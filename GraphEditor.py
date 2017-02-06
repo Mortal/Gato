@@ -94,7 +94,7 @@ class EditWeightsDialog(tkinter.simpledialog.Dialog):
                 if self.intFlag[i]:
                     self.result[i] = int(self.entry[i].get())
                 else:
-                    self.result[i] = string.atof(self.entry[i].get())
+                    self.result[i] = float(self.entry[i].get())
             except ValueError:
                 if self.intFlag[i]:
                     m = "Please enter an integer value for weight %d." % (i+1)

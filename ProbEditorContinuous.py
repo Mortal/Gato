@@ -2057,9 +2057,9 @@ class gauss_editor(tkinter.Frame):
         label.pack()
 
     def box(self):
-        s1=string.atof(self.e1.get())
-        s2=string.atof(self.e2.get())
-        s3=string.atof(self.e3.get())
+        s1=float(self.e1.get())
+        s2=float(self.e2.get())
+        s3=float(self.e3.get())
         self.create_new_fkt(box_function(start=s1,stop=s2,a=s3,color=self.nextColor()))
         self.top.destroy()
 
@@ -2090,9 +2090,9 @@ class gauss_editor(tkinter.Frame):
 
     def exp(self):
         l=len(self.plot_list)
-        s2=string.atof(self.e1.get())
-        s1=string.atof(self.e2.get())
-        s3=string.atof(self.e3.get())
+        s2=float(self.e1.get())
+        s1=float(self.e2.get())
+        s3=float(self.e3.get())
         s2=4*s2+s1 #berechnet stop von alpha und mu her
 
         self.create_new_fkt(exponential_function(start=s1,stop=s2,a=s3,color=self.nextColor()))
@@ -2125,9 +2125,9 @@ class gauss_editor(tkinter.Frame):
 
     def oexp(self):
         l=len(self.plot_list)
-        s1=string.atof(self.e1.get())
-        s2=string.atof(self.e2.get())
-        s3=string.atof(self.e3.get())
+        s1=float(self.e1.get())
+        s2=float(self.e2.get())
+        s3=float(self.e3.get())
         s1=s2-4*s1 #berechnet start von alpha und mu her
         self.create_new_fkt(exp_other_function(start=s1,stop=s2,a=s3,color=self.nextColor()))
         self.top.destroy()
@@ -2159,9 +2159,9 @@ class gauss_editor(tkinter.Frame):
 
     def gauss(self):
         l=len(self.plot_list)
-        s1=string.atof(self.e1.get())
-        s2=string.atof(self.e2.get())
-        s3=string.atof(self.e3.get())
+        s1=float(self.e1.get())
+        s2=float(self.e2.get())
+        s3=float(self.e3.get())
 
         self.create_new_fkt(gauss_function(mu=s1,sigma=s2,a=s3,color=self.nextColor()))
         self.top.destroy()
@@ -2198,10 +2198,10 @@ class gauss_editor(tkinter.Frame):
 
     def gaussl(self):
         l=len(self.plot_list)
-        s1=string.atof(self.e1.get())
-        s2=string.atof(self.e2.get())
-        s3=string.atof(self.e3.get())
-        s4=string.atof(self.e4.get())
+        s1=float(self.e1.get())
+        s2=float(self.e2.get())
+        s3=float(self.e3.get())
+        s4=float(self.e4.get())
         self.create_new_fkt(gauss_tail_function_left(mu=s1,sigma=s2,tail=s4,a=s3,color=self.nextColor()))
         self.top.destroy()
 
@@ -2236,10 +2236,10 @@ class gauss_editor(tkinter.Frame):
 
     def gaussr(self):
         l=len(self.plot_list)
-        s1=string.atof(self.e1.get())
-        s2=string.atof(self.e2.get())
-        s3=string.atof(self.e3.get())
-        s4=string.atof(self.e4.get())
+        s1=float(self.e1.get())
+        s2=float(self.e2.get())
+        s3=float(self.e3.get())
+        s4=float(self.e4.get())
         self.create_new_fkt(gauss_tail_function_right(mu=s1,sigma=s2,tail=s4,a=s3,color=self.nextColor()))
         self.top.destroy()
 

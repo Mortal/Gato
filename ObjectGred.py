@@ -151,20 +151,20 @@ class RandomizeEdgeWeightsDialog(tkinter.simpledialog.Dialog):
         for i in range(self.nrOfWeights):
             if self.checkVar[i] != None:
                 self.result.append( (self.checkVar[i].get(),
-                                     string.atof(self.minimum[i].get()),
-                                     string.atof(self.maximum[i].get())))
+                                     float(self.minimum[i].get()),
+                                     float(self.maximum[i].get())))
             else:
                 self.result.append( (0, None, None))
                 #           try:
-                #               minimun = string.atof(self.minimum[i].get())
+                #               minimun = float(self.minimum[i].get())
                 #           except ValueError:
                 #               minimum = "Please enter an floating point number for minimum of weight %d." % (i+1)
                 #           try:
-                #               maximum = string.atof(self.maximum[i].get())
+                #               maximum = float(self.maximum[i].get())
                 #           except ValueError:
                 #               m = "Please enter an floating point number for maximum of weight %d." % (i+1)
                 #           try:
-                #               maximum = string.atof(self.maximum[i].get())
+                #               maximum = float(self.maximum[i].get())
                 #           except ValueError:
                 #               m = "Please enter an floating point number for maximum of weight %d." % (i+1)
         return 1
