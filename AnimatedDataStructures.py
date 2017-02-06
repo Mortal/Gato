@@ -35,9 +35,9 @@
 #             last change by $Author: schliep $.
 #
 ################################################################################
-from GatoGlobals import AnimationParameters, gInfinity, NoSuchVertexError, NoSuchEdgeError  
-from DataStructures import VertexLabeling, Queue, Stack, PriorityQueue
-from Graph import SubGraph
+from .GatoGlobals import AnimationParameters, gInfinity, NoSuchVertexError, NoSuchEdgeError  
+from .DataStructures import VertexLabeling, Queue, Stack, PriorityQueue
+from .Graph import SubGraph
 import copy
 #import sets
 
@@ -48,10 +48,10 @@ class Animator:
         only print to console """
     
     def SetVertexColor(self,v, color):
-        print "set color of",v," to ",color
+        print("set color of",v," to ",color)
         
     def SetEdgeColor(self, tail, head, color):
-        print "set color of edge (",tail,",", head ,") to ",color
+        print("set color of edge (",tail,",", head ,") to ",color)
         
         
 class AnimatedNeighborhood:
@@ -632,7 +632,7 @@ class AnimatedSubGraph(SubGraph):
             self.Animator.RaiseEdge(tt,hh)
             self.Animator.DefaultInfo()
             return tt,hh
-        except NoSuchVertexError, NoSuchEdgeError:
+        except NoSuchVertexError as NoSuchEdgeError:
             return
 
     def AddSubGraph(self, G):
@@ -671,7 +671,7 @@ class AnimatedSubGraph(SubGraph):
         try:
             SubGraph.DeleteEdge(self,t,h)
             self.Animator.SetEdgeColor(t,h,"black")
-        except NoSuchVertexError, NoSuchEdgeError:
+        except NoSuchVertexError as NoSuchEdgeError:
             return
             
     def Clear(self, color="grey"):
@@ -694,7 +694,7 @@ class AnimatedSubGraph(SubGraph):
             SubGraph.AddEdge(self,tail,head)
             self.Animator.SetEdgeColor(tail,head,self.Color)
             self.Animator.DefaultInfo()
-        except NoSuchVertexError, NoSuchEdgeError:
+        except NoSuchVertexError as NoSuchEdgeError:
             return
             
             

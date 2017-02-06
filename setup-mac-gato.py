@@ -108,7 +108,7 @@ setup(name="Gato",
                                          ],
                                plist=dict(CFBundleIdentifier='org.schliep.gato',
                                           CFBundleGetInfoString='Graph Animation Toolbox',
-                                          NSHumanReadableCopyright=u"\u00A9 Alexander Schliep and Winfried Hochst\u00E4ttler 2014")
+                                          NSHumanReadableCopyright="\u00A9 Alexander Schliep and Winfried Hochst\u00E4ttler 2014")
                                )
                    ),
       description="Graph Animation Toolbox: animating algorithms on graphs",

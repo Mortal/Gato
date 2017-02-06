@@ -36,11 +36,11 @@
 #             last change by $Author: schliep $.
 #
 ################################################################################
-from Tkinter import *
-from ScrolledText import *
-import tkSimpleDialog 
-import tkMessageBox
-from tkColorChooser import askcolor
+from tkinter import *
+from tkinter.scrolledtext import *
+import tkinter.simpledialog 
+import tkinter.messagebox
+from tkinter.colorchooser import askcolor
 import copy
 import sys
 import os
@@ -202,16 +202,16 @@ class TkPopupSelector:
         self.value2pop = value2pop
         self.pop2value = pop2value
         self.popupvalue = StringVar()
-        self.popupvalue.set(self.pop2value.keys()[0]) # XXX first value as default 
+        self.popupvalue.set(list(self.pop2value.keys())[0]) # XXX first value as default 
         
         # XXX Uuughhh
-        keys = self.value2pop.keys()
+        keys = list(self.value2pop.keys())
         keys.sort()
-        pops = map(lambda x: value2pop[x], keys)
+        pops = [value2pop[x] for x in keys]
         #log.debug("pops = %s" % pops)
         args = (master, self.popupvalue) + tuple(pops)
         
-        self.tkwidget = apply(OptionMenu, args)
+        self.tkwidget = OptionMenu(*args)
         self.tkwidget.config(height=1, width=width)
         
     def tkWidget(self):
@@ -224,7 +224,7 @@ class TkPopupSelector:
         try:
             self.popupvalue.set(self.value2pop[value])
         except:
-            self.popupvalue.set(self.pop2value.keys()[0]) # XXX first value as default       
+            self.popupvalue.set(list(self.pop2value.keys())[0]) # XXX first value as default       
             
     def select(self):    
         # Cant choose invalid value with popup
@@ -238,9 +238,9 @@ class TkStringPopupSelector:
         if len(self.strings) > 0:
             self.popupvalue.set(self.strings[0]) # XXX first value as default 
             
-        width = max(map(len, self.strings))
+        width = max(list(map(len, self.strings)))
         args = (master, self.popupvalue) + tuple(self.strings)
-        self.tkwidget = apply(OptionMenu, args)
+        self.tkwidget = OptionMenu(*args)
         self.tkwidget.config(height=1, width=width)
         
     def tkWidget(self):
@@ -288,7 +288,7 @@ class TkColorSelector:
         
         
         
-class EditObjectAttributesDialog(tkSimpleDialog.Dialog):
+class EditObjectAttributesDialog(tkinter.simpledialog.Dialog):
     """ Creates an editable (pseudo-)inspector for a selected set of
         attributes of a given object
     
@@ -310,7 +310,7 @@ class EditObjectAttributesDialog(tkSimpleDialog.Dialog):
         self.object = object
         self.attr_names = attr_names
         self.edit = {}
-        tkSimpleDialog.Dialog.__init__(self, master, "Edit: %s" % self.object.desc)
+        tkinter.simpledialog.Dialog.__init__(self, master, "Edit: %s" % self.object.desc)
         
         
     def editWidget(self, master, object, attr_name):
@@ -374,7 +374,7 @@ class EditObjectAttributesDialog(tkSimpleDialog.Dialog):
 
                 cur_row = cur_row + 1
         else:
-            for attr in self.attr_names.keys():
+            for attr in list(self.attr_names.keys()):
                 label = Label(master, text="%s" % self.attr_names[attr], anchor=E)
                 label.grid(row=cur_row, column=0, padx=4, pady=3, sticky=E)
 
@@ -385,7 +385,7 @@ class EditObjectAttributesDialog(tkSimpleDialog.Dialog):
                 cur_row = cur_row + 1
 
     def validate(self):
-        for attr_name in self.edit.keys():
+        for attr_name in list(self.edit.keys()):
             try:
             
                 # In python 2.2 we can subclass attributes and add a validate method
@@ -398,12 +398,12 @@ class EditObjectAttributesDialog(tkSimpleDialog.Dialog):
                     
             except ValueError:
                 msg = "Please enter a valid value for %s" % attr_name
-                tkMessageBox.showwarning("Invalid Value", msg, parent=self)
+                tkinter.messagebox.showwarning("Invalid Value", msg, parent=self)
                 self.edit[attr_name].select()
                 return 0
                 
                 # Everything is valid => set values
-        for attr_name in self.edit.keys():            
+        for attr_name in list(self.edit.keys()):            
             self.object.__dict__[attr_name] = typed_assign(self.object.__dict__[attr_name], self.edit[attr_name].get())
             
             if isinstance(self.object.__dict__[attr_name], WithDefault):
@@ -444,7 +444,7 @@ class Popupable:
             self.pop2val = {} # Private copy
             self.width = 0
             
-            for val in val2pop.keys():
+            for val in list(val2pop.keys()):
                 pop = val2pop[val]
                 self.width = max(len(pop), self.width)
                 self.pop2val[pop] = val

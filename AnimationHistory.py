@@ -36,8 +36,8 @@
 import sys
 import inspect
 import time
-import GatoGlobals
-import MergedHistories
+from . import GatoGlobals
+from . import MergedHistories
 g = GatoGlobals.AnimationParameters
 
 
@@ -71,9 +71,9 @@ class AnimationCommand:
     def Undo(self):
         if self.canUndo:
             if self.undo_method == None:
-                apply(self.method, self.target + self.undo_args)
+                self.method(*self.target + self.undo_args)
             else:
-                apply(self.undo_method, self.target + self.undo_args)
+                self.undo_method(*self.target + self.undo_args)
 
 
     def __repr__(self):
@@ -95,7 +95,7 @@ class AnimationCommand:
             t = self.target
 
         if self.kwargs:
-            kwstr = ["%s=%s" % (str(key),str(val)) for key,val in self.kwargs.items()]
+            kwstr = ["%s=%s" % (str(key),str(val)) for key,val in list(self.kwargs.items())]
             # if 'SetAll' in self.method.__name__:
             #     print 'kwargs: ', self.kwargs
             #     print 'kwstr: ', kwstr
@@ -305,7 +305,7 @@ class AnimationHistory:
     #Deprecated Function
     def append(self, animation):
         if self.auto_print:
-            print self.logPrefix + animation.log_str() 
+            print(self.logPrefix + animation.log_str()) 
         self.history.append(animation)
         
 

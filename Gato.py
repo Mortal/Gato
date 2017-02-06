@@ -43,30 +43,30 @@ import bdb
 import random
 import re 
 import string
-import StringIO
+import io
 import tokenize
-import tkFont
+import tkinter.font
 import copy
 import webbrowser
 import getopt
 
-import Gred
+from . import Gred
 
-from Tkinter import *
-from tkFileDialog import askopenfilename, asksaveasfilename
-from tkMessageBox import askokcancel, showerror, askyesno
+from tkinter import *
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+from tkinter.messagebox import askokcancel, showerror, askyesno
 #from ScrolledText import ScrolledText
-from GatoConfiguration import GatoConfiguration
-import Graph #from Graph import Graph
-from GraphUtil import *
-from GraphDisplay import GraphDisplayToplevel, GraphDisplayFrame
-from GatoUtil import *
-import GatoGlobals
-from GatoDialogs import AboutBox, SplashScreen, HTMLViewer, AutoScrolledText
-import GatoIcons
+from .GatoConfiguration import GatoConfiguration
+from . import Graph #from Graph import Graph
+from .GraphUtil import *
+from .GraphDisplay import GraphDisplayToplevel, GraphDisplayFrame
+from .GatoUtil import *
+from . import GatoGlobals
+from .GatoDialogs import AboutBox, SplashScreen, HTMLViewer, AutoScrolledText
+from . import GatoIcons
 # Only needed for Trial-Solution version. 
 #import GatoSystemConfiguration
-from AnimationHistory import AnimationHistory, AnimationCommand
+from .AnimationHistory import AnimationHistory, AnimationCommand
 
 # Workaround for bug in py2exe which mangles linecache on Windows
 # On Windows put a copy of linecache.py included in your Python's 
@@ -75,7 +75,7 @@ from AnimationHistory import AnimationHistory, AnimationCommand
 # Same problem exists with py2app on Mac, only py2app is smarter
 # in sabotaging linecache
 try:
-    import linecacheCopy as linecache
+    from . import linecacheCopy as linecache
 except:
     import linecache
 
@@ -96,7 +96,7 @@ def parsegeometry(geometry):
     m = re.match("(\d+)x(\d+)([-+]\d+)([-+]\d+)", geometry)
     if not m:
         raise ValueError("failed to parse geometry string")
-    return map(int, m.groups())
+    return list(map(int, m.groups()))
 
 def WMExtrasGeometry(window):
     """ Returns (top,else) where
@@ -441,9 +441,9 @@ class AlgoWin(Frame):
         self.algoFont = font
         self.algoFontSize = size
         
-        f = tkFont.Font(self, (font, size, tkFont.NORMAL))
-        bf = tkFont.Font(self, (font, size, tkFont.BOLD))
-        itf = tkFont.Font(self, (font, size, tkFont.ITALIC))
+        f = tkinter.font.Font(self, (font, size, tkinter.font.NORMAL))
+        bf = tkinter.font.Font(self, (font, size, tkinter.font.BOLD))
+        itf = tkinter.font.Font(self, (font, size, tkinter.font.ITALIC))
         
         self.algoText.config(font=f)
         # syntax highlighting tags
@@ -555,10 +555,12 @@ class AlgoWin(Frame):
         for l in lines:
             self.tagLine(l, tag)
             
-    def tokenEater(self, type, token, (srow, scol), (erow, ecol), line):
+    def tokenEater(self, type, token, xxx_todo_changeme, xxx_todo_changeme1, line):
         #log.debug("%d,%d-%d,%d:\t%s\t%s" % \
         #     (srow, scol, erow, ecol, type, repr(token)))
     
+        (srow, scol) = xxx_todo_changeme
+        (erow, ecol) = xxx_todo_changeme1
         if type == 1:    # Name 
             if token in self.keywordsList:
                 self.algoText.tag_add('keyword','%d.%d' % (srow, scol),
@@ -599,7 +601,8 @@ class AlgoWin(Frame):
         if file is not "" and file is not ():
             try:
                 self.algorithm.Open(file)
-            except (EOFError, IOError), (errno, strerror):
+            except (EOFError, IOError) as xxx_todo_changeme5:
+                (errno, strerror) = xxx_todo_changeme5.args
                 self.HandleFileIOError("Algorithm",file,errno,strerror)
                 return 
 
@@ -614,7 +617,7 @@ class AlgoWin(Frame):
             self.tagLines(self.algorithm.GetBreakpointLines(), 'Break')
             
             # Syntax highlighting
-            tokenize.tokenize(StringIO.StringIO(self.algorithm.GetSource()).readline, self.tokenEater)
+            tokenize.tokenize(io.StringIO(self.algorithm.GetSource()).readline, self.tokenEater)
             
             if self.algorithm.ReadyToStart():
                 self.buttonStart['state'] = NORMAL 
@@ -650,7 +653,8 @@ class AlgoWin(Frame):
         if file is not "" and file is not ():
             try:
                 self.algorithm.OpenGraph(file)
-            except (EOFError, IOError),(errno, strerror):
+            except (EOFError, IOError) as xxx_todo_changeme6:
+                (errno, strerror) = xxx_todo_changeme6.args
                 self.HandleFileIOError("Graph",file,errno, strerror)
                 return 
                 
@@ -665,7 +669,7 @@ class AlgoWin(Frame):
         """
         under Construction...
         """
-        import GatoFile
+        from . import GatoFile
         
         # ToDo
         if not askyesno("Ooops...",
@@ -692,7 +696,7 @@ class AlgoWin(Frame):
         menu command
         """
         
-        import GatoFile
+        from . import GatoFile
         
         if self.algorithmIsRunning:
             # variable file is lost here!
@@ -719,7 +723,7 @@ class AlgoWin(Frame):
                     # select the graph
                     select=f.displaySelectionDialog(self)
                     
-            except GatoFile.FileException, e:
+            except GatoFile.FileException as e:
                 self.HandleFileIOError("GatoFile: %s"%e.reason,filename)
                 return
                 
@@ -735,7 +739,8 @@ class AlgoWin(Frame):
                     self.algorithm.OpenGraph(graphStream,
                                              fileName="%s::%s"%(filename,
                                                                 select["graph"].getName()))
-                except (EOFError, IOError),(errno, strerror):
+                except (EOFError, IOError) as xxx_todo_changeme3:
+                    (errno, strerror) = xxx_todo_changeme3.args
                     self.HandleFileIOError("Gato",filename,errno,strerror)
                     return
                     
@@ -770,7 +775,8 @@ class AlgoWin(Frame):
                 # text copied from AlgoWin.OpenAlgorithm
                 try:
                     self.algorithm.Open(self.tmpAlgoFileName)
-                except (EOFError, IOError),(errno, strerror):
+                except (EOFError, IOError) as xxx_todo_changeme4:
+                    (errno, strerror) = xxx_todo_changeme4.args
                     os.remove(self.tmpAlgoFileName)
                     os.remove(proFileName)
                     self.HandleFileIOError("Algorithm",self.tmpAlgoFileName,errno, strerror)
@@ -791,7 +797,7 @@ class AlgoWin(Frame):
                 self.tagLines(self.algorithm.GetInteractiveLines(), 'Interactive')
                 self.tagLines(self.algorithm.GetBreakpointLines(), 'Break')
                 # Syntax highlighting
-                tokenize.tokenize(StringIO.StringIO(self.algorithm.GetSource()).readline, 
+                tokenize.tokenize(io.StringIO(self.algorithm.GetSource()).readline, 
                                   self.tokenEater)
                 
                 # set the state
@@ -849,7 +855,7 @@ class AlgoWin(Frame):
                                  filetypes = [("SVG", ".svg")]
                                  )
         if fileName is not "":
-            import GatoExport
+            from . import GatoExport
 
             if not self.secondaryGraphDisplay or self.algorithm.graphDisplays == None or self.algorithm.graphDisplays == 1:
                 return GatoExport.ExportSVG(fileName, self, self.algorithm, self.graphDisplay, 
@@ -866,7 +872,7 @@ class AlgoWin(Frame):
                                          filetypes = [("SVG", ".svg")]
                                          )
         if fileName is not "":
-            import GatoExport
+            from . import GatoExport
             # We never destroy the secondary graph display (and create it from the beginning
             # for the paned viewed. graphDisplays is set from prolog
             if not self.secondaryGraphDisplay or self.algorithm.graphDisplays == None or self.algorithm.graphDisplays == 1:
@@ -1427,9 +1433,10 @@ class AlgorithmDebugger(bdb.Bdb):
         #self.interaction(frame, None)
         
         
-    def user_exception(self, frame, (exc_type, exc_value, exc_traceback)):
+    def user_exception(self, frame, xxx_todo_changeme2):
         """ *Internal* This function is called if an exception occurs,
             but only if we are to stop at or just below this level """ 
+        (exc_type, exc_value, exc_traceback) = xxx_todo_changeme2
         frame.f_locals['__exception__'] = exc_type, exc_value
         if type(exc_type) == type(''):
             exc_type_name = exc_type
@@ -1444,13 +1451,13 @@ class AlgorithmDebugger(bdb.Bdb):
         '''
         # TODO: These functions can definitely be consolidated...
         def construct_initial_graph_infos():
-            for i in xrange(num_graphs):
+            for i in range(num_graphs):
                 if self.init_graph_infos[i] is None:
                     self.init_graph_infos[i] = informers[i].DefaultInfo()
                     self.graph_infos[i] = copy.deepcopy(self.init_graph_infos[i])
 
         def construct_initial_edge_infos():
-            for i in xrange(num_graphs):
+            for i in range(num_graphs):
                 if self.init_edge_infos[i] is None:
                     self.init_edge_infos[i] = {}
                     for e in edges[i]:
@@ -1458,7 +1465,7 @@ class AlgorithmDebugger(bdb.Bdb):
                     self.edge_infos[i] = copy.deepcopy(self.init_edge_infos[i])
 
         def construct_initial_vertex_infos():
-            for i in xrange(num_graphs):
+            for i in range(num_graphs):
                 if self.init_vertex_infos[i] is None:
                     self.init_vertex_infos[i] = {}
                     for v in vertices[i]:
@@ -1466,7 +1473,7 @@ class AlgorithmDebugger(bdb.Bdb):
                     self.vertex_infos[i] = copy.deepcopy(self.init_vertex_infos[i])
 
         def check_for_edge_info_changes():
-            for i in xrange(num_graphs):
+            for i in range(num_graphs):
                 edge_infos = self.edge_infos[i]
                 history = histories[i]
                 informer = informers[i]
@@ -1481,12 +1488,12 @@ class AlgorithmDebugger(bdb.Bdb):
                             edge_infos[e] = curr_info
                             history.UpdateEdgeInfo(e[0], e[1], curr_info)
                 
-                for e in edge_infos.keys():
+                for e in list(edge_infos.keys()):
                     if e not in edges[i]:
                         del edge_infos[e]
 
         def check_for_vertex_info_changes():
-            for i in xrange(num_graphs):
+            for i in range(num_graphs):
                 vertex_infos = self.vertex_infos[i]
                 history = histories[i]
                 informer = informers[i]
@@ -1501,12 +1508,12 @@ class AlgorithmDebugger(bdb.Bdb):
                             vertex_infos[v] = curr_info
                             history.UpdateVertexInfo(v, curr_info)
 
-                for v in vertex_infos.keys():
+                for v in list(vertex_infos.keys()):
                     if v not in vertices[i]:
                         del vertex_infos[v]
 
         def check_for_graph_info_changes():
-            for i in xrange(num_graphs):
+            for i in range(num_graphs):
                 if self.graph_infos[i] != informers[i].DefaultInfo():
                     self.graph_infos[i] = informers[i].DefaultInfo()
                     histories[i].UpdateGraphInfo(self.graph_infos[i])
@@ -1515,14 +1522,14 @@ class AlgorithmDebugger(bdb.Bdb):
         num_graphs = 1
         informers = [self.GUI.GUI.graphDisplay.graphInformer]
         vertices = [self.GUI.graph.vertices]
-        edges = [self.GUI.graph.edgeWeights[0].keys()]    # list of tuples that are edges
+        edges = [list(self.GUI.graph.edgeWeights[0].keys())]    # list of tuples that are edges
         histories = [self.GUI.animation_history]
         if self.GUI.GUI.secondaryGraphDisplay is not None and self.GUI.GUI.secondaryGraphDisplay.graphInformer is not None:
             num_graphs = 2
             histories.append(self.GUI.GUI.secondaryGraphDisplay)
             informers.append(self.GUI.GUI.secondaryGraphDisplay.graphInformer)
-            edges.append(self.GUI.GUI.secondaryGraphDisplay.drawEdges.keys())
-            vertices.append(self.GUI.GUI.secondaryGraphDisplay.drawVertex.keys())
+            edges.append(list(self.GUI.GUI.secondaryGraphDisplay.drawEdges.keys()))
+            vertices.append(list(self.GUI.GUI.secondaryGraphDisplay.drawVertex.keys()))
 
         construct_initial_graph_infos()
         construct_initial_edge_infos()
@@ -1621,7 +1628,8 @@ class Algorithm:
             input = open(os.path.splitext(self.algoFileName)[0] + ".pro", 'r')
             options = self.ReadPrologOptions(input)
             input.close()
-        except (EOFError, IOError),(errno, strerror):
+        except (EOFError, IOError) as xxx_todo_changeme7:
+            (errno, strerror) = xxx_todo_changeme7.args
             self.GUI.HandleFileIOError("prolog",os.path.splitext(self.algoFileName)[0] + ".pro",
                                        errno, strerror)
             return
@@ -1675,7 +1683,7 @@ class Algorithm:
                          'noGraphNeeded':'noGraphNeeded[ \t]*=[ \t]*([0-1])'}
         # about is more complicated
         
-        for patternName in optionPattern.keys():
+        for patternName in list(optionPattern.keys()):
             compPattern = re.compile(optionPattern[patternName])
             match = compPattern.search(text) 
             
@@ -1706,9 +1714,9 @@ class Algorithm:
             
     def OpenGraph(self,file,fileName=None):
         """ Read in a graph from file and open the display """
-        if type(file) in types.StringTypes:
+        if type(file) in (str,):
             self.graphFileName = file
-        elif type(file) == types.FileType or issubclass(file.__class__,StringIO.StringIO):
+        elif type(file) == types.FileType or issubclass(file.__class__,io.StringIO):
             self.graphFileName = fileName
         else:
             raise Exception("wrong types in argument list: expected string or file like object")
@@ -1816,14 +1824,15 @@ class Algorithm:
         self.algoGlobals['gInteractive'] = g.Interactive
         # Read in prolog and execute it
         try:
-            execfile(os.path.splitext(self.algoFileName)[0] + ".pro", 
+            exec(compile(open(os.path.splitext(self.algoFileName)[0] + ".pro").read(), os.path.splitext(self.algoFileName)[0] + ".pro", 'exec'), 
                      self.algoGlobals, self.algoGlobals)
         except AbortProlog as e:
             # Only get here because NeededProperties was canceled by user
             log.info(e.value)
             self.GUI.CommitStop()
             return
-        except (EOFError, IOError), (errno, strerror):
+        except (EOFError, IOError) as xxx_todo_changeme8:
+            (errno, strerror) = xxx_todo_changeme8.args
             self.GUI.HandleFileIOError("prolog",
                                        os.path.splitext(self.algoFileName)[0] + ".pro",
                                        errno,strerror)
@@ -1958,7 +1967,7 @@ class Algorithm:
         
             Proper names for properties are defined in gProperty
         """
-        for property, requiredValue in propertyValueDict.iteritems():
+        for property, requiredValue in propertyValueDict.items():
             failed = 0
             value = self.graph.Property(property)
             if value != 'Unknown':   
@@ -1976,8 +1985,8 @@ class Algorithm:
             if failed or value == 'Unknown':
                 # For GatoTest: Abort if needed property is missing from graph 
                 if not g.Interactive and not g.GeneratingSVG:
-                    raise AbortProlog, "Not running interactively. Aborting due to" \
-                          " check for property %s" % property                    
+                    raise AbortProlog("Not running interactively. Aborting due to" \
+                          " check for property %s" % property)                    
                 errMsg = "The algorithm %s requires that the graph %s has %s" % \
                          (stripPath(self.algoFileName),
                           stripPath(self.graphFileName),
@@ -1991,13 +2000,13 @@ class Algorithm:
 
                 if g.GeneratingSVG:
                     # If we are generating SVG animations with GatoTest.py we want to proceed even if NeededProperties aren't met
-                    print "Warning: " + errMsg
+                    print("Warning: " + errMsg)
                     return
 
                 errMsg += ".\nDo you still want to proceed ?"                          
                 r = askokcancel("Gato - Error", errMsg)
                 if r == False:
-                    raise AbortProlog, "User aborted at check for property %s" % property
+                    raise AbortProlog("User aborted at check for property %s" % property)
                     
     def PickVertex(self, default=None, filter=None, visual=None):
         """ Pick a vertex interactively. 
@@ -2043,9 +2052,9 @@ class Algorithm:
         
 ################################################################################
 def usage():
-    print "Usage: Gato.py"
-    print "       Gato.py -v algorithm.alg graph.cat | gato-file"
-    print "               -v or --verbose switches on the debugging/logging information"
+    print("Usage: Gato.py")
+    print("       Gato.py -v algorithm.alg graph.cat | gato-file")
+    print("               -v or --verbose switches on the debugging/logging information")
 
 
 def main(argv=None):

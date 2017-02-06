@@ -34,9 +34,9 @@
 #             last change by $Author: schliep $.
 #
 ################################################################################
-import GatoGlobals
-from DataStructures import VertexLabeling, Queue
-from AnimatedDataStructures import *
+from . import GatoGlobals
+from .DataStructures import VertexLabeling, Queue
+from .AnimatedDataStructures import *
 #from GraphDisplay import GraphDisplay
 #from Graph import SubGraph
 

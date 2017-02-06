@@ -34,15 +34,15 @@
 #
 ################################################################################
 
-from Tkinter import * # Frame, Canvas, Toplevel, StringVar and lots of handy constants
-import tkFont
-from Graph import Graph
+from tkinter import * # Frame, Canvas, Toplevel, StringVar and lots of handy constants
+import tkinter.font
+from .Graph import Graph
 from math import sqrt, pi, sin, cos, atan2, degrees, log10
-import GatoGlobals
-from GatoUtil import orthogonal
-from GatoDialogs import AutoScrollbar
-from DataStructures import Point2D, VertexLabeling, EdgeLabeling
-from AnimatedDataStructures import ComponentMaker
+from . import GatoGlobals
+from .GatoUtil import orthogonal
+from .GatoDialogs import AutoScrollbar
+from .DataStructures import Point2D, VertexLabeling, EdgeLabeling
+from .AnimatedDataStructures import ComponentMaker
 import os
 import colorsys
 
@@ -120,7 +120,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         self.g = g # So algorithms can get to the globals (XXX)
         
     def font(self, size):
-        return tkFont.Font(self, (g.FontFamily, size, g.FontStyle))
+        return tkinter.font.Font(self, (g.FontFamily, size, g.FontStyle))
                 
     def GetCanvasCenter(self): 
         """ *Internal* Return the center of the canvas in pixel """
@@ -784,7 +784,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
             color=g.cVertexBlink
         dv = self.drawVertex[v]
         oldColor = self.canvas.itemconfig(dv, "fill")[4]
-        for i in xrange(1,g.BlinkRepeat):
+        for i in range(1,g.BlinkRepeat):
             self.canvas.after(g.BlinkRate)
             self.canvas.itemconfig( dv, fill=color)
             self.update()
@@ -807,7 +807,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
             except KeyError:
                 de = self.drawEdges[(head,tail)]	    
         oldColor = self.canvas.itemconfig(de, "fill")[4]
-        for i in xrange(1,g.BlinkRepeat):
+        for i in range(1,g.BlinkRepeat):
             self.canvas.after(g.BlinkRate)
             self.canvas.itemconfig( de, fill=color)
             self.update()
@@ -827,7 +827,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         oldColor = [None] * len(list)
         drawItems = [None] * len(list)
         
-        for i in xrange(len(list)):
+        for i in range(len(list)):
             try:
                 e = list[i]
                 l = len(e) # will raise an exception	
@@ -838,13 +838,13 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
                 drawItems[i] = self.drawVertex[v]
                 oldColor[i] = self.canvas.itemconfig(drawItems[i], "fill")[4]
                 
-        for i in xrange(1,g.BlinkRepeat):
+        for i in range(1,g.BlinkRepeat):
             self.canvas.after(g.BlinkRate)
-            for j in xrange(len(drawItems)):	
+            for j in range(len(drawItems)):	
                 self.canvas.itemconfig(drawItems[j], fill=color)
             self.update()
             self.canvas.after(g.BlinkRate)
-            for j in xrange(len(drawItems)):	
+            for j in range(len(drawItems)):	
                 self.canvas.itemconfig(drawItems[j], fill=oldColor[j])
             self.update()
 
@@ -901,7 +901,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
     def ClearVertexAnnotations(self):
         """ Set all vertex annotations to the empty string """
-        for v, da in self.vertexAnnotation.items():
+        for v, da in list(self.vertexAnnotation.items()):
             self.canvas.itemconfig(da,text='')     
         
             
@@ -930,7 +930,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         dl = self.drawLabel[v]
         if blink == 1:
             oldColor = self.canvas.itemconfig(dl, "fill")[4]
-            for i in xrange(1,g.BlinkRepeat):
+            for i in range(1,g.BlinkRepeat):
                 self.canvas.after(g.BlinkRate)
                 self.canvas.itemconfig( dl, fill=color)
                 self.update()
@@ -1149,7 +1149,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         self.G.SetLabeling(v, v)
         self.drawVertex[v] = self.CreateDrawVertex(v)
         self.drawLabel[v]  = self.CreateDrawLabel(v)
-        for i in xrange(0,self.G.NrOfVertexWeights()):
+        for i in range(0,self.G.NrOfVertexWeights()):
             self.G.SetVertexWeight(i,v,0)
         if self.autoUpdateScrollRegion:
             self.UpdateScrollRegion()
@@ -1164,7 +1164,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         self.G.SetLabeling(v, v)
         self.drawVertex[v] = self.CreateDrawVertex(v,x,y)
         self.drawLabel[v]  = self.CreateDrawLabel(v)
-        for i in xrange(0,self.G.NrOfVertexWeights()):
+        for i in range(0,self.G.NrOfVertexWeights()):
             self.G.SetVertexWeight(i,v,0)
         if self.autoUpdateScrollRegion:
             self.UpdateScrollRegion()
@@ -1349,7 +1349,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
             and rotated as to maximize size while still fitting on paper """ 
         bb = self.canvas.bbox("all") # Bounding box of all elements on canvas
         # Give 10 pixels room to breathe
-        print "PrintToPSFile", bb
+        print("PrintToPSFile", bb)
         padding = 15
         x = bb[0] - padding
         y = bb[1] - padding

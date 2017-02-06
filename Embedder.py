@@ -36,7 +36,7 @@
 #
 ################################################################################
 
-from GatoGlobals import gInfinity
+from .GatoGlobals import gInfinity
 
 class Rect:
     def __init__(self):
@@ -146,7 +146,7 @@ class CircularEmbedder(Embedder):
         theGraphEditor.config(cursor="")
         
         #----------------------------------------------------------------------
-from PlanarEmbedding import *
+from .PlanarEmbedding import *
 
 class FPP_PlanarEmbedder(Embedder):
 
@@ -185,12 +185,12 @@ class Schnyder_PlanarEmbedder(Embedder):
         theGraphEditor.config(cursor="")
         
         #----------------------------------------------------------------------
-from Tkinter import *
-import tkSimpleDialog 
+from tkinter import *
+import tkinter.simpledialog 
 import string
-from tkMessageBox import showwarning
+from tkinter.messagebox import showwarning
 
-from DataStructures import Stack
+from .DataStructures import Stack
 
 """
 def center(G):
@@ -227,11 +227,11 @@ def center(G):
     return center
 """
 
-class TreeLayoutDialog(tkSimpleDialog.Dialog):
+class TreeLayoutDialog(tkinter.simpledialog.Dialog):
 
     def __init__(self, master):
         self.G = master.G
-        tkSimpleDialog.Dialog.__init__(self, master, "Tree Layout")
+        tkinter.simpledialog.Dialog.__init__(self, master, "Tree Layout")
         
         
     def body(self, master):
@@ -410,13 +410,13 @@ class TreeEmbedder(Embedder):
         theGraphEditor.config(cursor="")
         
         #----------------------------------------------------------------------
-from GraphUtil import BFS
+from .GraphUtil import BFS
 
-class BFSLayoutDialog(tkSimpleDialog.Dialog):
+class BFSLayoutDialog(tkinter.simpledialog.Dialog):
 
     def __init__(self, master):
         self.G = master.G
-        tkSimpleDialog.Dialog.__init__(self, master, "BFS Layout")
+        tkinter.simpledialog.Dialog.__init__(self, master, "BFS Layout")
         
         
     def body(self, master):
@@ -469,7 +469,7 @@ def BFSTreeCoords(G, root, direction, rect=None):
     for v in G.vertices:
         list[BFSdistance[v]].append(v)
     maxDistance=len(list)
-    for d in list.values():
+    for d in list(list.values()):
         if len(d)>maxBreadth: maxBreadth=len(d)
     if maxDistance > 1:
         xDist=rect.height()/(maxDistance-1)
@@ -484,7 +484,7 @@ def BFSTreeCoords(G, root, direction, rect=None):
     
     G.xCoord={}
     G.yCoord={}
-    for d in list.values():
+    for d in list(list.values()):
         Coord2=mid_y-(len(d)-1)*yDist/2
         for v in d:
             G.xCoord[v]=Coord1+random.randint(-20,20)
@@ -518,7 +518,7 @@ class BFSTreeEmbedder(Embedder):
         
         
 from math import *
-from DataStructures import Queue
+from .DataStructures import Queue
 
 def RadialTreeBFS(G,root,direction='forward'):
     """ Calculate BFS distances and predecessor without showing animations.

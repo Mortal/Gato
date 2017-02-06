@@ -108,7 +108,7 @@ setup(name="Gred",
                                plist=dict(CFBundleIdentifier='org.schliep.gred',
                                           CFBundleGetInfoString='Graph Animation Toolbox',
                                           NSHumanReadableCopyright= \
-                                          u"\u00A9 Alexander Schliep and Winfried Hochst\u00E4ttler 2014")
+                                          "\u00A9 Alexander Schliep and Winfried Hochst\u00E4ttler 2014")
                                )
                                ),
       description="Graph Animation Toolbox: animating algorithms on graphs",

@@ -61,8 +61,8 @@
 
 #=============================================================================#
 from copy import deepcopy
-from DataStructures import Stack
-from tkMessageBox import showinfo
+from .DataStructures import Stack
+from tkinter.messagebox import showinfo
 #=============================================================================#
 
 
@@ -237,7 +237,7 @@ class pt_graph:
             if x[1]<y[1]: return -1
             if x[1]==y[1]: return 0
             return 1
-        sorted_list=cost.items()
+        sorted_list=list(cost.items())
         sorted_list.sort(up)
         self.del_all_edges()
         for i in sorted_list:
@@ -1003,22 +1003,22 @@ def embedding(e0,t,T,A):
     
     #=============================================================================#
 def PrintGraph(G):
-    print "============================================================"
-    print "V : "
+    print("============================================================")
+    print("V : ")
     for v in G.all_nodes():
-        print "[%i]" %(v-1)
-    print
+        print("[%i]" %(v-1))
+    print()
     
-    print "E : "
+    print("E : ")
     for e in G.all_edges():
-        print "[%i]---->[%i]" %((source(e)-1),(target(e)-1))
-    print
+        print("[%i]---->[%i]" %((source(e)-1),(target(e)-1)))
+    print()
     
     for v in G.all_nodes():
-        print "[%i] : " %(v-1)
+        print("[%i] : " %(v-1))
         for e in G.adj_edges(v):
-            print "    [%i]---->[%i]" %((source(e)-1),(target(e)-1))
-    print
+            print("    [%i]---->[%i]" %((source(e)-1),(target(e)-1)))
+    print()
     #=============================================================================#
     
     #=============================================================================#

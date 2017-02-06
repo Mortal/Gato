@@ -46,8 +46,8 @@ import copy
 import string
 
 def printDict(d):
-    for k in d.keys():
-        print k, d[k]
+    for k in list(d.keys()):
+        print(k, d[k])
         
 def getText(nodelist):
     rc = ""
@@ -57,7 +57,7 @@ def getText(nodelist):
     return rc
     
 def copyAttributes(XMLNode, object):
-    for i in xrange(0,XMLNode.attributes.length):
+    for i in range(0,XMLNode.attributes.length):
         attrName = XMLNode.attributes.item(i).name
         attrValue = XMLNode.attributes.item(i).value
         
@@ -65,7 +65,7 @@ def copyAttributes(XMLNode, object):
         
 def attributesDict(XMLNode):
     retVal = {}
-    for i in xrange(0,XMLNode.attributes.length):
+    for i in range(0,XMLNode.attributes.length):
         attrName = XMLNode.attributes.item(i).name
         attrValue = XMLNode.attributes.item(i).value
         
@@ -93,12 +93,12 @@ class DataFactory:
         return self.factories[type](stringArg)
         
     def Types(self):
-        return self.factories.keys()
+        return list(self.factories.keys())
         
     def arrayFromCSV(self, s, type):
         retVal = []
         
-        print "DataFactory.arrayFromCSV(", s, ")"
+        print("DataFactory.arrayFromCSV(", s, ")")
         
         items = string.split(s,',')
         for i in items:
@@ -242,9 +242,9 @@ class GraphML:
                 self.hmmAlphabet.map[symbolCode] = symbolRep
                 
         else:
-            print "GraphML::handleHMMAlphabet does not handle alphabet type %s yet" % XMLNode.getAttribute("hmm:type") 
+            print("GraphML::handleHMMAlphabet does not handle alphabet type %s yet" % XMLNode.getAttribute("hmm:type")) 
             
-        print self.hmmAlphabet.__dict__
+        print(self.hmmAlphabet.__dict__)
         
         
         
@@ -279,28 +279,28 @@ class GraphML:
     def __str__(self):
         r =     "GraphML\n"
         r = r + "  #key\tdescription\n"
-        for k in self.desc.keys():            
+        for k in list(self.desc.keys()):            
             r = r + "  %s\t%s\n" % (k,self.desc[k])
         r = r + "  #Nodes -------------------------\n"
         r = r + "  id  "
-        for k in self.desc.keys():            
+        for k in list(self.desc.keys()):            
             if self.domain[k] == 'all' or self.domain[k] == 'node':
                 r = r + "  %s " % k
         r = r + "\n"
         for n in self.graph.nodes:
             r = r + "  %s  " % n.id
-            for k in self.desc.keys():
+            for k in list(self.desc.keys()):
                 if self.domain[k] == 'all' or self.domain[k] == 'node':
                     r = r + "  %s " % n.__dict__[k]
             r = r + "\n"
         r = r + "  #Edges -------------------------\n     "
-        for k in self.desc.keys():            
+        for k in list(self.desc.keys()):            
             if self.domain[k] == 'all' or self.domain[k] == 'edge':
                 r = r + "  %s " % k
         r = r + "\n"
         for e in self.graph.edges:
             r = r + "  (%s,%s) " % (e.source, e.target)
-            for k in self.desc.keys():
+            for k in list(self.desc.keys()):
                 if self.domain[k] == 'all' or self.domain[k] == 'edge':
                     r = r + "  %s " % e.__dict__[k]
             r = r + "\n"
@@ -326,12 +326,12 @@ class Edge:
         
 class Empty:
     def __init__(self, **args):
-        for k in args.keys():
+        for k in list(args.keys()):
             self.__dict__[k] = args[k]
             
     def __str__(self):
         r = "{"
-        for k in self.__dict__.keys():
+        for k in list(self.__dict__.keys()):
             r = r + "%s:%s," % (k, self.__dict__[k])
         r = r + "}"
         return r
@@ -347,7 +347,7 @@ class DiscreteAlphabet:
         
         
 def WriteData(doc, e, object, keys):
-    print doc, e, object, keys
+    print(doc, e, object, keys)
     for k in keys:
         elem = doc.createElement("data")
         elem.setAttribute('key', k)
@@ -363,7 +363,7 @@ def WriteXML(gml):
     node_keys = []
     edge_keys = []
     
-    for k in gml.desc.keys():
+    for k in list(gml.desc.keys()):
         elem = doc.createElement("key")
         elem.setAttribute('id', k)
         if gml.domain[k] is not None:
@@ -393,7 +393,7 @@ def WriteXML(gml):
         WriteData(doc,elem,e,edge_keys)
         graphelem.appendChild(elem)
         
-    print doc.toprettyxml()
+    print(doc.toprettyxml())
     
     
     
@@ -404,7 +404,7 @@ if __name__ == '__main__':
     
     gml = GraphML()
     gml.handleGraphML(dom)
-    print gml
+    print(gml)
     
     WriteXML(gml)
     

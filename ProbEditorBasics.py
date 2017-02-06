@@ -76,7 +76,7 @@ class ProbDict(UserDict.UserDict):
             return cmp(self[b],self[a])
             
     def __setitem__(self,a,b):
-        if self.has_key(a):
+        if a in self:
             self.sum=self.sum-self[a]
         self.sum=self.sum+b
         UserDict.UserDict.__setitem__(self,a,b)
@@ -94,7 +94,7 @@ class ProbDict(UserDict.UserDict):
         self.__calc_sum__()
         
     def setdefault(self,key,failobj=0):
-        if not self.has_key(key):
+        if key not in self:
             self[key] = failobj
         return self[key]
         
@@ -103,7 +103,7 @@ class ProbDict(UserDict.UserDict):
         
     def __calc_sum__(self):
         self.sum=0
-        for v in self.values():
+        for v in list(self.values()):
             self.sum=self.sum+v
             
     def __repr__(self):
@@ -114,11 +114,11 @@ class ProbDict(UserDict.UserDict):
         self.__calc_sum__()
         if self.sum == 0.0:
             even = sum/float(len(self.data))
-            for key in self.data.keys():
+            for key in list(self.data.keys()):
                 self.data[key] = even
         else:
             factor=sum/self.sum
-            for key in self.data.keys():
+            for key in list(self.data.keys()):
                 self.data[key]*=factor
 
         self.__calc_sum__()
@@ -204,7 +204,7 @@ class emission_data:
                              'chocolate', 'burlywood', 'turquoise', 'wheat', 'cyan']
         else:
             self.color_list=color_list
-        self.order_list=emissions.keys()
+        self.order_list=list(emissions.keys())
         self.order_list.sort(emissions.cmp_prob_val)
         
     def register_viewer(self,data_viewer):

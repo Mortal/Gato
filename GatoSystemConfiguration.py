@@ -36,12 +36,12 @@ import shutil
 import sys
 import string
 import re
-import Tkinter
-import tkSimpleDialog
-import tkFileDialog
+import tkinter
+import tkinter.simpledialog
+import tkinter.filedialog
 import traceback
 try:
-    import _winreg
+    import winreg
 except ImportError:
     # we are not on a windows system
     pass
@@ -138,7 +138,7 @@ class configureUnsupported(configureOS):
     def runInstall(self):
         """
         """
-        print "unsupported operating system %s"%sys.platform
+        print("unsupported operating system %s"%sys.platform)
         
 class configureUNIX(configureOS):
     """
@@ -153,7 +153,7 @@ class configureUNIX(configureOS):
         configureOS.__init__(self,DialogMaster)
         
         # find mailcap file
-        if not os.environ.has_key("HOME"):
+        if "HOME" not in os.environ:
             raise ConfigurationException("could not determine home directory")
         self.mailcapFile=os.path.join(os.environ["HOME"],".mailcap")
         self.mime_typesFile=os.path.join(os.environ["HOME"],".mime.types")
@@ -189,7 +189,7 @@ class configureUNIX(configureOS):
             while line[-1]=="\\":
                 line=line[:-1]+mailcap.readline().rstrip()
             entries=line.split(";")
-            (mimeType,viewCommand)=map(string.strip,entries[:2])
+            (mimeType,viewCommand)=list(map(string.strip,entries[:2]))
             
             if (mimeType==gatoMimeType and
                 os.path.exists(viewCommand.split(" ")[0]) and
@@ -237,7 +237,7 @@ class configureUNIX(configureOS):
                 
         return 0
         
-    class askUserInstallDialog(tkSimpleDialog.Dialog):
+    class askUserInstallDialog(tkinter.simpledialog.Dialog):
         """
         dialog for system file manipulation of linux systems
         """
@@ -245,60 +245,60 @@ class configureUNIX(configureOS):
         def __init__(self,master,title=None):
             if not title:
                 title="System Configuration"
-            tkSimpleDialog.Dialog.__init__(self,master,title)
+            tkinter.simpledialog.Dialog.__init__(self,master,title)
             
         def body(self, master):
             """
             """
             row=0
             # install prefix question
-            Tkinter.Label(master, text="Install Gato to another place?").grid(row=row,column=0)
-            self.installQ = Tkinter.IntVar()
+            tkinter.Label(master, text="Install Gato to another place?").grid(row=row,column=0)
+            self.installQ = tkinter.IntVar()
             self.installQ.set(1)
-            Tkinter.Radiobutton(master, text="Yes", variable=self.installQ, value=1,
+            tkinter.Radiobutton(master, text="Yes", variable=self.installQ, value=1,
                                 command=self.enablePathEntry).grid(row=row,column=1)
-            Tkinter.Radiobutton(master, text="No",  variable=self.installQ, value=2,
+            tkinter.Radiobutton(master, text="No",  variable=self.installQ, value=2,
                                 command=self.disablePathEntry).grid(row=row,column=2)
             
             # install location
             row+=1
-            self.installP=Tkinter.Entry(master)
+            self.installP=tkinter.Entry(master)
             self.installP.insert(0,os.path.expanduser("~/bin"))
             self.installP.rowLocation=row
             self.installP.colLocation=0
-            self.installP.grid(row=row,column=0,sticky=Tkinter.EW)
-            self.searchP=Tkinter.Button(master,text="search...",
+            self.installP.grid(row=row,column=0,sticky=tkinter.EW)
+            self.searchP=tkinter.Button(master,text="search...",
                                         command=self.askInstallPrefix,
                                         pady=0)
             self.searchP.grid(row=row,column=1,columnspan=2)
             
             # mime type reg?
             row+=1
-            Tkinter.Label(master, text="add gato mime type").grid(row=row,column=0)
-            self.mimeQ = Tkinter.IntVar()
+            tkinter.Label(master, text="add gato mime type").grid(row=row,column=0)
+            self.mimeQ = tkinter.IntVar()
             self.mimeQ.set(1)
-            Tkinter.Radiobutton(master, text="Yes", variable=self.mimeQ,
+            tkinter.Radiobutton(master, text="Yes", variable=self.mimeQ,
                                 value=1).grid(row=row,column=1)
-            Tkinter.Radiobutton(master, text="No",  variable=self.mimeQ,
+            tkinter.Radiobutton(master, text="No",  variable=self.mimeQ,
                                 value=2).grid(row=row,column=2)
             
             # mime type reg?
             row+=1
-            Tkinter.Label(master, text="add gato to .mailcap").grid(row=row,column=0)
-            self.mailcapQ = Tkinter.IntVar()
+            tkinter.Label(master, text="add gato to .mailcap").grid(row=row,column=0)
+            self.mailcapQ = tkinter.IntVar()
             self.mailcapQ.set(1)
-            Tkinter.Radiobutton(master, text="Yes", variable=self.mailcapQ,
+            tkinter.Radiobutton(master, text="Yes", variable=self.mailcapQ,
                                 value=1).grid(row=row,column=1)
-            Tkinter.Radiobutton(master, text="No",  variable=self.mailcapQ,
+            tkinter.Radiobutton(master, text="No",  variable=self.mailcapQ,
                                 value=2).grid(row=row,column=2)
             
         def enablePathEntry(self):
-            self.installP.grid(row=self.installP.rowLocation,column=self.installP.colLocation,sticky=Tkinter.EW)
-            self.searchP["state"]=Tkinter.NORMAL
+            self.installP.grid(row=self.installP.rowLocation,column=self.installP.colLocation,sticky=tkinter.EW)
+            self.searchP["state"]=tkinter.NORMAL
             
         def disablePathEntry(self):
             self.installP.grid_forget()
-            self.searchP["state"]=Tkinter.DISABLED
+            self.searchP["state"]=tkinter.DISABLED
             
         def askInstallPrefix(self):
             """
@@ -307,11 +307,11 @@ class configureUNIX(configureOS):
             initDir=self.installP.get()
             newPrefix=""
             if os.path.exists(initDir):
-                newPrefix=tkFileDialog.askdirectory(parent=self,initialdir=initDir,mustexist=1)
+                newPrefix=tkinter.filedialog.askdirectory(parent=self,initialdir=initDir,mustexist=1)
             else:
-                newPrefix=tkFileDialog.askdirectory(parent=self,mustexist=1)                
+                newPrefix=tkinter.filedialog.askdirectory(parent=self,mustexist=1)                
             if newPrefix:
-                self.installP.delete(0, Tkinter.END)
+                self.installP.delete(0, tkinter.END)
                 self.installP.insert(0, newPrefix)
                 
         def apply(self):
@@ -336,14 +336,14 @@ class configureUNIX(configureOS):
         self.askedUser=self.askUserInstallDialog(self.DialogMaster).result
         return self.askedUser
         
-    class askUserUninstallDialog(tkSimpleDialog.Dialog):
+    class askUserUninstallDialog(tkinter.simpledialog.Dialog):
         """
         dialog for system file manipulation of linux systems
         """
         def __init__(self,master,title=None):
             if not title:
                 title="System Configuration"
-            tkSimpleDialog.Dialog.__init__(self,master,title)
+            tkinter.simpledialog.Dialog.__init__(self,master,title)
             
         def body(self, master):
             """
@@ -351,7 +351,7 @@ class configureUNIX(configureOS):
             """
             row=0
             # install prefix question
-            Tkinter.Label(master,
+            tkinter.Label(master,
                           text="Install Gato from\n%s ?"%self.myExecutable
                           ).grid(row=row,column=0)
             
@@ -403,7 +403,7 @@ class configureUNIX(configureOS):
                     savedLine=mailcap.readline()
                     line=line[:-1]+savedLine.rstrip()
                 entries=line.split(";")
-                (mimeType,viewCommand)=map(string.strip,entries[:2])
+                (mimeType,viewCommand)=list(map(string.strip,entries[:2]))
                 
                 # skip my old entry
                 if mimeType==gatoMimeType:
@@ -510,13 +510,13 @@ class configureWindows(configureOS):
         self.ClassesSection=self.findWritableClassesSection()
         return 0
         
-    class askUserInstallDialog(tkSimpleDialog.Dialog):
+    class askUserInstallDialog(tkinter.simpledialog.Dialog):
         """
         """
         def __init__(self,master,title=None):
             if not title:
                 title="System Configuration"
-            tkSimpleDialog.Dialog.__init__(self,master,title)
+            tkinter.simpledialog.Dialog.__init__(self,master,title)
             
         def body(self, master):
             """
@@ -524,34 +524,34 @@ class configureWindows(configureOS):
             """
             row=0
             # install question
-            Tkinter.Label(master, text="Install Gato.exe to another place?").grid(row=row,column=0)
-            self.installQ = Tkinter.IntVar()
+            tkinter.Label(master, text="Install Gato.exe to another place?").grid(row=row,column=0)
+            self.installQ = tkinter.IntVar()
             self.installQ.set(1)
-            Tkinter.Radiobutton(master, text="Yes", variable=self.installQ, value=1, command=self.enablePathEntry).grid(row=row,column=1)
-            Tkinter.Radiobutton(master, text="No",  variable=self.installQ, value=2, command=self.disablePathEntry).grid(row=row,column=2)
+            tkinter.Radiobutton(master, text="Yes", variable=self.installQ, value=1, command=self.enablePathEntry).grid(row=row,column=1)
+            tkinter.Radiobutton(master, text="No",  variable=self.installQ, value=2, command=self.disablePathEntry).grid(row=row,column=2)
             # install location
             row+=1
-            self.installP=Tkinter.Entry(master)
+            self.installP=tkinter.Entry(master)
             self.installP.insert(0,"C:\\Gato\\")
             self.installP.rowLocation=row
             self.installP.colLocation=0
-            self.installP.grid(row=row,column=0,sticky=Tkinter.EW)
-            self.searchP=Tkinter.Button(master,text="search...",command=self.askInstallPrefix, pady=0)
+            self.installP.grid(row=row,column=0,sticky=tkinter.EW)
+            self.searchP=tkinter.Button(master,text="search...",command=self.askInstallPrefix, pady=0)
             self.searchP.grid(row=row,column=1,columnspan=2)
             # extension question
             row+=1
-            self.extensionQ = Tkinter.IntVar()
+            self.extensionQ = tkinter.IntVar()
             self.extensionQ.set(1)
-            Tkinter.Label(master, text="Create bindings to .%s file extensions:"%gatoFileExtension).grid(row=row)
-            Tkinter.Radiobutton(master, text="Yes", variable=self.extensionQ, value=1).grid(row=row,column=1)
-            Tkinter.Radiobutton(master, text="No",  variable=self.extensionQ, value=2).grid(row=row,column=2)
+            tkinter.Label(master, text="Create bindings to .%s file extensions:"%gatoFileExtension).grid(row=row)
+            tkinter.Radiobutton(master, text="Yes", variable=self.extensionQ, value=1).grid(row=row,column=1)
+            tkinter.Radiobutton(master, text="No",  variable=self.extensionQ, value=2).grid(row=row,column=2)
             # MIME type question
             row+=1
-            self.mimeQ = Tkinter.IntVar()
+            self.mimeQ = tkinter.IntVar()
             self.mimeQ.set(1)
-            Tkinter.Label(master, text="Register MIME type %s:"%gatoMimeType).grid(row=row)
-            Tkinter.Radiobutton(master, text="Yes", variable=self.mimeQ, value=1).grid(row=row,column=1)
-            Tkinter.Radiobutton(master, text="No",  variable=self.mimeQ, value=2).grid(row=row,column=2)
+            tkinter.Label(master, text="Register MIME type %s:"%gatoMimeType).grid(row=row)
+            tkinter.Radiobutton(master, text="Yes", variable=self.mimeQ, value=1).grid(row=row,column=1)
+            tkinter.Radiobutton(master, text="No",  variable=self.mimeQ, value=2).grid(row=row,column=2)
             
         def apply(self):
             """
@@ -570,12 +570,12 @@ class configureWindows(configureOS):
                 self.result["extensionsQ"]=self.extensionsQ.get()==1
                 
         def enablePathEntry(self):
-            self.installP.grid(row=self.installP.rowLocation,column=self.installP.colLocation,sticky=Tkinter.EW)
-            self.searchP["state"]=Tkinter.NORMAL
+            self.installP.grid(row=self.installP.rowLocation,column=self.installP.colLocation,sticky=tkinter.EW)
+            self.searchP["state"]=tkinter.NORMAL
             
         def disablePathEntry(self):
             self.installP.grid_forget()
-            self.searchP["state"]=Tkinter.DISABLED
+            self.searchP["state"]=tkinter.DISABLED
             
         def askInstallPrefix(self):
             """
@@ -584,11 +584,11 @@ class configureWindows(configureOS):
             initDir=self.installP.get()
             newPrefix=""
             if os.path.exists(initDir):
-                newPrefix=tkFileDialog.askdirectory(parent=self,initialdir=initDir,mustexist=1)
+                newPrefix=tkinter.filedialog.askdirectory(parent=self,initialdir=initDir,mustexist=1)
             else:
-                newPrefix=tkFileDialog.askdirectory(parent=self,mustexist=1)                
+                newPrefix=tkinter.filedialog.askdirectory(parent=self,mustexist=1)                
             if newPrefix:
-                self.installP.delete(0, Tkinter.END)
+                self.installP.delete(0, tkinter.END)
                 self.installP.insert(0, newPrefix)
                 
     def askUserInstall(self):
@@ -610,62 +610,62 @@ class configureWindows(configureOS):
         """
         start reading...
         """
-        reader=_winreg.ConnectRegistry(None,_winreg.HKEY_CLASSES_ROOT)
+        reader=winreg.ConnectRegistry(None,winreg.HKEY_CLASSES_ROOT)
         # get Gato.File section
         GatoFileHandle=None
         try:
-            GatoFileHandle=_winreg.OpenKey(reader,"Gato.File")
+            GatoFileHandle=winreg.OpenKey(reader,"Gato.File")
         except WindowsError:
-            print "Could not find Gato.File section"
+            print("Could not find Gato.File section")
         else:
-            print "found Gato.File section:"
+            print("found Gato.File section:")
             self.printSubRegistry(GatoFileHandle)
             
             # get Gato FileExtension Section
         GatoExtensionHandle=None
         try:
-            GatoExtensionHandle=_winreg.OpenKey(reader,"."+gatoFileExtension)
+            GatoExtensionHandle=winreg.OpenKey(reader,"."+gatoFileExtension)
         except WindowsError:
-            print "could not find the file extension .%s"%gatoFileExtension
+            print("could not find the file extension .%s"%gatoFileExtension)
         else:
-            print "found gato's extension"
+            print("found gato's extension")
             self.printSubRegistry(GatoExtensionHandle)
             
             # get Gato mime Type section
         GatoMimeHandleGatoExt=None
         try:
-            GatoMimeHandle=_winreg.OpenKey(reader,"MIME")
-            GatoMimeHandleDatabase=_winreg.OpenKey(GatoMimeHandle,
+            GatoMimeHandle=winreg.OpenKey(reader,"MIME")
+            GatoMimeHandleDatabase=winreg.OpenKey(GatoMimeHandle,
                                                     "Database")
-            GatoMimeHandleContentType=_winreg.OpenKey(GatoMimeHandleDatabase,
+            GatoMimeHandleContentType=winreg.OpenKey(GatoMimeHandleDatabase,
                                                       "Content Type")
-            GatoMimeHandleGatoExt=_winreg.OpenKey(GatoMimeHandleContentType,
+            GatoMimeHandleGatoExt=winreg.OpenKey(GatoMimeHandleContentType,
                                                   gatoMimeType)
         except WindowsError:
-            print "could not find mime type: %s"%gatoMimeType
+            print("could not find mime type: %s"%gatoMimeType)
         else:
-            print "found %s mime type"%gatoMimeType
+            print("found %s mime type"%gatoMimeType)
             self.printSubRegistry(GatoMimeHandleGatoExt)
             
     def printSubRegistry(self,key,indent=""):
         """
         print all information of a subkey
         """
-        subkeyNo,valueNo,lastMod=_winreg.QueryInfoKey(key)
+        subkeyNo,valueNo,lastMod=winreg.QueryInfoKey(key)
         for i in range(valueNo):
-            print indent,_winreg.EnumValue(key, i)
+            print(indent,winreg.EnumValue(key, i))
         for i in range(subkeyNo):
-            subkeyName=_winreg.EnumKey(key,i)
-            subkey=_winreg.OpenKey(key,subkeyName)
-            print indent,subkeyName
+            subkeyName=winreg.EnumKey(key,i)
+            subkey=winreg.OpenKey(key,subkeyName)
+            print(indent,subkeyName)
             self.printSubRegistry(subkey,indent+"  ")
             
     def findWritableClassesSection(self):
         # first try in HKEY_CLASSES_ROOT
         try:
-            writer=_winreg.ConnectRegistry(None,_winreg.HKEY_CLASSES_ROOT)
-            GatoFileTestHandle=_winreg.CreateKey(writer,"Gato.File.Test")
-            _winreg.DeleteKey(writer,"Gato.File.Test")
+            writer=winreg.ConnectRegistry(None,winreg.HKEY_CLASSES_ROOT)
+            GatoFileTestHandle=winreg.CreateKey(writer,"Gato.File.Test")
+            winreg.DeleteKey(writer,"Gato.File.Test")
             return writer
         except WindowsError:
             # print "could not access HKEY_CLASSES_ROOT/Gato.File"
@@ -673,11 +673,11 @@ class configureWindows(configureOS):
             pass
             # next try...
         try:
-            writer=_winreg.ConnectRegistry(None,_winreg.HKEY_CURRENT_USER)
-            SoftwareSection=_winreg.OpenKey(writer,"Software")
-            ClassesSection=_winreg.OpenKey(SoftwareSection,"Classes",0,_winreg.KEY_SET_VALUE)
-            GatoFileTestHandle=_winreg.CreateKey(ClassesSection,"Gato.File.Test")
-            _winreg.DeleteKey(ClassesSection,"Gato.File.Test")
+            writer=winreg.ConnectRegistry(None,winreg.HKEY_CURRENT_USER)
+            SoftwareSection=winreg.OpenKey(writer,"Software")
+            ClassesSection=winreg.OpenKey(SoftwareSection,"Classes",0,winreg.KEY_SET_VALUE)
+            GatoFileTestHandle=winreg.CreateKey(ClassesSection,"Gato.File.Test")
+            winreg.DeleteKey(ClassesSection,"Gato.File.Test")
             return ClassesSection
         except WindowsError:
             # print "could not access HKEY_CURRENT_USER/Software/Classes Section"
@@ -690,48 +690,48 @@ class configureWindows(configureOS):
         """
         # update Gato.File section
         try:
-            GatoFileHandle=_winreg.CreateKey(ClassesSection,"Gato.File")
-            _winreg.SetValueEx(GatoFileHandle,"",0,_winreg.REG_SZ,"Gato.File")
+            GatoFileHandle=winreg.CreateKey(ClassesSection,"Gato.File")
+            winreg.SetValueEx(GatoFileHandle,"",0,winreg.REG_SZ,"Gato.File")
         except WindowsError:
-            print "Could not create/update the Gato.File section"
+            print("Could not create/update the Gato.File section")
             self.traceback.print_exc()
             
             # update Gato.File's subsections
         try:
-            GatoShellHandle=_winreg.CreateKey(GatoFileHandle,"shell")
-            GatoOpenHandle=_winreg.CreateKey(GatoShellHandle,"open")
-            GatoOpenCommandHandle=_winreg.CreateKey(GatoOpenHandle,"command")
-            _winreg.SetValueEx(GatoOpenCommandHandle,"",0,_winreg.REG_SZ,self.myExecutable+' "%1"')
+            GatoShellHandle=winreg.CreateKey(GatoFileHandle,"shell")
+            GatoOpenHandle=winreg.CreateKey(GatoShellHandle,"open")
+            GatoOpenCommandHandle=winreg.CreateKey(GatoOpenHandle,"command")
+            winreg.SetValueEx(GatoOpenCommandHandle,"",0,winreg.REG_SZ,self.myExecutable+' "%1"')
         except WindowsError:
-            print "could not install open command for gato"
+            print("could not install open command for gato")
             self.traceback.print_exc()
             
             # update .gato section    
         try:
-            GatoExtensionHandle=_winreg.CreateKey(ClassesSection,"."+gatoFileExtension)
-            _winreg.SetValueEx(GatoExtensionHandle,"",0,_winreg.REG_SZ,"Gato.File")
-            _winreg.SetValueEx(GatoExtensionHandle,"Content Type",0,_winreg.REG_SZ,gatoMimeType)
+            GatoExtensionHandle=winreg.CreateKey(ClassesSection,"."+gatoFileExtension)
+            winreg.SetValueEx(GatoExtensionHandle,"",0,winreg.REG_SZ,"Gato.File")
+            winreg.SetValueEx(GatoExtensionHandle,"Content Type",0,winreg.REG_SZ,gatoMimeType)
         except WindowsError:
-            print "could not create/update FileExtension section"
+            print("could not create/update FileExtension section")
             self.traceback.print_exc()
             
             # access MIME Database section
         MimeContentTypeSection=None
         try:
-            MimeSection=_winreg.CreateKey(ClassesSection,"MIME")
-            MimeDatabaseSection=_winreg.CreateKey(MimeSection,"Database")
-            MimeContentTypeSection=_winreg.CreateKey(MimeDatabaseSection,"Content Type")
+            MimeSection=winreg.CreateKey(ClassesSection,"MIME")
+            MimeDatabaseSection=winreg.CreateKey(MimeSection,"Database")
+            MimeContentTypeSection=winreg.CreateKey(MimeDatabaseSection,"Content Type")
         except WindowsError:
-            print "could not access MIME Content Type database"
+            print("could not access MIME Content Type database")
             self.traceback.print_exc()
             return
             # update gato's mime type
         try:
-            GatoMimeContentTypeHandle=_winreg.CreateKey(MimeContentTypeSection,gatoMimeType)
-            _winreg.SetValueEx(GatoMimeContentTypeHandle,"Extension",0,
-                                    _winreg.REG_SZ,"."+gatoFileExtension)
+            GatoMimeContentTypeHandle=winreg.CreateKey(MimeContentTypeSection,gatoMimeType)
+            winreg.SetValueEx(GatoMimeContentTypeHandle,"Extension",0,
+                                    winreg.REG_SZ,"."+gatoFileExtension)
         except WindowsError:
-            print "could not update the gato MIME section"
+            print("could not update the gato MIME section")
             self.traceback.print_exc()
             
 class GatoInstaller:
@@ -741,7 +741,7 @@ class GatoInstaller:
     """
     instanceCounter=0
     
-    def __init__(self,disabled=0,menu=None,index=Tkinter.END):
+    def __init__(self,disabled=0,menu=None,index=tkinter.END):
         """
         gets system configurator and checks state
         """
@@ -775,7 +775,7 @@ class GatoInstaller:
         self.disabled=1
         self.removeMenuEntry()
         
-    def addMenuEntry(self,menu,index=Tkinter.END):
+    def addMenuEntry(self,menu,index=tkinter.END):
         self.menu=menu
         self.index=menu.index(index) # make absolute position
         if self.disabled:
@@ -812,7 +812,7 @@ class GatoInstaller:
         self.configureMenuEntry()
         
     def uninstallCommand(self):
-        print "uninstall"
+        print("uninstall")
         self.state=self.SysConfig.check()
         self.configureMenuEntry()
         

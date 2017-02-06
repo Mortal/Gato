@@ -32,13 +32,13 @@
 #             last change by $Author: schliep $.
 #
 ################################################################################
-from Tkinter import *
-from Tkinter import _cnfmerge
-from ScrolledText import *
-import GatoUtil
-import GatoGlobals
-import GatoIcons
-import tkSimpleDialog 
+from tkinter import *
+from tkinter import _cnfmerge
+from tkinter.scrolledtext import *
+from . import GatoUtil
+from . import GatoGlobals
+from . import GatoIcons
+import tkinter.simpledialog 
 import sys
 import os
 import htmllib, formatter
@@ -75,9 +75,9 @@ class AutoScrollbar(Scrollbar):
             self.grid()
         Scrollbar.set(self, lo, hi)
     def pack(self, **kw):
-        raise TclError, "cannot use pack with this widget"
+        raise TclError("cannot use pack with this widget")
     def place(self, **kw):
-        raise TclError, "cannot use place with this widget"
+        raise TclError("cannot use place with this widget")
 
 
 class AutoScrolledText(Text):
@@ -91,7 +91,7 @@ class AutoScrolledText(Text):
         if kw:
             cnf = _cnfmerge((cnf, kw))
         fcnf = {}
-        for k in cnf.keys():
+        for k in list(cnf.keys()):
             if type(k) == ClassType or k == 'name':
                 fcnf[k] = cnf[k]
                 del cnf[k]
@@ -111,9 +111,9 @@ class AutoScrolledText(Text):
 
 
         # Copy geometry methods of self.frame -- hack!
-        methods = Pack.__dict__.keys()
-        methods = methods + Grid.__dict__.keys()
-        methods = methods + Place.__dict__.keys()
+        methods = list(Pack.__dict__.keys())
+        methods = methods + list(Grid.__dict__.keys())
+        methods = methods + list(Place.__dict__.keys())
 
         for m in methods:
             if m[0] != '_' and m != 'config' and m != 'configure':
@@ -121,7 +121,7 @@ class AutoScrolledText(Text):
 
 
 
-class AboutBox(tkSimpleDialog.Dialog):
+class AboutBox(tkinter.simpledialog.Dialog):
     """ The application's about box """
     
     def buttonbox(self):

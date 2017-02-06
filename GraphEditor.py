@@ -35,19 +35,19 @@
 ################################################################################
 
 
-from Tkinter import *
-from Graph import Graph, Point2D
+from tkinter import *
+from .Graph import Graph, Point2D
 from math import sqrt
-import GatoGlobals
-from GraphDisplay import GraphDisplay
-from tkSimpleDialog import askinteger, askfloat
-import tkSimpleDialog 
+from . import GatoGlobals
+from .GraphDisplay import GraphDisplay
+from tkinter.simpledialog import askinteger, askfloat
+import tkinter.simpledialog 
 import string
-import tkMessageBox
+import tkinter.messagebox
 
 g = GatoGlobals.AnimationParameters
 
-class EditWeightsDialog(tkSimpleDialog.Dialog):
+class EditWeightsDialog(tkinter.simpledialog.Dialog):
     """ Provide a dialog for editing vertex and edge weigths
     
          - title        the title in the dialog box
@@ -62,7 +62,7 @@ class EditWeightsDialog(tkSimpleDialog.Dialog):
         self.weights = weights
         self.intFlag = intFlag
         self.label = label
-        tkSimpleDialog.Dialog.__init__(self, master, title)
+        tkinter.simpledialog.Dialog.__init__(self, master, title)
         
         
     def body(self, master):
@@ -74,7 +74,7 @@ class EditWeightsDialog(tkSimpleDialog.Dialog):
         
         self.entry = [None] * self.nrOfWeights
         
-        for i in xrange(self.nrOfWeights):
+        for i in range(self.nrOfWeights):
             if self.label == None:
                 label = Label(master, text="Weight %d" %(i+1), anchor=W)
             else:
@@ -89,7 +89,7 @@ class EditWeightsDialog(tkSimpleDialog.Dialog):
             
     def validate(self):
         self.result = [None] * self.nrOfWeights
-        for i in xrange(self.nrOfWeights):	    
+        for i in range(self.nrOfWeights):	    
             try:
                 if self.intFlag[i]:
                     self.result[i] = string.atoi(self.entry[i].get())
@@ -100,7 +100,7 @@ class EditWeightsDialog(tkSimpleDialog.Dialog):
                     m = "Please enter an integer value for weight %d." % (i+1) 
                 else:
                     m = "Please enter an floating point number for weight %d." % (i+1) 
-                tkMessageBox.showwarning("Invalid Value", m, parent=self)
+                tkinter.messagebox.showwarning("Invalid Value", m, parent=self)
                 self.entry[i].selection_range(0,"end")
                 self.entry[i].focus_set()
                 self.result = None
@@ -357,30 +357,30 @@ class GraphEditor(GraphDisplay):
                 
                 weights = ()
                 intFlag = ()
-                count = len(self.G.edgeWeights.keys())
-                for i in xrange(count):
+                count = len(list(self.G.edgeWeights.keys()))
+                for i in range(count):
                     weights = weights + (self.G.GetEdgeWeight(i,tail,head),)
                     intFlag = intFlag + (self.G.edgeWeights[i].QInteger(),)
                     
                 d = EditWeightsDialog(self, "Weight of edge (%d,%d)" % (tail,head), 
                                       count, weights, intFlag) 
                 if d.result is not None:
-                    for i in xrange(count):
+                    for i in range(count):
                         self.SetEdgeWeight(i, tail, head, d.result[i])
             else: # We have a vertex
                 v = self.FindVertex(event)
                 if v != None and self.G.NrOfVertexWeights() > 0:
                     weights = ()
                     intFlag = ()
-                    count = len(self.G.vertexWeights.keys())
-                    for i in xrange(count):
+                    count = len(list(self.G.vertexWeights.keys()))
+                    for i in range(count):
                         weights = weights + (self.G.GetVertexWeight(i, v),)
                         intFlag = intFlag + (self.G.vertexWeights[i].QInteger(),)
                         
                     d = EditWeightsDialog(self, "Edit vertex weights %d" % v, 
                                               count, weights, intFlag) 
                     if d.result is not None:
-                        for i in xrange(count):
+                        for i in range(count):
                             self.G.SetVertexWeight(i, v, d.result[i])
                             
                             

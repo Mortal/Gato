@@ -37,7 +37,7 @@
 ################################################################################
 
 
-from __future__ import generators #Needed for PQImplementation and Python2.2
+ #Needed for PQImplementation and Python2.2
 #from GatoGlobals import *
 
 
@@ -88,13 +88,13 @@ class VertexLabeling:
         return self.label[v]
         
     def keys(self):
-        return self.label.keys()
+        return list(self.label.keys())
 
     def items(self):
-        return self.label.items()
+        return list(self.label.items())
         
     def QDefined(self,v):
-        return v in self.label.keys()
+        return v in list(self.label.keys())
         
 class VertexWeight(VertexLabeling):
 
@@ -111,7 +111,7 @@ class VertexWeight(VertexLabeling):
         
     def Integerize(self):
         if not self.integer:
-            for v in self.label.keys():
+            for v in list(self.label.keys()):
                 self.label[v] = int(round(self.label[v]))
             self.integer = 1	
             
@@ -149,13 +149,13 @@ class EdgeLabeling:
         return self.label[e]
         
     def items(self):
-        return self.label.items()
+        return list(self.label.items())
 
     def keys(self):
-        return self.label.keys()
+        return list(self.label.keys())
 
     def QDefined(self,e):
-        return e in self.label.keys()
+        return e in list(self.label.keys())
         
         
 class EdgeWeight(EdgeLabeling):
@@ -196,7 +196,7 @@ class EdgeWeight(EdgeLabeling):
         
     def Integerize(self):
         if not self.integer:
-            for e in self.label.keys():
+            for e in list(self.label.keys()):
                 self.label[e] = int(round(self.label[e]))
             self.integer = 1	
             
@@ -259,7 +259,7 @@ class PQImplementation(dict):
     def smallest(self):
         '''Find smallest item after removing deleted items from heap.'''
         if len(self) == 0:
-            raise IndexError, "smallest of empty priorityDictionary"
+            raise IndexError("smallest of empty priorityDictionary")
         heap = self.__heap
         while heap[0][1] not in self or self[heap[0][1]] != heap[0][0]:
             lastItem = heap.pop()
@@ -297,7 +297,7 @@ class PQImplementation(dict):
         dict.__setitem__(self,key,val)
         heap = self.__heap
         if len(heap) > 2 * len(self):
-            self.__heap = [(v,k) for k,v in self.iteritems()]
+            self.__heap = [(v,k) for k,v in self.items()]
             self.__heap.sort()  # builtin sort likely faster than O(n) heapify
         else:
             newPair = (val,key)
@@ -316,7 +316,7 @@ class PQImplementation(dict):
         return self[key]
         
     def update(self, other):
-        for key in other.keys():
+        for key in list(other.keys()):
             self[key] = other[key]
             
             
@@ -335,10 +335,10 @@ class PriorityQueue:
         return self.pq.deleteMin()
         
     def DecreaseKey(self,value,newSortKey):
-        if self.pq.has_key(value):
+        if value in self.pq:
             self.pq[value] = newSortKey
         else:
-            raise KeyError, "PriorityQueue: DecreaseKey of non-existing key"
+            raise KeyError("PriorityQueue: DecreaseKey of non-existing key")
             
     def Clear(self):
         del self.pq

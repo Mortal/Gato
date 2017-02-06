@@ -36,8 +36,8 @@
 #
 ################################################################################
 
-import GatoGlobals
-import AnimationHistory
+from . import GatoGlobals
+from . import AnimationHistory
 import traceback
 
 g = GatoGlobals.AnimationParameters
@@ -226,7 +226,7 @@ class MergedHistories:
         self._check_animator_set(animator, display)
         #Delete all edges containing v
         #Call deletevertex command
-        for d in animator.drawEdges.keys():
+        for d in list(animator.drawEdges.keys()):
             if d[0]==v or d[1]==v:
                 self.DeleteEdge(d[0], d[1], animator, display)
         animation = AnimationHistory.AnimationCommand(animator.DeleteVertex, (v,), (), canUndo=False)
@@ -251,7 +251,7 @@ class MergedHistories:
         self.append(animation, display)
         
     def __getattr__(self,arg):
-        print "Function tried to be called: ", arg
+        print("Function tried to be called: ", arg)
         raise AttributeError('Specified function of MergedHistories does not exist.')
             
     def Undo(self):

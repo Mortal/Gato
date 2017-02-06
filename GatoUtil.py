@@ -34,7 +34,7 @@
 #
 ################################################################################
 
-from Tkinter import *
+from tkinter import *
     
 def extension(pathAndFile):
     """ Return ext if path/filename.ext is given """
@@ -91,10 +91,10 @@ class ImageCache:
         """ Given a relative URL to an image file return the 
             corresponding PhotoImage. """
         try:    
-            if relURL not in self.images.keys():
+            if relURL not in list(self.images.keys()):
                 ImageCache.images[relURL] = PhotoImage(file=relURL)
             return ImageCache.images[relURL]
-        except IndexError, IOError:
+        except IndexError as IOError:
             import logging
             log = logging.getLogger("GatoUtil.py")
             log.exception("Error finding image %s" % relURL)

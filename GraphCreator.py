@@ -34,10 +34,10 @@
 #
 ################################################################################
 
-from Graph import *
-from Embedder import *
+from .Graph import *
+from .Embedder import *
 import random
-from tkMessageBox import askokcancel
+from tkinter.messagebox import askokcancel
 
 class Creator:
     """ This class provides an abstract Creator as
@@ -76,17 +76,17 @@ def DrawNewGraph(theGraphEditor,G,direction):
     
         
 #----------------------------------------------------------------------
-from Tkinter import *
-import tkSimpleDialog 
+from tkinter import *
+import tkinter.simpledialog 
 import string
-from tkMessageBox import showwarning
+from tkinter.messagebox import showwarning
 
-class Dialog(tkSimpleDialog.Dialog):
+class Dialog(tkinter.simpledialog.Dialog):
 
     def __init__(self, master, planar, visible, Text):
         self.planar=planar
         self.visible=visible
-        tkSimpleDialog.Dialog.__init__(self, master, Text)
+        tkinter.simpledialog.Dialog.__init__(self, master, Text)
         
         
     def body(self, master):
@@ -419,11 +419,11 @@ class randomPlanarGraphCreator(Creator):
         theGraphEditor.config(cursor="")         
         
         #----------------------------------------------------------------------
-class TreeDialog(tkSimpleDialog.Dialog):
+class TreeDialog(tkinter.simpledialog.Dialog):
 
     def __init__(self, master, visible, Text):
         self.visible=visible
-        tkSimpleDialog.Dialog.__init__(self, master, Text)
+        tkinter.simpledialog.Dialog.__init__(self, master, Text)
         
         
     def body(self, master):
@@ -689,11 +689,11 @@ class randomTreeCreator(Creator):
         #----------------------------------------------------------------------
 from math import ceil
 
-class GridDialog(tkSimpleDialog.Dialog):
+class GridDialog(tkinter.simpledialog.Dialog):
 
     def __init__(self, master, visible, Text):
         self.visible=visible
-        tkSimpleDialog.Dialog.__init__(self, master, Text)
+        tkinter.simpledialog.Dialog.__init__(self, master, Text)
         
         
     def body(self, master):
@@ -800,20 +800,20 @@ class rectangularGridGraph(Creator):
         
         nodes = {}
         count = 1
-        for i in xrange(maxI):
-            for j in xrange(maxJ):
+        for i in range(maxI):
+            for j in range(maxJ):
                 v = G.AddVertex()
                 nodes[(i,j)] = v
                 G.xCoord[v] = j * deltax + deltax
                 G.yCoord[v] = i * deltay + deltay
                 count += 1
                 
-        for i in xrange(maxI-1):
-            for j in xrange(maxJ-1):
+        for i in range(maxI-1):
+            for j in range(maxJ-1):
                 G.AddEdge(nodes[(i,j)], nodes[(i+1,j)], initialize_weight=False)
                 G.AddEdge(nodes[(i,j)], nodes[(i,j+1)], initialize_weight=False)
             G.AddEdge(nodes[(i,maxJ-1)], nodes[(i+1,maxJ-1)], initialize_weight=False)
-        for  j in xrange(maxJ-1):
+        for  j in range(maxJ-1):
             G.AddEdge(nodes[(maxI-1,j)], nodes[(maxI-1,j+1)], initialize_weight=False)
             
         DrawNewGraph(theGraphEditor,G,G.directed) 

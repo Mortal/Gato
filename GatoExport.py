@@ -36,13 +36,13 @@
 #
 ################################################################################
 import os
-import StringIO
+import io
 import tokenize
 import re
 import pdb
 from bs4 import BeautifulSoup
 from math import sqrt, pi, sin, cos, atan2, degrees, log10, floor, ceil
-from WebGatoJS import animationhead
+from .WebGatoJS import animationhead
 
 #Global constants for tokenEater
 line_count = 1
@@ -81,7 +81,9 @@ svg_drop_shadow = '''
 '''
 
 
-def tokenEater(type, token, (srow, scol), (erow, ecol), line):
+def tokenEater(type, token, xxx_todo_changeme, xxx_todo_changeme1, line):
+    (srow, scol) = xxx_todo_changeme
+    (erow, ecol) = xxx_todo_changeme1
     global line_count
     global prev
     global begun_line
@@ -247,7 +249,7 @@ def collectAnimations(histories, prefixes):
         currentTime = cmd[0]
         mergedCmds[i][0] = str(duration)
         # We want to change the edge ids to a different form
-        for j in xrange(2, len(mergedCmds[i])):
+        for j in range(2, len(mergedCmds[i])):
             if 'Edge' in mergedCmds[i][1]:
                 mergedCmds[i][j] = change_id_format(mergedCmds[i][j])
     return ["Array(" + ", ".join(cmd) + ")" for cmd in mergedCmds]
@@ -599,7 +601,7 @@ def format_init_edge_infos(info_dict, idPrefix):
     if not info_dict:
         return 'null';
     str_bits = ['{'] # List of strings to return joined at the end(faster than concatenation)
-    for tup, info in info_dict.iteritems():
+    for tup, info in info_dict.items():
         v, w = tup
         edge_id = get_edge_id(v, w, idPrefix)
         assignment = '"{}": "{}",'.format(edge_id, info)
@@ -612,7 +614,7 @@ def format_init_vertex_infos(info_dict, idPrefix):
     if not info_dict:
         return 'null';
     str_bits = ['{'] # List of strings to return joined at the end(faster than concatenation)
-    for v, info in info_dict.iteritems():
+    for v, info in info_dict.items():
         vertex_id = idPrefix + str(v)
         assignment = '"{}": "{}",'.format(vertex_id, info)
         str_bits.append(assignment)
@@ -664,7 +666,7 @@ def ExportAlgoInfo(fileName, algorithm):
 
 def format_animation(animation):
     def chunker(seq, size):
-        return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+        return (seq[pos:pos + size] for pos in range(0, len(seq), size))
     if len(animation) < 32000:
         return 'var anim_array = Array(' + ',\n'.join(animation) + ');'
     else:
@@ -719,12 +721,12 @@ def ExportSVG(fileName, algowin, algorithm, graphDisplay, secondaryGraphDisplay=
                                                algowin.codeLineHistory],
                                               ['g1_', 'l_'])
         except IndexError as e:
-            print "Error:"
-            print e
-            print "Filename: ", fileName
-            print "Algowin: ", algowin
-            print "Algorithm: ", algorithm
-            print "graphDisplay: ", graphDisplay
+            print("Error:")
+            print(e)
+            print("Filename: ", fileName)
+            print("Algowin: ", algowin)
+            print("Algorithm: ", algorithm)
+            print("graphDisplay: ", graphDisplay)
             return
 
     # Reload the graph and execute prolog so we can save the initial state to SVG
@@ -766,7 +768,7 @@ def ExportSVG(fileName, algowin, algorithm, graphDisplay, secondaryGraphDisplay=
 
         # Build the Algorithm SVG string
         source = algorithm.GetSource()
-        tokenize.tokenize(StringIO.StringIO(source.replace('\\', '\\\\')).readline, tokenEater)
+        tokenize.tokenize(io.StringIO(source.replace('\\', '\\\\')).readline, tokenEater)
         algowin.CommitStop()
 
         # Merge the animation into the HTML

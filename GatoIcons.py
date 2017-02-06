@@ -1478,7 +1478,7 @@ sKDBgwgTKlzIsKHDhxAjSpxIsaLFixgzatzIsaPHjyBDihxJsqTJkyhTngwIADs=
 """
 
 def Init():
-    import GatoUtil
+    from . import GatoUtil
     imageCache = GatoUtil.ImageCache() # singleton
     imageCache.AddImage("Icons/black.gif",black)
     imageCache.AddImage("Icons/blacknde.gif",blacknde)

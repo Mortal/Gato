@@ -34,31 +34,31 @@
 #
 ################################################################################
 
-from DataStructures import Point2D
-from Graph import Graph
-from Gred import *
-from GraphUtil import GraphInformer, VertexWeight
-from GraphDisplay import GraphDisplay
-from GatoUtil import stripPath, extension
-from GatoGlobals import *
-from GraphEditor import EditWeightsDialog
-from tkFileDialog import askopenfilename, asksaveasfilename
-import tkMessageBox
-from tkMessageBox import askokcancel
-import tkSimpleDialog 
+from .DataStructures import Point2D
+from .Graph import Graph
+from .Gred import *
+from .GraphUtil import GraphInformer, VertexWeight
+from .GraphDisplay import GraphDisplay
+from .GatoUtil import stripPath, extension
+from .GatoGlobals import *
+from .GraphEditor import EditWeightsDialog
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+import tkinter.messagebox
+from tkinter.messagebox import askokcancel
+import tkinter.simpledialog 
 import random
 import string
 import types
 import copy
-import ProbEditorBasics
-import ProbEditorDialogs
+from . import ProbEditorBasics
+from . import ProbEditorDialogs
 
-import HMMXML
+from . import HMMXML
 import xml.dom.minidom
-import EditObjectAttributesDialog
-from EditObjectAttributesDialog import EditObjectAttributesDialog, ValidatingString, ValidatingInt, ValidatingFloat, PopupableInt, Probability, DefaultedInt, DefaultedString
+from . import EditObjectAttributesDialog
+from .EditObjectAttributesDialog import EditObjectAttributesDialog, ValidatingString, ValidatingInt, ValidatingFloat, PopupableInt, Probability, DefaultedInt, DefaultedString
 
-from MapEditor import MapEditor, NamedCollectionEditor
+from .MapEditor import MapEditor, NamedCollectionEditor
 
 def typed_assign(var, val):
     result = type(var)(val)
@@ -67,15 +67,15 @@ def typed_assign(var, val):
     return result
     
 def listFromCSV(s, type):
-    return map(type,string.split(s,','))
+    return list(map(type,string.split(s,',')))
     
 def csvFromList(list, perRow = None):
     if perRow == None:
-        return string.join(map(str,list), ', ')
+        return string.join(list(map(str,list)), ', ')
     else:
         result = ""
-        for start in xrange(0, len(list), perRow):
-            result += string.join(map(str,list[start:start+perRow]), ', ') + ',\n'
+        for start in range(0, len(list), perRow):
+            result += string.join(list(map(str,list[start:start+perRow])), ', ') + ',\n'
         return result[0:len(result)-2]
         
 def writeContents(XMLDoc, XMLNode, data):
@@ -131,11 +131,11 @@ class NamedDistributions:
             dataValue = ""
             for child in data.childNodes:
                 dataValue += child.nodeValue
-            p = listFromCSV(dataValue, types.FloatType)
+            p = listFromCSV(dataValue, float)
             self.addDistribution(dataKey, dataOrder, p)
             
     def toDOM(self, XMLDoc, XMLNode):
-        for name in self.dist.keys():
+        for name in list(self.dist.keys()):
             background_elem = XMLDoc.createElement("hmm:background")
             background_elem.setAttribute('key', "%s" % name)
             background_elem.setAttribute('order', "%s" % self.order[name])
@@ -151,13 +151,13 @@ class NamedDistributions:
         editor = NamedCollectionEditor(master, self)
         
     def names(self):
-        return self.dist.keys()
+        return list(self.dist.keys())
         
     def add(self, name):
-        order = tkSimpleDialog.askinteger("Distribution %s" % name, "Order", initialvalue=0)
+        order = tkinter.simpledialog.askinteger("Distribution %s" % name, "Order", initialvalue=0)
         tmp = [1.0 / self.itsHMM.hmmAlphabet.size()] * self.itsHMM.hmmAlphabet.size()
         p = tmp * (self.itsHMM.hmmAlphabet.size() ** order)
-        print "adding", name, order, p
+        print("adding", name, order, p)
         self.addDistribution(name, order, p)
         
     def delete(self, name):
@@ -165,11 +165,11 @@ class NamedDistributions:
         
     def edit(self, master, name):
         if self.order[name] != 0:
-            print "Sorry, cannot edit higher order distributions yet"
+            print("Sorry, cannot edit higher order distributions yet")
         else:
             emission_probabilities = ProbEditorBasics.ProbDict({})
             
-            for code in self.itsHMM.hmmAlphabet.name.keys():
+            for code in list(self.itsHMM.hmmAlphabet.name.keys()):
                 label = self.itsHMM.hmmAlphabet.name[code]
                 weight = self.dist[name][code]
                 emission_probabilities.update({label:weight})
@@ -179,7 +179,7 @@ class NamedDistributions:
                                                   "background emission probs %s" % name)
             if d.success():
                 # write back normalized probabilities
-                for key in emission_probabilities.keys():
+                for key in list(emission_probabilities.keys()):
                     code = self.itsHMM.hmmAlphabet.name2code[key]
                     weight = self.dist[name][code] = emission_probabilities[key] / emission_probabilities.sum
                     
@@ -226,7 +226,7 @@ class DOM_Map:
         XMLNode.setAttribute('hmm:low', "%s" % self.low())
         XMLNode.setAttribute('hmm:high', "%s" % self.high())
         map = XMLDoc.createElement("map")  
-        for key in self.name.keys():
+        for key in list(self.name.keys()):
             symbol = XMLDoc.createElement("symbol")
             symbol.setAttribute('code', "%s" % key)
             if self.hasDesc and self.desc[key] != "":
@@ -248,7 +248,7 @@ class DiscreteHMMAlphabet(DOM_Map):
         if XMLNode.getAttribute("hmm:type") == self.hmm_type:
             self.symbolsFromDom(XMLNode)
         else:
-            print "DiscreteHMMAlphabet wrong type %s" % XMLNode.getAttribute("hmm:type") 
+            print("DiscreteHMMAlphabet wrong type %s" % XMLNode.getAttribute("hmm:type")) 
             
     def toDOM(self, XMLDoc, XMLNode):
         hmmalphabet = XMLDoc.createElement("hmm:alphabet")
@@ -257,11 +257,11 @@ class DiscreteHMMAlphabet(DOM_Map):
         XMLNode.appendChild(hmmalphabet)
         
     def size(self):
-        return len(self.name.keys())
+        return len(list(self.name.keys()))
         
     def edit(self, master):        
         mapedit = MapEditor(master, [self.name], ['code','name'], [3,5])
-        print mapedit.result
+        print(mapedit.result)
         if mapedit.result != None:
         
             new_keys = []
@@ -271,7 +271,7 @@ class DiscreteHMMAlphabet(DOM_Map):
                 self.name2code[name] = code
                 new_keys.append(code)
                 
-            for key in self.name.keys():
+            for key in list(self.name.keys()):
                 if key not in new_keys:
                     del self.name2code[self.name[key]]
                     del self.name[key] 
@@ -294,7 +294,7 @@ class HMMClass(DOM_Map):
         
     def edit(self, master):        
         mapedit = MapEditor(master, [self.name, self.desc], ['code','name','desc'], [3,5,35])
-        print mapedit.result
+        print(mapedit.result)
         if mapedit.result != None:
         
             new_keys = []
@@ -305,7 +305,7 @@ class HMMClass(DOM_Map):
                 self.name2code[name] = code
                 new_keys.append(code)
                 
-            for key in self.name.keys():
+            for key in list(self.name.keys()):
                 if key not in new_keys:
                     del self.name2code[self.name[key]]
                     del self.name[key] 
@@ -410,11 +410,11 @@ class HMMState:
                 dataValue = ""
                 for child in data.childNodes:
                     dataValue += child.nodeValue
-                self.emissions = listFromCSV(dataValue, types.FloatType)
+                self.emissions = listFromCSV(dataValue, float)
                 #print self.emissions
                 
             else:
-                print "HMMState.fromDOM: unknown key %s of value %s" % (dataKey, dataValue)
+                print("HMMState.fromDOM: unknown key %s of value %s" % (dataKey, dataValue))
                 
                 
     def toDOM(self, XMLDoc, XMLNode, initial_sum):
@@ -612,7 +612,7 @@ class HMMEditor(SAGraphEditor):
         
         self.toolVar = StringVar()
         
-        import GatoIcons
+        from . import GatoIcons
         # Load Icons
         self.vertexIcon = PhotoImage(data=GatoIcons.vertex)
         self.edgeIcon   = PhotoImage(data=GatoIcons.edge)
@@ -754,9 +754,9 @@ class HMMEditor(SAGraphEditor):
         self.SetTitle("HMMEd _VERSION_ - New Graph")
         self.SetGraphMenuOptions()
         if nrOfSymbols == 0:
-            nrOfSymbols  = tkSimpleDialog.askinteger("New HMM",
+            nrOfSymbols  = tkinter.simpledialog.askinteger("New HMM",
                                                      "Enter the number of output symbols")
-        for i in xrange(nrOfSymbols):
+        for i in range(nrOfSymbols):
             self.HMM.G.vertexWeights[i] = VertexWeight(0.0)
             
     def OpenGraph(self):	
@@ -766,7 +766,7 @@ class HMMEditor(SAGraphEditor):
                                             )
                                )
         if file is "": 
-            print "cancelled"
+            print("cancelled")
         else:
             self.fileName = file
             self.graphName = stripPath(file)
@@ -775,7 +775,7 @@ class HMMEditor(SAGraphEditor):
             if e == 'xml':
                 self.HMM.OpenXML(file)
             else:
-                print "Unknown extension"
+                print("Unknown extension")
                 return
                 
             self.ShowGraph(self.HMM.G, self.graphName)
@@ -800,9 +800,9 @@ class HMMEditor(SAGraphEditor):
                                                )
                                  )
         if file is "": 
-            print "cancelled"
+            print("cancelled")
         else:
-            print file
+            print(file)
             self.fileName = file
             self.HMM.SaveAs(file)
             self.graphName = stripPath(file)
@@ -823,7 +823,7 @@ class HMMEditor(SAGraphEditor):
                     transition_probabilities.update({label:weight})
                     
                 if transition_probabilities.sum==0:
-                    key_list=transition_probabilities.keys()
+                    key_list=list(transition_probabilities.keys())
                     for key in key_list:
                         transition_probabilities[key]=1.0/len(key_list)
                 e=ProbEditorBasics.emission_data(transition_probabilities)
@@ -832,7 +832,7 @@ class HMMEditor(SAGraphEditor):
                                                       "transition probs from state %d" % tail)
                 if d.success():
                     # write back normalized probabilities
-                    for key in transition_probabilities.keys():
+                    for key in list(transition_probabilities.keys()):
                         head = int(key[3:])
                         self.HMM.G.edgeWeights[0][(tail,head)]=transition_probabilities[key]/transition_probabilities.sum
                         
@@ -841,7 +841,7 @@ class HMMEditor(SAGraphEditor):
                 if v != None:
                     state = self.HMM.state[v]
                     if state.order > 0:
-                        print "Ooops. Cant edit higher order states"
+                        print("Ooops. Cant edit higher order states")
                         return
                         
                     if state.tiedto != '':
@@ -856,14 +856,14 @@ class HMMEditor(SAGraphEditor):
                         state.emissions = [1.0 / self.HMM.hmmAlphabet.size()] * self.HMM.hmmAlphabet.size()
                     emission_probabilities = ProbEditorBasics.ProbDict({})
                     
-                    for code in self.HMM.hmmAlphabet.name.keys():
+                    for code in list(self.HMM.hmmAlphabet.name.keys()):
                         label = self.HMM.hmmAlphabet.name[code]
                         weight = state.emissions[code]
                         emission_probabilities.update({label:weight})
                         
                         # Normalize ... should be member function
                     if emission_probabilities.sum != 1.0:
-                        key_list = emission_probabilities.keys()
+                        key_list = list(emission_probabilities.keys())
                         for key in key_list:
                             emission_probabilities[key] = 1.0 / len(key_list)
                             
@@ -873,7 +873,7 @@ class HMMEditor(SAGraphEditor):
                                                           "emission probs of state %s" % state.id)
                     if d.success():
                         # write back normalized probabilities
-                        for key in emission_probabilities.keys():
+                        for key in list(emission_probabilities.keys()):
                             code = self.HMM.hmmAlphabet.name2code[key]
                             state.emissions[code] = emission_probabilities[key] / emission_probabilities.sum	
                             
@@ -906,18 +906,18 @@ class HMMEditor(SAGraphEditor):
             return
             
         emission_probabilities = ProbEditorBasics.ProbDict({})
-        for state in self.HMM.state.values():
+        for state in list(self.HMM.state.values()):
             label = state.id
             weight = state.initial
             emission_probabilities.update({label:weight})
             
         e = ProbEditorBasics.emission_data(emission_probabilities)
         d = ProbEditorDialogs.emission_dialog(self, e, "initial probabilities")
-        u = 1.0 / len(emission_probabilities.keys())
+        u = 1.0 / len(list(emission_probabilities.keys()))
         
         if d.success():
             # write back normalized probabilities
-            for key in emission_probabilities.keys():
+            for key in list(emission_probabilities.keys()):
                 state = self.HMM.state[self.HMM.id2index[key]]
                 if emission_probabilities.sum == 0.0:
                     state.initial = typed_assign(state.initial, u)
@@ -929,7 +929,7 @@ class HMMEditor(SAGraphEditor):
         
     def AddVertexCanvas(self,x,y):
         v = GraphDisplay.AddVertexCanvas(self, x, y)
-        print "AddVertex at ",x,y
+        print("AddVertex at ",x,y)
         self.HMM.AddState(v)
         
     def AddEdge(self,tail,head):

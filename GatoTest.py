@@ -40,8 +40,8 @@ import os
 import re
 import fnmatch
 import logging
-from Gato import *
-import GatoGlobals
+from .Gato import *
+from . import GatoGlobals
 g = GatoGlobals.AnimationParameters
 
 #
@@ -631,12 +631,12 @@ def should_generate_png(algo_file_name, graph_file_name, png_file_name):
 
 #------------------------------------------------------------------
 def usage():
-    print "Usage: GatoTest.py"
-    print "       GatoTest.py -v -d"
-    print "               -v or --verbose switches on the logging information"
-    print "               -d or --debug switches on the debugging  information"
-    print "               -s or --svg generates svg animations if the animation sources have been updated"
-    print "               -f or --force_animation used with -s to force generation of svg animations, even if there have been no updates"
+    print("Usage: GatoTest.py")
+    print("       GatoTest.py -v -d")
+    print("               -v or --verbose switches on the logging information")
+    print("               -d or --debug switches on the debugging  information")
+    print("               -s or --svg generates svg animations if the animation sources have been updated")
+    print("               -f or --force_animation used with -s to force generation of svg animations, even if there have been no updates")
 
 
 
@@ -648,7 +648,7 @@ if __name__ == '__main__':
         usage()
         exit()
 
-    print "Welcome to GatoTest!"
+    print("Welcome to GatoTest!")
 
     all = False
     svg = False
@@ -700,7 +700,7 @@ if __name__ == '__main__':
                 }
             instance = allInstances(exclude_algorithms=['MSTInteractive.alg'],
                                     exclude_instances=ei)
-        algorithms = instance.keys()
+        algorithms = list(instance.keys())
         algorithms.sort()
         tests = [(algo, graph) for algo in algorithms for graph in instance[algo]]
         testPath = "../CATBox/"
@@ -741,7 +741,7 @@ if __name__ == '__main__':
                                     format='%(name)s %(levelname)s %(message)s')        
     
     if svg:
-        print "# Producing SVG output"
+        print("# Producing SVG output")
         if not os.path.exists('./svgs'):
             os.makedirs('./svgs')
 
@@ -756,7 +756,7 @@ if __name__ == '__main__':
                 'Generation of an SVG Index page requires the python packages for cairo(http://cairographics.org/)'
                 ' and librsvg(https://wiki.gnome.org/action/show/Projects/LibRsvg?action=show&redirect=LibRsvg).'
                 '  SVG generation will continue, but no index page will be generated.\n*******')
-            print err_msg
+            print(err_msg)
 
         graph_pngs = {}
         testPath = "../CATBox/"
@@ -764,7 +764,7 @@ if __name__ == '__main__':
             for algo in chapter_dict['algorithms']:
                 for graph_file in algo['graphs']:
                     log.info("=== TEST === "+algo['file']+" === "+graph_file+" ===")
-                    print "=== TEST === "+algo['file']+" === "+graph_file+" ==="
+                    print("=== TEST === "+algo['file']+" === "+graph_file+" ===")
                     graph_name = os.path.splitext(os.path.basename(graph_file))[0]
                     png_file_name = 'svgs/img/%s.png' % (graph_name)
                     svg_file_name = 'svgs/%s--%s.html' % (os.path.splitext(algo['file'])[0], graph_name)
