@@ -36,7 +36,7 @@
 
 import types
 import io
-from string import split
+split = str.split
 import string
 from .GatoGlobals import *
 from . import Graph
