@@ -147,7 +147,7 @@ class Dialog(tkinter.simpledialog.Dialog):
 
     def validate(self):
         try:
-            n=string.atoi(self.number_of_nodes.get())
+            n=int(self.number_of_nodes.get())
             if n<1 or n>200:
                 raise nodeError
         except:
@@ -157,7 +157,7 @@ class Dialog(tkinter.simpledialog.Dialog):
             return 0
 
         try:
-            m=string.atoi(self.number_of_edges.get())
+            m=int(self.number_of_edges.get())
 
             if self.planar:
                 if n==1: max_m=0
@@ -493,7 +493,7 @@ class TreeDialog(tkinter.simpledialog.Dialog):
 
     def validate(self):
         try:
-            d=string.atoi(self.degree.get())
+            d=int(self.degree.get())
             if d<1 or d>20:
                 raise degreeError
         except:
@@ -503,7 +503,7 @@ class TreeDialog(tkinter.simpledialog.Dialog):
             return 0
 
         try:
-            h=string.atoi(self.height.get())
+            h=int(self.height.get())
             if h<0 or h>50:
                 raise heightError
         except:
@@ -513,7 +513,7 @@ class TreeDialog(tkinter.simpledialog.Dialog):
             return 0
 
         try:
-            n=string.atoi(self.number_of_nodes.get())
+            n=int(self.number_of_nodes.get())
         except:
             showwarning("Invalid value !",
                         "Please enter an integer\n"
@@ -737,7 +737,7 @@ class GridDialog(tkinter.simpledialog.Dialog):
 
     def validate(self):
         try:
-            xs=string.atoi(self.xsize.get())
+            xs=int(self.xsize.get())
             if xs<1:
                 raise degreeError
         except:
@@ -746,7 +746,7 @@ class GridDialog(tkinter.simpledialog.Dialog):
             return 0
 
         try:
-            ys=string.atoi(self.ysize.get())
+            ys=int(self.ysize.get())
             if ys<1:
                 raise degreeError
         except:
@@ -755,7 +755,7 @@ class GridDialog(tkinter.simpledialog.Dialog):
             return 0
 
         try:
-            xd=string.atoi(self.deltax.get())
+            xd=int(self.deltax.get())
             if xd<1:
                 raise degreeError
         except:
@@ -764,7 +764,7 @@ class GridDialog(tkinter.simpledialog.Dialog):
             return 0
 
         try:
-            yd=string.atoi(self.deltay.get())
+            yd=int(self.deltay.get())
             if yd<1:
                 raise degreeError
         except:

@@ -259,11 +259,11 @@ class TreeLayoutDialog(tkinter.simpledialog.Dialog):
 
     def validate(self):
         try:
-            if (string.atoi(self.root.get())<0 or
-                string.atoi(self.root.get()) not in self.G.vertices):
+            if (int(self.root.get())<0 or
+                int(self.root.get()) not in self.G.vertices):
                 raise rootError
             self.result=[]
-            self.result.append(string.atoi(self.root.get()))
+            self.result.append(int(self.root.get()))
             self.result.append(self.orientation.get())
             return self.result
         except:
@@ -444,11 +444,11 @@ class BFSLayoutDialog(tkinter.simpledialog.Dialog):
 
     def validate(self):
         try:
-            if (string.atoi(self.root.get())<0 or
-                string.atoi(self.root.get()) not in self.G.vertices):
+            if (int(self.root.get())<0 or
+                int(self.root.get()) not in self.G.vertices):
                 raise rootError
             self.result=[]
-            self.result.append(string.atoi(self.root.get()))
+            self.result.append(int(self.root.get()))
             self.result.append(self.direction.get())
             return self.result
         except:

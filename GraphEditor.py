@@ -92,7 +92,7 @@ class EditWeightsDialog(tkinter.simpledialog.Dialog):
         for i in range(self.nrOfWeights):
             try:
                 if self.intFlag[i]:
-                    self.result[i] = string.atoi(self.entry[i].get())
+                    self.result[i] = int(self.entry[i].get())
                 else:
                     self.result[i] = string.atof(self.entry[i].get())
             except ValueError:
