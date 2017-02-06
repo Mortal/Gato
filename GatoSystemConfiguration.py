@@ -189,7 +189,7 @@ class configureUNIX(configureOS):
             while line[-1]=="\\":
                 line=line[:-1]+mailcap.readline().rstrip()
             entries=line.split(";")
-            (mimeType,viewCommand)=list(map(string.strip,entries[:2]))
+            (mimeType,viewCommand)=list(map(str.strip,entries[:2]))
 
             if (mimeType==gatoMimeType and
                 os.path.exists(viewCommand.split(" ")[0]) and
@@ -403,7 +403,7 @@ class configureUNIX(configureOS):
                     savedLine=mailcap.readline()
                     line=line[:-1]+savedLine.rstrip()
                 entries=line.split(";")
-                (mimeType,viewCommand)=list(map(string.strip,entries[:2]))
+                (mimeType,viewCommand)=list(map(str.strip,entries[:2]))
 
                 # skip my old entry
                 if mimeType==gatoMimeType:
