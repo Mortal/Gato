@@ -308,7 +308,7 @@ def OpenCATBoxGraph(_file):
             break
 
         if lineNr == 2: # Read directed and euclidian
-            splitLine = split(line[:-1],';')    
+            splitLine = split(line[:-1],';')
             G.directed = eval(split(splitLine[0],':')[1])
             G.simple = eval(split(splitLine[1],':')[1])
             G.euclidian = eval(split(splitLine[2],':')[1])
@@ -405,7 +405,7 @@ def SaveCATBoxGraph(G, _file):
             if integerEdgeWeights: # XXX
                 file.write(" w:%d;" % int(round(G.vertexWeights[i][v])))
             else:
-                file.write(" w:%d;" % G.vertexWeights[i][v])    
+                file.write(" w:%d;" % G.vertexWeights[i][v])
         file.write("\n")
 
     file.write("edges:" + repr(G.Size()) + ";\n")

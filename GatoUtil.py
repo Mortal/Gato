@@ -81,7 +81,7 @@ class ImageCache:
 
         ...image_create('insert', image=ic['some/path/image.gif']
     """
-    images = None       
+    images = None
 
     def __init__(self):
         if ImageCache.images == None:

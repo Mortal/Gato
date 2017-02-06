@@ -147,19 +147,19 @@ class EditPreferencesDialog(tkinter.simpledialog.Dialog):
         return result
 
     def body(self, master):
-        self.resizable(0,0)     
+        self.resizable(0,0)
 
         #------------------ pane ------------------------------------------
         pane = self.pane(master, "Animation", "")
         row = 0
         Label(pane, text="Delay between instructions:").grid(row=row,
-                                                             column=0, sticky=E)        
+                                                             column=0, sticky=E)
         self.widgets['blinkrate'] = TkIntEntry(pane, 3)
         self.widgets['blinkrate'].tkWidget().grid(row=row, column=1, sticky=W)
         self.widgets['blinkrate'].set(100)
 
         row += 1
-        Label(pane, text="Number of blinks:").grid(row=row, column=0, sticky=E) 
+        Label(pane, text="Number of blinks:").grid(row=row, column=0, sticky=E)
         self.widgets['blinkrepeat'] = TkIntEntry(pane, 2)
         self.widgets['blinkrepeat'].tkWidget().grid(row=row, column=1, sticky=W)
         self.widgets['blinkrepeat'].set(4)
@@ -169,13 +169,13 @@ class EditPreferencesDialog(tkinter.simpledialog.Dialog):
         #------------------ pane ------------------------------------------
         pane = self.pane(master, "Algorithm Font", "")
         row = 1
-        Label(pane, text="Font:").grid(row=row, column=0, sticky=E)     
+        Label(pane, text="Font:").grid(row=row, column=0, sticky=E)
         self.widgets['algofont'] = TkStringPopupSelector(pane, self.gatoconfig.fonts)
         self.widgets['algofont'].tkWidget().grid(row=row, column=1,
                                                  sticky=W, columnspan=2)
 
         row += 1
-        Label(pane, text="Font Size:").grid(row=row, column=0, sticky=E)        
+        Label(pane, text="Font Size:").grid(row=row, column=0, sticky=E)
         self.widgets['algofontsize'] = TkIntEntry(pane, 2)
         self.widgets['algofontsize'].tkWidget().grid(row=row, column=1, sticky=W)
         self.widgets['algofontsize'].set(12)
@@ -189,28 +189,28 @@ class EditPreferencesDialog(tkinter.simpledialog.Dialog):
         Label(pane, text="Background").grid(row=row, column=2, sticky=W)
 
         row += 1
-        Label(pane, text="Font Color:").grid(row=row, column=0, sticky=E)       
+        Label(pane, text="Font Color:").grid(row=row, column=0, sticky=E)
         self.widgets['algofg'] = TkColorSelector(pane, 'black')
         self.widgets['algofg'].tkWidget().grid(row=row, column=1, sticky=W)
         self.widgets['algobg'] = TkColorSelector(pane, 'black')
         self.widgets['algobg'].tkWidget().grid(row=row, column=2, sticky=W)
 
         row += 1
-        Label(pane, text="Breakpoint Font Color:").grid(row=row, column=0, sticky=E)    
+        Label(pane, text="Breakpoint Font Color:").grid(row=row, column=0, sticky=E)
         self.widgets['breakpointfg'] = TkColorSelector(pane, 'black')
         self.widgets['breakpointfg'].tkWidget().grid(row=row, column=1, sticky=W)
         self.widgets['breakpointbg'] = TkColorSelector(pane, 'black')
         self.widgets['breakpointbg'].tkWidget().grid(row=row, column=2, sticky=W)
 
         row += 1
-        Label(pane, text="Interactive Font Color:").grid(row=row, column=0, sticky=E)   
+        Label(pane, text="Interactive Font Color:").grid(row=row, column=0, sticky=E)
         self.widgets['interactivefg'] = TkColorSelector(pane, 'black')
         self.widgets['interactivefg'].tkWidget().grid(row=row, column=1, sticky=W)
         self.widgets['interactivebg'] = TkColorSelector(pane, 'black')
         self.widgets['interactivebg'].tkWidget().grid(row=row, column=2, sticky=W)
 
         row += 1
-        Label(pane, text="Active lines:").grid(row=row, column=0, sticky=E)     
+        Label(pane, text="Active lines:").grid(row=row, column=0, sticky=E)
         self.widgets['activefg'] = TkColorSelector(pane, 'black')
         self.widgets['activefg'].tkWidget().grid(row=row, column=1, sticky=W)
         self.widgets['activebg'] = TkColorSelector(pane, 'black')

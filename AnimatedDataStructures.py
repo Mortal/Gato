@@ -72,7 +72,7 @@ class AnimatedNeighborhood:
 
     def __init__(self, theAnimator, G, v, ignoreColors = [],
                  blinkColor = None, activeColor = 'yellow',
-                 traversedColor = g.cTraversedEdge):    
+                 traversedColor = g.cTraversedEdge):
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         self.Animator = theAnimator
         self.nbh = G.Neighborhood(v)[:] # Create a copy so we can delete edges (v,w)
@@ -123,7 +123,7 @@ class BlinkingNeighborhood:
         #    doSomething
         will blink all edges"""
 
-    def __init__(self,theAnimator,G,v,c):       
+    def __init__(self,theAnimator,G,v,c):
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         self.Animator = theAnimator
         self.nbh = G.Neighborhood(v)
@@ -181,7 +181,7 @@ class BlinkingContainerWrapper:
         #    doSomething
         """
 
-    def __init__(self, theAnimator, l, color=g.cOnQueue):       
+    def __init__(self, theAnimator, l, color=g.cOnQueue):
         self.Animator = theAnimator
         self.list = copy.copy(l)
         self.color = color
@@ -213,7 +213,7 @@ class ContainerWrapper(BlinkingContainerWrapper):
         """
 
     def __init__(self, theAnimator, l, color=g.cOnQueue):
-        BlinkingContainerWrapper.__init__(self,theAnimator,l,color)     
+        BlinkingContainerWrapper.__init__(self,theAnimator,l,color)
         self.lastitem  = None
         self.lastcolor = None
 
@@ -567,7 +567,7 @@ class AnimatedEdgeSet:
         if edgeSet == None:
             self.edges = []
         else:
-            self.edges = edgeSet        
+            self.edges = edgeSet
         self.Animator = theAnimator
         self.color = color
 

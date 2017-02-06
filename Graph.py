@@ -93,7 +93,7 @@ class Graph:
 
     def AddVertex(self):
         """ Add an isolated vertex. Returns the id of the new vertex """
-        id = self.GetNextVertexID()     
+        id = self.GetNextVertexID()
         self.vertices.append(id)
         self.adjLists[id]    = []
         self.invAdjLists[id] = []
@@ -182,7 +182,7 @@ class Graph:
     def QEdge(self,tail,head):
         """ Returns 1 if (tail,head) is an edge in G. If G is undirected
             order of vertices does not matter """
-        if self.directed == 1:  
+        if self.directed == 1:
             return head in self.adjLists[tail]
         else:
             return (head in self.adjLists[tail]) or (tail in self.adjLists[head])
@@ -219,36 +219,36 @@ class Graph:
 
 
     def InOutNeighbors(self,v):
-        """ Returns vertices w for which (v,w) or (w,v) is an edge """  
+        """ Returns vertices w for which (v,w) or (w,v) is an edge """
         return self.InNeighbors(v) + self.OutNeighbors(v)
 
 
     def InEdges(self,v):
-        """ Returns edges (*,v) """     
+        """ Returns edges (*,v) """
         f = lambda x, vertex = v : (x,vertex)
         return list(map(f, self.invAdjLists[v]))
 
 
     def OutEdges(self,v):
-        """ Returns edges (v,*) """     
+        """ Returns edges (v,*) """
         f = lambda x, vertex = v : (vertex,x)
         return list(map(f ,self.adjLists[v]))
 
 
     def IncidentEdges(self,v):
-        """ Returns edges (v,*) and (*,v) """   
+        """ Returns edges (v,*) and (*,v) """
         return self.InEdges(v) + self.OutEdges(v)
 
 
     def Edges(self):
-        """ Returns all edges """               
+        """ Returns all edges """
         tmp = []
         for v in self.vertices:
             tmp = tmp + self.OutEdges(v)
         return tmp
 
     def Vertices(self):
-        """ Returns all edges """               
+        """ Returns all edges """
         return self.vertices
 
     def printMy(self):
@@ -637,7 +637,7 @@ class SubGraph(Graph):
         """ Returns 1 if (tail,head) is an edge in G """
         if not tail in self.vertices or not head in self.vertices:
             return 0
-        if self.directed == 1:  
+        if self.directed == 1:
             return head in self.adjLists[tail]
         else:
             return head in self.adjLists[tail] or tail in self.adjLists[head]

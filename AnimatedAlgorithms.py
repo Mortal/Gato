@@ -51,7 +51,7 @@ def shortestPath(G, A, s, t):
     A.SetAllVerticesColor(g.cVertexDefault)
 
     for v in G.vertices:
-        pred[v] = None  
+        pred[v] = None
     Q.Append(s)
 
     while Q.IsNotEmpty() and pred[t] == None:

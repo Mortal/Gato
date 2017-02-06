@@ -255,7 +255,7 @@ class completeGraphCreator(Creator):
 
         dial = Dialog(theGraphEditor, 0, 0, "Create Complete Graph")
         if dial.result is None:
-            theGraphEditor.config(cursor="")    
+            theGraphEditor.config(cursor="")
             return
 
         n=dial.result[0]

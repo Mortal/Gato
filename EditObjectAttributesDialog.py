@@ -353,7 +353,7 @@ class EditObjectAttributesDialog(tkinter.simpledialog.Dialog):
 
 
     def body(self, master):
-        self.resizable(0,0)     
+        self.resizable(0,0)
 
         # Header Zeile
         label = Label(master, text="Name", anchor=E)

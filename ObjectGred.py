@@ -89,7 +89,7 @@ class GredAboutBox(GatoDialogs.AboutBox):
                                      font="Times 10")
         self.infoText.pack(expand=0, fill=X, side=BOTTOM)
         self.infoText.delete('0.0', END)
-        self.infoText.insert('0.0', GatoGlobals.gLGPLText)      
+        self.infoText.insert('0.0', GatoGlobals.gLGPLText)
         self.infoText.configure(state=DISABLED)
         self.title("Gred - About")
 
@@ -223,7 +223,7 @@ class SAGraphEditor(GraphEditor, Frame):
                 self.graphMenu.invoke(self.graphMenu.index('Directed'))
         else:
             if self.directedVar.get():
-                self.graphMenu.invoke(self.graphMenu.index('Directed')) 
+                self.graphMenu.invoke(self.graphMenu.index('Directed'))
 
 
     def SetGraphMenuEuclidean(self,euclidean):
@@ -440,7 +440,7 @@ class SAGraphEditor(GraphEditor, Frame):
 
         self.graphMenu.add_separator()
         self.graphMenu.add_checkbutton(label='Grid',
-                                                  command=self.ToggleGridding)  
+                                                  command=self.ToggleGridding)
         self.menubar.add_cascade(label="Graph", menu=self.graphMenu,
                                  underline=0)
 
@@ -503,12 +503,12 @@ class SAGraphEditor(GraphEditor, Frame):
         # On a Mac we put our about box under the Apple menu ...
         if os.name == 'mac':
             self.apple=Menu(self.menubar, tearoff=0, name='apple')
-            self.apple.add_command(label='About Gred',  
+            self.apple.add_command(label='About Gred',
                                    command=self.AboutBox)
             self.menubar.add_cascade(menu=self.apple)
         else: # ... on other systems we add a help menu
             self.helpMenu=Menu(self.menubar, tearoff=0, name='help')
-            self.helpMenu.add_command(label='About Gred',       
+            self.helpMenu.add_command(label='About Gred',
                                       command=self.AboutBox)
             self.menubar.add_cascade(label="Help", menu=self.helpMenu,
                                      underline=0)
@@ -544,7 +544,7 @@ class SAGraphEditor(GraphEditor, Frame):
         self.fileName = None
         self.SetTitle("Gred %s - New Graph" % GatoGlobals.gatoVersion)
 
-    def OpenGraph(self):        
+    def OpenGraph(self):
         file = askopenfilename(title="Open Graph",
                                defaultextension=".cat",
                                filetypes = [("Gato", ".cat"),
@@ -569,13 +569,13 @@ class SAGraphEditor(GraphEditor, Frame):
                 log.error("Unknown extension %s" % e)
 
             if not self.gridding:
-                self.graphMenu.invoke(self.graphMenu.index('Grid'))     
+                self.graphMenu.invoke(self.graphMenu.index('Grid'))
 
             if G.QDirected() != self.directedVar.get():
-                self.graphMenu.invoke(self.graphMenu.index('Directed')) 
+                self.graphMenu.invoke(self.graphMenu.index('Directed'))
 
             if G.QEuclidian() != self.euclideanVar.get():
-                self.graphMenu.invoke(self.graphMenu.index('Euclidean'))        
+                self.graphMenu.invoke(self.graphMenu.index('Euclidean'))
 
             if G.edgeWeights[0].QInteger() != self.edgeIntegerWeightsVar.get():
                 self.graphMenu.invoke(self.graphMenu.index('Integer Edge Weights'))
@@ -693,7 +693,7 @@ class SAGraphEditor(GraphEditor, Frame):
         if self.G.edgeWeights[0].QInteger():
             initialWeight = 0
         else:
-            initialWeight = 0.0 
+            initialWeight = 0.0
 
         if n == 1 or n == 2:
             if 2 in k:
@@ -723,7 +723,7 @@ class SAGraphEditor(GraphEditor, Frame):
         if self.vertexIntegerWeightsVar.get() == 1:
             initialWeight = 0
         else:
-            initialWeight = 0.0 
+            initialWeight = 0.0
 
         if n > old: # Add additional weigths
             for i in range(old,n):
@@ -810,14 +810,14 @@ class SAGraphEditorToplevel(SAGraphEditor, Toplevel):
         self.focus_force()
 
     def AboutBox(self):
-        d = GredAboutBox(self)  
+        d = GredAboutBox(self)
 
     def SetTitle(self,title):
         self.title(title)
         self.tkraise()
         self.focus_force()
 
-    def Quit(self):     
+    def Quit(self):
         if askokcancel("Quit","Do you really want to quit?"):
             self.destroy()
         else:

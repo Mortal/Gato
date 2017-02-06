@@ -154,7 +154,7 @@ class AboutBox(tkinter.simpledialog.Dialog):
                                      font="Times 10")
         self.infoText.pack(expand=0, fill=X, side=BOTTOM)
         self.infoText.delete('0.0', END)
-        self.infoText.insert('0.0', GatoGlobals.gLGPLText)      
+        self.infoText.insert('0.0', GatoGlobals.gLGPLText)
         self.infoText.configure(state=DISABLED)
         self.title("Gato - About")
 

@@ -49,7 +49,7 @@
 class Point2D:
     """ Simple Wrapper class for a point in 2D-space. Used for Graph
         Embeddings.  Use: Point2D([x,y]) or Point2D(x,y) """
-    def __init__(self, x = None, y = None):     
+    def __init__(self, x = None, y = None):
         if y == None:
             if x == None:
                 self.x = 0
@@ -113,7 +113,7 @@ class VertexWeight(VertexLabeling):
         if not self.integer:
             for v in list(self.label.keys()):
                 self.label[v] = int(round(self.label[v]))
-            self.integer = 1    
+            self.integer = 1
 
     def SetAll(self, initialWeight):
         for v in self.G.vertices:
@@ -198,7 +198,7 @@ class EdgeWeight(EdgeLabeling):
         if not self.integer:
             for e in list(self.label.keys()):
                 self.label[e] = int(round(self.label[e]))
-            self.integer = 1    
+            self.integer = 1
 
     def SetAll(self, initialWeight):
         for e in self.G.Edges():
