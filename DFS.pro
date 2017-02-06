@@ -4,14 +4,14 @@
 #       version 1.1 from 4/10/2011. You can find more information at
 #       http://schliep.org/CATBox/
 #
-#	file:   DFS.pro
-#	author: Torsten Pattberg (torsten.pattberg@klf.de)
+#       file:   DFS.pro
+#       author: Torsten Pattberg (torsten.pattberg@klf.de)
 #               Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2011, Winfried Hochstaettler and Alexander Schliep.
-#	(C) 2010 Springer Verlag.
+#       (C) 2010 Springer Verlag.
 #       
-#	This is part of the Springer textbook "CATBox - an interactive course in 
+#       This is part of the Springer textbook "CATBox - an interactive course in 
 #       discrete optimization".
 #
 #       All rights reserved. Do not distribute without written permission. 
@@ -124,15 +124,15 @@ S = AnimatedVertexStack(A,"blue","red")
 class MyGraphInformer(GraphInformer):
 
     def __init__(self, G, label):
-	GraphInformer.__init__(self, G)
+        GraphInformer.__init__(self, G)
         self.label = label
 
     def VertexInfo(self,v):
-	if self.label.get(v):
-	    return "Vertex %d - label %d - pred %d"%(v,self.label.get(v),pred[v])
-	elif v in S.contents:
+        if self.label.get(v):
+            return "Vertex %d - label %d - pred %d"%(v,self.label.get(v),pred[v])
+        elif v in S.contents:
             return "Vertex %d - Stack position %d"%(v,len(S.contents)-S.contents.index(v))
-	else:
+        else:
             return "Vertex %d - not visited yet"%v
         return
 

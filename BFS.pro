@@ -4,14 +4,14 @@
 #       version 1.1 from 4/10/2011. You can find more information at
 #       http://schliep.org/CATBox/
 #
-#	file:   BFS.pro
-#	author: Torsten Pattberg (torsten.pattberg@klf.de)
+#       file:   BFS.pro
+#       author: Torsten Pattberg (torsten.pattberg@klf.de)
 #               Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2011, Winfried Hochstaettler and Alexander Schliep.
-#	(C) 2010 Springer Verlag.
+#       (C) 2010 Springer Verlag.
 #       
-#	This is part of the Springer textbook "CATBox - an interactive course in 
+#       This is part of the Springer textbook "CATBox - an interactive course in 
 #       discrete optimization".
 #
 #       All rights reserved. Do not distribute without written permission. 
@@ -97,11 +97,11 @@ Q            = AnimatedVertexQueue(A)
 class MyGraphInformer(GraphInformer):
 
     def VertexInfo(self,v):
-	if label[v]:
-	    return "Vertex %d - label %d - pred %d"%(v,label[v],pred[v])
-	elif v in Q.contents:
+        if label[v]:
+            return "Vertex %d - label %d - pred %d"%(v,label[v],pred[v])
+        elif v in Q.contents:
             return "Vertex %d - Queue position %d"%(v,Q.contents.index(v)+1)
-	else:
+        else:
             return "Vertex %d - not visited yet"%v
         return
 
