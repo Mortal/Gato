@@ -1729,7 +1729,7 @@ class Algorithm:
         self.GUI.graphDisplay.RegisterGraphInformer(WeightedGraphInformer(self.graph))
         self.GUI.graphDisplay.UpdateScrollRegion(auto=1)
 
-        if self.graphDisplays == 2:
+        if getattr(self, 'graphDisplays', None) == 2:
             # Open a secondary empty graph to overwrite the results of last algorithm run
             self.OpenSecondaryGraph(Graph.Graph(), 'tmp')
 
