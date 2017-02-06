@@ -67,7 +67,7 @@ def typed_assign(var, val):
     return result
 
 def listFromCSV(s, type):
-    return list(map(type,string.split(s,',')))
+    return list(map(type,str.split(s,',')))
 
 def csvFromList(list, perRow = None):
     if perRow == None:

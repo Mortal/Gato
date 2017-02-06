@@ -546,7 +546,7 @@ def OpenDotGraph(fileName):
     dot2graph = {}
 
     for l in lines[3:]:
-        items = string.split(l)
+        items = str.split(l)
         if len(items) < 2:
             break
         if items[1] != '->':

@@ -100,7 +100,7 @@ class DataFactory:
 
         print("DataFactory.arrayFromCSV(", s, ")")
 
-        items = string.split(s,',')
+        items = str.split(s,',')
         for i in items:
             retVal.append(type(i))
         return retVal
