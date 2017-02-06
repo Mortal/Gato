@@ -768,7 +768,8 @@ def ExportSVG(fileName, algowin, algorithm, graphDisplay, secondaryGraphDisplay=
 
         # Build the Algorithm SVG string
         source = algorithm.GetSource()
-        tokenize.tokenize(io.StringIO(source.replace('\\', '\\\\')).readline, tokenEater)
+        for x in tokenize.tokenize(io.BytesIO(source.replace('\\', '\\\\').encode()).readline):
+            tokenEater(*x)
         algowin.CommitStop()
 
         # Merge the animation into the HTML

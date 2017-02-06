@@ -618,7 +618,7 @@ class AlgoWin(Frame):
             self.tagLines(self.algorithm.GetBreakpointLines(), 'Break')
 
             # Syntax highlighting
-            for x in tokenize.tokenize(io.StringIO(self.algorithm.GetSource()).readline):
+            for x in tokenize.tokenize(io.BytesIO(self.algorithm.GetSource().encode()).readline):
                 self.tokenEater(*x)
 
             if self.algorithm.ReadyToStart():
