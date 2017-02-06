@@ -113,7 +113,7 @@ animationhead = '''
             <filter id="dropshadow" height="130%%">
               <feGaussianBlur in="SourceAlpha" stdDeviation="1"/> <!-- stdDeviation is how much to blur -->
                 <feOffset dx="2.5" dy="2.5" result="offsetblur"/> <!-- how much to offset -->
-                <feMerge> 
+                <feMerge>
                   <feMergeNode/> <!-- this contains the offset blurred image -->
                   <feMergeNode in="SourceGraphic"/> <!-- this contains the element that the filter is applied to -->
                </feMerge>
@@ -121,7 +121,7 @@ animationhead = '''
             <filter id="tooltip_dropshadow" height="130%%">
               <feGaussianBlur in="SourceAlpha" stdDeviation="1"/> <!-- stdDeviation is how much to blur -->
                 <feOffset dx="2" dy="2" result="offsetblur"/> <!-- how much to offset -->
-                <feMerge> 
+                <feMerge>
                   <feMergeNode/> <!-- this contains the offset blurred image -->
                   <feMergeNode in="SourceGraphic"/> <!-- this contains the element that the filter is applied to -->
                </feMerge>
@@ -154,7 +154,7 @@ animationhead = '''
         <script type="text/javascript" src="js/animation_functions.js"></script>
         <script type="text/javascript" src="js/display_functions.js"></script>
         <script type="text/javascript" src="js/webgato_main.js"></script>
-        
+
         <script type="text/javascript">
             %(animation)s
             init();

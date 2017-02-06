@@ -1,13 +1,13 @@
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #
 #	file:   ObjectGraph.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 2007-2015 Alexander Schliep, Winfried Hochstaettler
-#                                   
-#       Contact: alexander@schliep.org             
+#
+#       Contact: alexander@schliep.org
 #
 #       Information: http://gato.sf.net
 #
@@ -27,7 +27,7 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
@@ -58,7 +58,7 @@ class VertexObject(object):
         self.labeling = None
         self.inEdges = []
         self.outEdges = []
-           
+
 
 
 class EdgeObject(object):
@@ -82,9 +82,9 @@ class EdgeObject(object):
     def SetEdgeWeight(self,i,value):
         if i == 0:
             self.weight = value
-        
 
-        
+
+
 
 
 ################################################################################
@@ -93,11 +93,11 @@ class EdgeObject(object):
 #
 ################################################################################
 class ObjectGraph(object):
-    """ 
-
-    
     """
-    
+
+
+    """
+
     def __init__(self, vertexClass, edgeClass):
         self.vertexClass = vertexClass
         self.edgeClass = edgeClass
@@ -117,14 +117,14 @@ class ObjectGraph(object):
         self.vertexAnnotation = None
         self.edgeAnnotation   = None
         self.properties       = {}
-        
+
     def AddVertex(self):
         """ Add an isolated vertex. Returns the id of the new vertex """
         v = self.vertexClass()
         v.id = self.GetNextVertexID()
         self.vertices[v.id] = v
         return v.id
-        
+
     def DeleteVertex(self, v):
         """ Delete the vertex v and its incident edges """
         outEdges = self.vertices[v].outEdges[:] # Need a copy here
@@ -133,25 +133,25 @@ class ObjectGraph(object):
             (v,w) = e.key()
             self.DeleteEdge(v,w)
         for e in inEdges:
-            (w,v) = e.key()            
+            (w,v) = e.key()
             if w != v: # We have already deleted loops
                 self.DeleteEdge(w,v)
         del(self.vertices[v])
-        
+
     def QVertex(self, v):
         """ Check whether v is a vertex """
         return v in list(self.vertices.keys())
 
-        
+
     def AddEdge(self,tail,head):
         """ Add an edge (tail,head). Returns nothing
             Raises GraphNotSimpleError if
             - trying to add a loop
-            - trying to add an edge multiply 
-        
+            - trying to add an edge multiply
+
             In case of directed graphs (tail,head) and (head,tail)
             are distinct edges """
-        
+
         if self.simple == 1 and tail == head: # Loop
             raise GraphNotSimpleError('(%d,%d) is a loop' % (tail,head))
         if self.directed == 0 and (head,tail) in self.edges:
@@ -173,7 +173,7 @@ class ObjectGraph(object):
         for i in range(1,self.NrOfEdgeWeights()):
             self.SetEdgeWeight(i,tail,head,0)
 
-        
+
     def DeleteEdge(self,tail,head):
         """ Deletes edge (tail,head). Does *not* handle undirected graphs
             implicitely. Raises NoSuchEdgeError upon error. """
@@ -186,163 +186,163 @@ class ObjectGraph(object):
         self.vertices[tail].outEdges.remove(e)
         self.vertices[head].inEdges.remove(e)
         del(self.edges[(tail,head)])
-            
-            
+
+
     def Edge(self,tail,head):
         """  Handles undirected graphs by returning correctly ordered
              vertices as (tail,head). Raises NoSuchEdgeError upon error. """
-        
+
         if tail not in list(self.vertices.keys()) or head not in list(self.vertices.keys()):
             raise NoSuchEdgeError("(%d,%d) is not an edge." % (tail,head))
-            
+
         if (tail,head) in self.edges:
             return (tail,head)
         elif self.directed == 0 and (head,tail) in self.edges:
             return (head,tail)
         else:
             raise NoSuchEdgeError("(%d,%d) is not an edge." % (tail,head))
-            
-            
+
+
     def QEdge(self,tail,head):
         """ Returns 1 if (tail,head) is an edge in G. If G is undirected
             order of vertices does not matter """
         if self.directed == 1:	
             return (tail,head) in self.edges
-        else: 
+        else:
             return (tail,head) in self.edges or (head,tail) in self.edges
 
 
     def QEdgeWidth(self):
         """ Returns 1 if individual edge widths are defined, 0 else """
         return 0 # XXX NOT SUPPORTED
-        
+
 
     def EdgeWidth(self, tail, head):
-        return 0 # XXX NOT SUPPORTED 
+        return 0 # XXX NOT SUPPORTED
 
-            
+
     def Neighborhood(self,v):
         """ Returns the vertices which are connected to v. Does handle
-            undirected graphs (i.e., returns vertices w s.t. either 
+            undirected graphs (i.e., returns vertices w s.t. either
             (v,w) or (w,v) is an edge) """
-        
+
         if self.directed:
             return self.OutNeighbors(v)
         else:
             return self.InOutNeighbors(v)
-            
-            
+
+
     def InNeighbors(self,v):
         """ Returns vertices w for which (w,v) is an edge """
         return [e.tail.id for e in self.vertices[v].inEdges]
-        
-        
+
+
     def OutNeighbors(self,v):
         """ Returns vertices w for which (v,w) is an edge """
         return [e.head.id for e in self.vertices[v].outEdges]
-        
-        
+
+
     def InOutNeighbors(self,v):
         """ Returns vertices w for which (v,w) or (w,v) is an edge """	
         return self.InNeighbors(v) + self.OutNeighbors(v)
-        
-        
+
+
     def InEdges(self,v):
         """ Returns edges (*,v) """	
-        return [e.key() for e in self.vertices[v].inEdges] 
-        
-        
+        return [e.key() for e in self.vertices[v].inEdges]
+
+
     def OutEdges(self,v):
         """ Returns edges (v,*) """	
-        return [e.key() for e in self.vertices[v].outEdges] 
-        
-        
+        return [e.key() for e in self.vertices[v].outEdges]
+
+
     def IncidentEdges(self,v):
         """ Returns edges (v,*) and (*,v) """	
         return self.InEdges(v) + self.OutEdges(v)
-        
-        
+
+
     def Edges(self):
         """ Returns all edges """		
         return list(self.edges.keys())
 
-        
+
     def Vertices(self):
         """ Returns all edges """		
         return list(self.vertices.keys())
-        
+
     def printMy(self):
         """ Debugging only """
         for v in self.vertices:
             print(v, " -- ", self.adjLists[v])
-            
-            
+
+
     def GetNextVertexID(self):
         """ *Internal* returns next free vertex id """
         self.highVertexID += 1
         return self.highVertexID
-        
-        
+
+
     def Order(self):
         """ Returns order i.e., the number of vertices """
         return len(list(self.vertices.keys()))
-        
-        
+
+
     def Size(self):
         """ Returns size i.e., the number of edge """
-        return len(list(self.edges.keys())) 
-        
-        
+        return len(list(self.edges.keys()))
+
+
     def Degree(self, v):
         """ Returns the degree of the vertex v, which is
             - the number of incident edges in the undirect case
             - the number of outgoing edges in the directed case """
-        
+
         if self.directed:
             return len(self.vertices[v].outEdges)
         else:
             return len(self.vertices[v].outEdges) + len(self.vertices[v].inEdges)
 
-            
+
     def InDegree(self, v):
         """ Returns the number of incoming edges for direct graphs """
         if self.directed:
             return len(self.vertices[v].inEdges)
         else:
             return None # Proper error to raise?
-            
-            
+
+
     def OutDegree(self, v):
         """ Returns the number of incoming edges for direct graphs """
         if self.directed:
             return len(self.vertices[v].outEdges)
         else:
             return None # Proper error to raise?
-            
-            
+
+
     def QEuclidian(self):
         """ Returns 1 if the graph is euclidian, 0 else """
         return self.euclidian
-        
-        
+
+
     def QDirected(self):
         """ Returns 1 if the graph is directed, 0 else """
         return self.directed
-        
-        
+
+
     def CalculateWidthFromWeight(self, scale, weightID = 0):
-        """ Calculate width of edges (self.edgeWidth will be used by 
+        """ Calculate width of edges (self.edgeWidth will be used by
             GraphDisplay if not none) from the specified set of edge
-            weights. 
-        
+            weights.
+
             Default: weightID = 0 is used """
         pass  # XXX NOT SUPPORTED
 ##        self.edgeWidth = EdgeLabeling()
 ##        edges = self.Edges()
 ##        maxWeight = max(self.edgeWeights[weightID].label.values())
 ##        for e in edges:
-##            self.edgeWidth[e] = scale * (1 + 35 * self.edgeWeights[weightID][e] / maxWeight) 
-            
+##            self.edgeWidth[e] = scale * (1 + 35 * self.edgeWeights[weightID][e] / maxWeight)
+
     def NrOfEdgeWeights(self):
         return self.edgeClass.NrOfEdgeWeights()
 
@@ -355,123 +355,123 @@ class ObjectGraph(object):
     def QIntegerWeight(self,i):
         # Edge and Vertex class should take care of that ...class method
         return 0 # XXX UNSUPPORTED: FLOAT WEIGHTS ONLY. Barf
-    
+
 
     def NrOfVertexWeights(self):
         return self.vertexClass.NrOfVertexWeights()
 
     def SetVertexWeight(self,i,v,value):
-        pass 
+        pass
 
     def GetVertexWeight(self,i,v):
         pass
 
     def GetLabeling(self,v):
         return self.vertices[v].labeling
-    
+
     def SetLabeling(self,v, value):
         self.vertices[v].labeling = value
 
     def GetEmbedding(self,v):
         return self.vertices[v].embedding
-    
+
     def SetEmbedding(self,v, x, y):
         self.vertices[v].embedding = Point2D(x,y)
 
-                  
+
     def Euclidify(self):
-        """ Replace edge weights with weightID = 0 with Euclidean distance 
+        """ Replace edge weights with weightID = 0 with Euclidean distance
             between incident vertices """
-        pass  # XXX NOT SUPPORTED 
+        pass  # XXX NOT SUPPORTED
 ##        for v in self.vertices:
 ##            for w in self.adjLists[v]:
-##                d = ((self.embedding[v].x - self.embedding[w].x)**2 + 
+##                d = ((self.embedding[v].x - self.embedding[w].x)**2 +
 ##                     (self.embedding[v].y - self.embedding[w].y)**2)**(.5)
-                
+
 ##                if self.edgeWeights[0].QInteger():
 ##                    self.edgeWeights[0][(v,w)] = int(round(d))
 ##                else:
 ##                    self.edgeWeights[0][(v,w)] = d
-                    
+
 ##        self.euclidian = 1
-        
-        
+
+
     def Integerize(self, weightID = 0):
         """ Integerize: Make all edge weights integers """
-        pass  # XXX NOT SUPPORTED 
+        pass  # XXX NOT SUPPORTED
 ##        if weightID == 'all':
 ##            for w in self.edgeWeights.keys():
 ##                self.edgeWeights[w].Integerize()
 ##        else:
 ##            self.edgeWeights[weightID].Integerize()
-            
-            
+
+
     def Undirect(self):
         """ If (u,v) and (v,u) are edges in the directed graph, remove one of them.
             to make graph undirected (no multiple edges allowed). Which one gets
             deleted depends on ordering in adjacency lists. """
         if not self.directed:
             return
-            
+
         for v in list(self.vertices.keys()):
             for e in self.vertices[v].outEdges:
                 w = e.head.id
                 if v in self.OutNeighbors(w):
                     self.DeleteEdge(w,v)
-                    
+
         self.directed = 0
-        
+
     def SetProperty(self, name, val):
         """ Set the value of property 'name' to 'val' """
-        pass # XXX NOT SUPPORTED 
+        pass # XXX NOT SUPPORTED
         #self.properties[name] = val
-        
+
     def Property(self,name):
         """ Return the value of property 'name'. If the property
            'name' has not been set 'Unknown' is returned """
-        pass  # XXX NOT SUPPORTED 
+        pass  # XXX NOT SUPPORTED
         #try:
         #    return self.properties[name]
         #except:
         #    return 'Unknown'
-            
+
     def About(self):
         """ Return string containing HTML code providing information
             about the graph """
         return "<HTML><BODY> <H3>No information available</H3></BODY></HTML>"
-        
-        
+
+
 ##        ################################################################################
 ##        #
 ##        # Induced Subgraph
 ##        #
 ##        ################################################################################
-        
+
 ##class SubGraph(Graph):
-##    """ Provides a subgraph, i.e., a subset of the vertices and edges 
+##    """ Provides a subgraph, i.e., a subset of the vertices and edges
 ##        of a specified graph
-    
+
 ##        Vertices are specified via ids from its supergraph and edges via
-##        (tail,head)-tuples 
-    
-##        It also keeps track of the subgraphs total weight (= sum of edge 
+##        (tail,head)-tuples
+
+##        It also keeps track of the subgraphs total weight (= sum of edge
 ##        weights) for weights with weightID == 0
 ##    """
-    
-    
+
+
 ##    def __init__(self,G):
 ##        Graph.__init__(self)
 ##        self.superGraph    = G
-        
+
 ##        self.embedding     = self.superGraph.embedding
 ##        self.labeling      = self.superGraph.labeling
 ##        self.edgeWeights   = self.superGraph.edgeWeights
-        
+
 ##        self.directed = self.superGraph.directed
-        
+
 ##        self.totalWeight   = 0
-        
-        
+
+
 ##    def AddVertex(self,v):
 ##        """ Add a vertex from the supergraph to the subgraph.
 ##            Returns NoSuchVertexError if v does not exist in
@@ -485,7 +485,7 @@ class ObjectGraph(object):
 ##            self.invAdjLists[v] = []
 ##        except:
 ##            raise NoSuchVertexError, "%d is not a vertex in the supergraph" % v
-            
+
 ##    def AddEdge(self,tail,head):
 ##        """ Add an edge from the supergraph to the subgraph.
 ##            Will also add tail and/or head if there are not
@@ -495,8 +495,8 @@ class ObjectGraph(object):
 ##                self.AddVertex(tail)
 ##            if not head in self.vertices:
 ##                self.AddVertex(head)
-##            (tail,head) = self.superGraph.Edge(tail,head) 
-            
+##            (tail,head) = self.superGraph.Edge(tail,head)
+
 ##            self.adjLists[tail].append(head)
 ##            self.invAdjLists[head].append(tail)
 ##            self.size = self.size + 1
@@ -505,12 +505,12 @@ class ObjectGraph(object):
 ##            except KeyError:
 ##                w = 0.0 # XXX we dont have w weight for the edge. Make totalWeight configurable/subclass
 ##            self.totalWeight += w
-            
+
 ##        except (KeyError, NoSuchVertexError, NoSuchEdgeError):
 ##            raise NoSuchEdgeError, "(%d,%d) is not an edge in the supergraph." % (tail,head)
-            
+
 ##    def AddSubGraph(self,G):
-##        """ Add subgraph G to self. Will do nothing if self and G 
+##        """ Add subgraph G to self. Will do nothing if self and G
 ##            have distinct supergraphs """
 ##        if self.superGraph != G.superGraph:
 ##            log.error("AddSubGraph: distinct superGraphs")
@@ -519,8 +519,8 @@ class ObjectGraph(object):
 ##            self.AddVertex(v)
 ##        for e in G.Edges():
 ##            self.AddEdge(e[0],e[1])
-            
-            
+
+
 ##    def DeleteEdge(self,tail,head):
 ##        """ Delete edge from subgraph. Raises NoSuchEdgeError
 ##            upon error """
@@ -532,41 +532,41 @@ class ObjectGraph(object):
 ##            self.size = self.size - 1
 ##        else:
 ##            raise NoSuchEdgeError, "(%d,%d) is not an edge." % (tail,head)
-            
+
 ##    def Clear(self):
 ##        """ Delete all vertices and edges from the subgraph. """
-##        self.vertices         = [] 
+##        self.vertices         = []
 ##        self.adjLists         = {}
 ##        self.invAdjLists      = {}   # Inverse Adjazenzlisten
 ##        self.size = 0
 ##        self.totalWeight   = 0
-        
-        
+
+
 ##    def GetNextVertexID(self):
 ##        """ *Internal* safeguard """
 ##        log.error("Induced Subgraph -> GetNextVertexID should never have been called")
-        
+
 ##    def Weight(self):
 ##        """ Returns the total weight (= sum of edge weights) of subgraph """
 ##        return self.totalWeight
-        
-        
+
+
 ##    def QEuclidian(self):
 ##        """ Returns 1 if the super graph is euclidian, 0 else """
 ##        return self.superGraph.euclidian
-        
-        
+
+
 ##    def QDirected(self):
 ##        """ Returns 1 if the super graph is directed, 0 else"""
 ##        return self.superGraph.directed
-        
+
 ##    def QEdge(self,tail,head):
 ##        """ Returns 1 if (tail,head) is an edge in G """
 ##        if not tail in self.vertices or not head in self.vertices:
 ##            return 0
 ##        if self.directed == 1:	
 ##            return head in self.adjLists[tail]
-##        else: 
+##        else:
 ##            return head in self.adjLists[tail] or tail in self.adjLists[head]
-            
-            
+
+

@@ -1,14 +1,14 @@
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #       You can find more information at http://gato.sf.net
 #
 #	file:   GatoDialogs.py
 #	author: Alexander Schliep (alexander@schliep.org)
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -27,7 +27,7 @@
 #       Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
@@ -38,13 +38,13 @@ from tkinter.scrolledtext import *
 from . import GatoUtil
 from . import GatoGlobals
 from . import GatoIcons
-import tkinter.simpledialog 
+import tkinter.simpledialog
 import sys
 import os
 import htmllib, formatter
 
 
-# Should be in GatoGlobals 
+# Should be in GatoGlobals
 crnotice1 = "Copyright (C) 1998-2015, Alexander Schliep\n"\
             "and Winfried Hochstaettler. Copyright (C)\n"\
             "1998-2001 ZPR, University of Cologne\n"\
@@ -63,7 +63,7 @@ crnotice2 = "Written by Alexander Schliep (alexander@schliep.org).\n" \
 class AutoScrollbar(Scrollbar):
     """ Code taken from a comp.lang.python posting by
         Fredrik Lundh.
-        
+
         A scrollbar that hides itself if it's not needed.  Only
         works if you use the grid geometry manager.
     """
@@ -81,7 +81,7 @@ class AutoScrollbar(Scrollbar):
 
 
 class AutoScrolledText(Text):
-    """ Code taken from Tkinter's ScrolledText.py. 
+    """ Code taken from Tkinter's ScrolledText.py.
 
         Modified to use a grid layout and AutoScrollbars
     """
@@ -100,7 +100,7 @@ class AutoScrolledText(Text):
         self.vbar.grid(row=0, column=1, sticky=N+S)
         #self.vbar.pack(side=RIGHT, fill=Y)
         cnf['name'] = 'text'
-        Text.__init__(self, self.frame, **cnf)        
+        Text.__init__(self, self.frame, **cnf)
         self.grid(row=0, column=0, sticky=N+S+E+W)
         #self.pack(side=LEFT, fill=BOTH, expand=1)
         self['yscrollcommand'] = self.vbar.set
@@ -123,7 +123,7 @@ class AutoScrolledText(Text):
 
 class AboutBox(tkinter.simpledialog.Dialog):
     """ The application's about box """
-    
+
     def buttonbox(self):
         # Stolen from tkSimpleDialog.py
         # add standard button box. override if you don't want the
@@ -133,8 +133,8 @@ class AboutBox(tkinter.simpledialog.Dialog):
         w.pack(side=RIGHT, padx=5, pady=5)
         self.bind("<Return>", self.ok)
         box.pack(side=BOTTOM,fill=X)
-        
-        
+
+
     def body(self, master):
         self.resizable(0,0)
         self.catIconImage = PhotoImage(data=GatoIcons.gato) # statt file=
@@ -145,9 +145,9 @@ class AboutBox(tkinter.simpledialog.Dialog):
         label = Label(master, font="Helvetica 10", text=crnotice2, justify=CENTER)
         label.pack(side=TOP)
         color = self.config("bg")[4]
-        self.infoText = ScrolledText(master, relief=FLAT, 
+        self.infoText = ScrolledText(master, relief=FLAT,
                                      padx=3, pady=3,
-                                     background=color, 
+                                     background=color,
                                      #foreground="black",
                                      wrap='word',
                                      width=60, height=12,
@@ -157,22 +157,22 @@ class AboutBox(tkinter.simpledialog.Dialog):
         self.infoText.insert('0.0', GatoGlobals.gLGPLText)	
         self.infoText.configure(state=DISABLED)
         self.title("Gato - About")
-        
-        
+
+
 class SplashScreen(Toplevel):
     """ Provides a splash screen. Usage:
-    
+
         Subclass and override 'CreateWidgets()'
-    
+
         In constructor of main window/application call
-    
-        - S = SplashScreen(main=self)        (if caller is Toplevel) 
-        - S = SplashScreen(main=self.master) (if caller is Frame) 
-    
+
+        - S = SplashScreen(main=self)        (if caller is Toplevel)
+        - S = SplashScreen(main=self.master) (if caller is Frame)
+
         - S.Destroy()  after you are done creating your widgets etc.
-    
+
     """
-    
+
     def __init__(self, master=None):
         Toplevel.__init__(self, master, relief=RAISED, borderwidth=5)
         self.main = master
@@ -183,7 +183,7 @@ class SplashScreen(Toplevel):
         self.CreateWidgets()
         self.after_idle(self.CenterOnScreen)
         self.update()
-        
+
     def CenterOnScreen(self):
         self.update_idletasks()
         xmax = self.winfo_screenwidth()
@@ -191,7 +191,7 @@ class SplashScreen(Toplevel):
         x0 = (xmax - self.winfo_reqwidth()) / 2
         y0 = (ymax - self.winfo_reqheight()) / 2
         self.geometry("+%d+%d" % (x0, y0))
-        
+
     def CreateWidgets(self):
         self.catIconImage = PhotoImage(data=GatoIcons.gato) # statt file=
         self.label = Label(self, image=self.catIconImage)
@@ -200,28 +200,28 @@ class SplashScreen(Toplevel):
         self.label.pack(side=TOP)
         label = Label(self, font="Helvetica 10", text=crnotice2, justify=CENTER)
         label.pack(side=TOP)
-        
-        
+
+
     def Destroy(self):
         self.main.update()
         self.main.deiconify()
         self.withdraw()
-        
+
 class HTMLWriter(formatter.DumbWriter):
 
     def __init__(self, textWidget, viewer):
-        # XXX Stupid hack. Now DumbWriter wordwraps at 9999999 columns  
+        # XXX Stupid hack. Now DumbWriter wordwraps at 9999999 columns
         formatter.DumbWriter.__init__(self, self, 9999999)
         self.textWidget = textWidget
         self.viewer = viewer
         self.indent = ""
-        
+
     def write(self, data):
         self.textWidget.insert( 'insert', data)
-        
+
     def new_margin(self, margin, level):
         self.indent = '\t' * level
-        
+
     def send_label_data(self, data):
         self.write(self.indent + data + ' ')
 
@@ -232,21 +232,21 @@ class HTMLWriter(formatter.DumbWriter):
     #def send_paragraph(self,blankline):
     #    print "send_paragraph", blankline
 
-        
 
-        
+
+
 class MyHTMLParser(htmllib.HTMLParser):
     """ Basic parser with image support added. output is supposed to be
         the textwidget for output """
-    
+
     def __init__(self, formatter, output):
         htmllib.HTMLParser.__init__(self, formatter)
         self.output = output
         self.tag_start = {}
-        
+
     def handle_image(self, source, alt, ismap, align, width, height):
         imageCache = GatoUtil.ImageCache() # ImageCache is a singleton
-        self.output.image_create('insert', image=imageCache[source], align='baseline') 
+        self.output.image_create('insert', image=imageCache[source], align='baseline')
 
     def do_colordef(self,attrs):
         colordef = Frame(self.output,width=40,height=18,background=attrs[0][1])
@@ -297,19 +297,19 @@ class MyHTMLParser(htmllib.HTMLParser):
 
     def end_b(self):
         self.output.tag_add('b',self.tag_start['b'],self.output.index(INSERT))
-            
+
     def start_em(self,attr):
         self.tag_start['em'] = self.output.index(INSERT)
 
     def end_em(self):
         self.output.tag_add('em',self.tag_start['em'],self.output.index(INSERT))
-    
+
     def start_p(self,attr):
         self.output.insert(INSERT,'\n')
 
     def end_p(self):
         self.output.insert(INSERT,'\n\n')
-        
+
     def start_pre(self,attr):
         self.tag_start['pre'] = self.output.index(INSERT)
 
@@ -323,23 +323,23 @@ class MyHTMLParser(htmllib.HTMLParser):
     def end_tt(self):
         self.output.tag_add('tt',self.tag_start['tt'],self.output.index(INSERT))
 
-        
-        
+
+
 class HTMLViewer(Toplevel):
     """ Basic class which provides a scrollable area for viewing HTML
         text and a Dismiss button """
-    
+
     def __init__(self, htmlcode, title, master=None):
-    
+
         Toplevel.__init__(self, master)
         #self.protocol('WM_DELETE_WINDOW',self.withdraw)
         self.titleprefix = title
         color = self.config("bg")[4]
         borderFrame = Frame(self, relief=SUNKEN, bd=2) # Extra Frame
-        self.text = ScrolledText(borderFrame, relief=FLAT, 
+        self.text = ScrolledText(borderFrame, relief=FLAT,
                                  padx=3, pady=3,
-                                 background='white', 
-                                 #background=color, 
+                                 background='white',
+                                 #background=color,
                                  #foreground="black",
                                  wrap='word',
                                  width=60, height=20,
@@ -348,7 +348,7 @@ class HTMLViewer(Toplevel):
                                  spacing3=3)
         self.text.pack(expand=1, fill=BOTH)
         #self.text.insert('0.0', text)
-        self.text['state'] = DISABLED 
+        self.text['state'] = DISABLED
         borderFrame.pack(side=TOP,expand=1,fill=BOTH)
         box = Frame(self)
         w = Button(box, text="Dismiss", width=10, command=self.doWithdraw, default=ACTIVE)
@@ -361,7 +361,7 @@ class HTMLViewer(Toplevel):
     def setStyle(self):
         baseSize = 14
         self.text.config(font="Times %d" % baseSize)
-        
+
         self.text.tag_config('h1', font="Times %d bold" % (baseSize + 8))
         self.text.tag_config('h2', font="Times %d bold" % (baseSize + 6))
         self.text.tag_config('h3', font="Times %d bold" % (baseSize + 4))
@@ -371,17 +371,17 @@ class HTMLViewer(Toplevel):
         self.text.tag_config('em', font="Times %d italic" % baseSize)
         self.text.tag_config('pre', font="Courier %d" % baseSize)
         self.text.tag_config('tt', font="Courier %d" % baseSize)
-       
+
 
 
     def doWithdraw(self, event=None):
         # Need to eat optional event so that we can use is in both button and bind callback
         self.withdraw()
-        
+
     def Update(self,htmlcode, title):
         self.titleprefix = title
         self.insert(htmlcode)
-        
+
     def insert(self, htmlcode):
         self.text['state'] = NORMAL
         self.text.delete('0.0', END)
@@ -392,13 +392,13 @@ class HTMLViewer(Toplevel):
         parser.nofill=False
         parser.feed(htmlcode)
         parser.close()
-        
-        self.text['state'] = DISABLED 
+
+        self.text['state'] = DISABLED
         if parser.title != None:
             self.title(self.titleprefix + " - " + parser.title)
         else:
             self.title(self.titleprefix)
-            
+
             #---------------------------------- test code -----------------------------------
 about = """<HTML>
 <HEAD>
@@ -441,13 +441,13 @@ alisation</p>
 
 <H4>Implementation</h4>
 
-This was done by 
+This was done by
 
 <pre>
 asasdadasdasdaaasssssssssssssssssssssssssssssssssssssssssssssssss
 </pre>
 <tt>Blaeh</tt>
-<a href="module-sgmllib.html">sgmllib</a><a name="l2h-1953"></a>. 
+<a href="module-sgmllib.html">sgmllib</a><a name="l2h-1953"></a>.
 <P>
 The following is a summary of the interface defined by
 <tt class=class>sgmllib.SGMLParser</tt>:

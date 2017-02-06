@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #
 #	file:   GatoTest.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -29,7 +29,7 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
@@ -94,7 +94,7 @@ def allInstances(exclude_algorithms=[], exclude_instances = {}):
     return instance
 
 
-# instance is a dictionary where the keys are 
+# instance is a dictionary where the keys are
 # algorithms and their value is a list of graphs
 # they will work on.
 #
@@ -134,7 +134,7 @@ instance = {
     '03-MinimalSpanningTrees/Kruskal3.cat'
     ],
     '03-MinimalSpanningTrees/MatroidDualKruskal.alg':[
-    '03-MinimalSpanningTrees/Kruskal3.cat'    
+    '03-MinimalSpanningTrees/Kruskal3.cat'
     ],
     '03-MinimalSpanningTrees/Prim.alg':[
     '03-MinimalSpanningTrees/Prim1.cat'
@@ -161,7 +161,7 @@ instance = {
     '05-ShortestPaths/NegCircuit.cat'
     ],
     '05-ShortestPaths/TwoSources.alg':[
-    '05-ShortestPaths/ShortestPathsUndirected05.cat'    
+    '05-ShortestPaths/ShortestPathsUndirected05.cat'
     ],
     '06-MaximalFlows/FordFulkerson.alg':[
     '06-MaximalFlows/FordFulkerson4.cat'
@@ -176,7 +176,7 @@ instance = {
     '07-MinimumCostFlows/MCFCycle.cat'
     ],
     '07-MinimumCostFlows/SuccessiveShortestPath.alg':[
-    '07-MinimumCostFlows/MCF4to1B.cat'    
+    '07-MinimumCostFlows/MCF4to1B.cat'
     ],
     '08-Matching/Bipartite.alg':[
     '08-Matching/Bi006.cat'
@@ -253,7 +253,7 @@ svg_instance = [
         'chapter_number': 3,
         'title': 'Minimum Spanning Trees',
         'algorithms': [
-            {   
+            {
                 'title': 'Kruskal\'s Algorithm',
                 'file': 'Kruskal.alg',
                 'description': 'Kruskal\'s algorithm computes a minimum spanning tree in ' \
@@ -296,7 +296,7 @@ svg_instance = [
                     '03-MinimalSpanningTrees/Kruskal1.cat','03-MinimalSpanningTrees/Kruskal2.cat',
                     '03-MinimalSpanningTrees/Kruskal3.cat',
                     '03-MinimalSpanningTrees/Prim1.cat','03-MinimalSpanningTrees/Prim2.cat'
-                ]   
+                ]
             },
             {
                 'title': 'Prim\'s Algorithm',
@@ -312,7 +312,7 @@ svg_instance = [
             {
                 'title': 'Matroid Dual of Kruskal\'s Algorithm',
                 'file': 'MatroidDualKruskal.alg',
-                'description': 'An implementation of a matroid dual of Kruskal\'s Algorithm. ', 
+                'description': 'An implementation of a matroid dual of Kruskal\'s Algorithm. ',
                 'graphs': [
                     '03-MinimalSpanningTrees/Kruskal1.cat','03-MinimalSpanningTrees/Kruskal2.cat',
                     '03-MinimalSpanningTrees/Kruskal3.cat',
@@ -353,7 +353,7 @@ svg_instance = [
                     '05-ShortestPaths/ShortestPathsUndirected03.cat',
                     '05-ShortestPaths/7x7grid.cat',
                     '05-ShortestPaths/NegArc.cat',
-                    '05-ShortestPaths/NegCircuit.cat'                   
+                    '05-ShortestPaths/NegCircuit.cat'
                 ]
             },
             {
@@ -364,9 +364,9 @@ svg_instance = [
                 'graphs': [
                     '05-ShortestPaths/ShortestPathsUndirected02.cat',
                     '05-ShortestPaths/ShortestPathsUndirected03.cat',
-                    '05-ShortestPaths/7x7grid.cat',      
+                    '05-ShortestPaths/7x7grid.cat',
                     '05-ShortestPaths/NegArc.cat',
-                    '05-ShortestPaths/NegCircuit.cat'                   
+                    '05-ShortestPaths/NegCircuit.cat'
                 ]
             },
             {
@@ -543,7 +543,7 @@ svg_instance = [
                 'description': 'This algorithm considers vertices as points in 2-dimensional ' \
                 'space and implicitely assumes the existence of all edges in the complete ' \
                 'graph. Furthermore, edge weights are Euclidean. It finds a matching of minimal ' \
-                'weight. The matching is perfect if the number of vertices is even', 
+                'weight. The matching is perfect if the number of vertices is even',
                 'graphs': [
                     '09-WeightedMatching/twotriangles.cat', '09-WeightedMatching/3223.cat',
                     '09-WeightedMatching/11vs13.cat'
@@ -572,7 +572,7 @@ graph_descriptions = {
 }
 
 def create_svg_index_page(graph_pngs):
-    ''' Creates an HTML index page that leads to the SVG 
+    ''' Creates an HTML index page that leads to the SVG
         animations generated from the svg_instance dictionary
     '''
     import jinja2
@@ -589,8 +589,8 @@ def create_svg_index_page(graph_pngs):
         with open('svgs/index.html', 'w') as index_out:
             template = jinja2.Template(template_in.read())
             index_out.write(template.render({
-                'svg_instance': svg_instance, 
-                'graph_pngs': graph_pngs, 
+                'svg_instance': svg_instance,
+                'graph_pngs': graph_pngs,
                 'graph_descriptions': graph_descriptions,
                 'svg_locations': svg_locations
              }))
@@ -602,7 +602,7 @@ def should_generate_animation(algo_file_name, graph_file_name, svg_file_name):
     algo_pro_file_name = os.path.splitext(os.path.basename(algo_file_name))[0] + '.pro'
     if os.path.isfile(svg_file_name):
         svg_age = os.path.getmtime(svg_file_name)
-    else: # File does not exist, so generate 
+    else: # File does not exist, so generate
         return True
     graph_age = os.path.getmtime(graph_file_name)
     pro_age = os.path.getmtime(os.path.join(catbox_path, algo_pro_file_name))
@@ -619,7 +619,7 @@ def should_generate_png(algo_file_name, graph_file_name, png_file_name):
     algo_pro_file_name = os.path.splitext(os.path.basename(algo_file_name))[0] + '.pro'
     if os.path.isfile(png_file_name):
         png_age = os.path.getmtime(png_file_name)
-    else: # File does not exist, so generate 
+    else: # File does not exist, so generate
         return True
     graph_age = os.path.getmtime(graph_file_name)
     pro_age = os.path.getmtime(os.path.join(catbox_path, algo_pro_file_name))
@@ -669,8 +669,8 @@ if __name__ == '__main__':
             test = True
         if o in ("-f", "--force_animation"):
             force_animation = True
-            
-            
+
+
     if test:
         testPath = "./"
         tests = [ ("BFS.alg", "sample.cat") ]
@@ -707,12 +707,12 @@ if __name__ == '__main__':
 
 
     # To speed up running of tests
-    g.BlinkRepeat = 1 
+    g.BlinkRepeat = 1
     g.BlinkRate = 2
-    
+
     g.Interactive = 0 # Same effect as hitting continue for interactive lines
     log = logging.getLogger("Gato")
-    
+
     app = AlgoWin()
     if debug:
         app.algorithm.logAnimator = 2
@@ -738,8 +738,8 @@ if __name__ == '__main__':
             logging.basicConfig(level=logging.WARNING,
                                 filename='/tmp/Gato.log',
                                 filemode='w',
-                                    format='%(name)s %(levelname)s %(message)s')        
-    
+                                    format='%(name)s %(levelname)s %(message)s')
+
     if svg:
         print("# Producing SVG output")
         if not os.path.exists('./svgs'):
@@ -821,4 +821,4 @@ if __name__ == '__main__':
             app.update_idletasks()
             #app.mainloop()
 
-            
+

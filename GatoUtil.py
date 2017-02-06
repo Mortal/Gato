@@ -1,14 +1,14 @@
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #
 #	file:   GatoUtil.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -28,24 +28,24 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
 ################################################################################
 
 from tkinter import *
-    
+
 def extension(pathAndFile):
     """ Return ext if path/filename.ext is given """
     import string
     return string.split(stripPath(pathAndFile),".")[-1]
-    
+
 def stripPath(pathAndFile):
     """ Return filename.ext if path/filename.ext is given """
-    import os 
+    import os
     return os.path.split(pathAndFile)[1]
-    
+
 def orthogonal(u):
     """ Return a unit length vector (v1,v2) which has an angle of
         90 degrees clockwise to the vector u = (u1,u2) """
@@ -57,21 +57,21 @@ def orthogonal(u):
     u1 = u1 / length
     u2 = u2 / length
     return (-u2,u1)
-      
+
 def ArgMin(list,val):
     """ Returns the element e of list for which val[e] is minimal.
     """
     values = [val[e] for e in list]
     return list[values.index(min(values))]
-    
+
 def ArgMax(list,val):
     """ Returns the element e of list for which val[e] is maximal """
     values = [val[e] for e in list]
     return list[values.index(max(values))]
 
-            
+
 class ImageCache:
-    """ Provides a global cache for PhotoImages displayed in the 
+    """ Provides a global cache for PhotoImages displayed in the
         application. Singleton Pattern
 
         ic = ImageCache()
@@ -82,15 +82,15 @@ class ImageCache:
         ...image_create('insert', image=ic['some/path/image.gif']
     """
     images = None	
-    
+
     def __init__(self):
         if ImageCache.images == None:
             ImageCache.images = {}
-            
+
     def __getitem__(self, relURL):
-        """ Given a relative URL to an image file return the 
+        """ Given a relative URL to an image file return the
             corresponding PhotoImage. """
-        try:    
+        try:
             if relURL not in list(self.images.keys()):
                 ImageCache.images[relURL] = PhotoImage(file=relURL)
             return ImageCache.images[relURL]
@@ -98,6 +98,6 @@ class ImageCache:
             import logging
             log = logging.getLogger("GatoUtil.py")
             log.exception("Error finding image %s" % relURL)
-            
+
     def AddImage(self, relURL, imageData):
         ImageCache.images[relURL] = PhotoImage(data=imageData)

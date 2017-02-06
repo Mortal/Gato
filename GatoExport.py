@@ -1,14 +1,14 @@
 #!/usr/bin/env python2.6
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #
 #   file:   GatoExport.py
 #   author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 2010, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 2010, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
+#
 #       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
@@ -30,7 +30,7 @@
 #
 #
 #
-#       This file is version $Revision: 353 $ 
+#       This file is version $Revision: 353 $
 #                       from $Date: 2010-06-03 14:58:37 -0400 (Thu, 03 Jun 2010) $
 #             last change by $Author: schliep $.
 #
@@ -73,7 +73,7 @@ svg_drop_shadow = '''
     <filter id="dropshadow" height="130%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="1"/> <!-- stdDeviation is how much to blur -->
         <feOffset dx="2.5" dy="2.5" result="offsetblur"/> <!-- how much to offset -->
-        <feMerge> 
+        <feMerge>
           <feMergeNode/> <!-- this contains the offset blurred image -->
           <feMergeNode in="SourceGraphic"/> <!-- this contains the element that the filter is applied to -->
        </feMerge>
@@ -93,7 +93,7 @@ def tokenEater(type, token, xxx_todo_changeme, xxx_todo_changeme1, line):
     global last_line
 
     if begun_line and last_line != line:
-        # This handles the case where there is a multi-line algorithm command 
+        # This handles the case where there is a multi-line algorithm command
         # that spans the lines with a backslash(look at line 10/11 of Prim)
         line_count += 1
         algo_lines.append('</text>\n')
@@ -196,7 +196,7 @@ def tokenEater(type, token, xxx_todo_changeme, xxx_todo_changeme1, line):
             algo_lines.append('%s' % token)
         else:
             algo_lines.append(' %s' % token)
-    
+
     last_line = line
     if type != 0:
         prev[0] = token
@@ -207,16 +207,16 @@ def cmd_as_javascript(cmd, idPrefix=''):
     """ Return a list of methodname, target and args """
     def quote(s, prefix=''):
         return "\"%s\"" % (prefix+str(s))
-    
+
     if len(cmd.target) == 1:
         target = quote(cmd.target[0], idPrefix)
     else:
         target = quote(cmd.target, idPrefix)
-        
+
     result = [cmd.time, cmd.method.__name__, target]
     for arg in cmd.args:
         result.append(quote(arg))
-    
+
     # Special case for some animatin commands
     if cmd.method.__name__ == 'SetAllVerticesColor' and 'vertices' in cmd.kwargs:
         for v in cmd.kwargs['vertices']:
@@ -237,7 +237,7 @@ def collectAnimations(histories, prefixes):
     """ Given a list of animation histories (aka list of AnimationCommands)
         combine them, giving all targets of animation commands their history-
         specific prefix, sort them and return a list of JavaScripts arrays.
-    """ 
+    """
     mergedCmds = [cmd_as_javascript(cmd, prefixes[0]) for cmd in histories[0]]
     for i, h in enumerate(histories[1:]):
         mergedCmds += [cmd_as_javascript(cmd, prefixes[i+1]) for cmd in h]
@@ -284,7 +284,7 @@ def get_graph_as_svg_str_standalone(graphDisplay, x_add, y_add, file, idPrefix='
     ret_strs = []
     min_x, max_x, min_y, max_y = None, None, None, None
 
-    # Keep track of vertex_radius as we have to shift everything over by that much so 
+    # Keep track of vertex_radius as we have to shift everything over by that much so
     # vertices on the far left don't appear half off the screen
     vertex_radius = None
     for v in graphDisplay.G.Vertices():
@@ -303,7 +303,7 @@ def get_graph_as_svg_str_standalone(graphDisplay, x_add, y_add, file, idPrefix='
         wx, wy, r = graphDisplay.VertexPositionAndRadius(w)
         col = graphDisplay.GetEdgeColor(v,w)
         width = graphDisplay.GetEdgeWidth(v,w)
-        
+
         vy -= y_add
         wy -= y_add
         vx -= x_add
@@ -317,7 +317,7 @@ def get_graph_as_svg_str_standalone(graphDisplay, x_add, y_add, file, idPrefix='
         else:
             x1,y1,x2,y2 = graphDisplay.directedDrawEdgePoints(graphDisplay.VertexPosition(v),
                 graphDisplay.VertexPosition(w), 0)
-            
+
             x1e,y1e = graphDisplay.CanvasToEmbedding(x1,y1)
             x2e,y2e = graphDisplay.CanvasToEmbedding(x2,y2)
             y1e -= y_add
@@ -339,7 +339,7 @@ def get_graph_as_svg_str_standalone(graphDisplay, x_add, y_add, file, idPrefix='
                 c = (l-2*graphDisplay.zVertexRadius)/l + .01
                 tmpX = float(vx) + c*(float(wx) - float(vx))
                 tmpY = float(vy) + c*(float(wy) - float(vy))
-                
+
                 #dx = 0 #offset of wx to make room for arrow
                 #dy = 0 #offset of wy
                 cr = 0
@@ -361,7 +361,7 @@ def get_graph_as_svg_str_standalone(graphDisplay, x_add, y_add, file, idPrefix='
                 a_width = (1 + 1.5/(1*pow(log10(float(width)), 6)))
                 if(a_width > 5.0):
                     a_width = 5.0
-                a_width *= float(width) 
+                a_width *= float(width)
                 p1 = (0,0)
                 p2 = (0, a_width)
                 p3 = (cr, a_width/2)
@@ -385,7 +385,7 @@ def get_graph_as_svg_str_standalone(graphDisplay, x_add, y_add, file, idPrefix='
             xe -= x_add
             min_x, min_y, max_x, max_y = update_min_and_max(x, y, min_x, min_y, max_x, max_y)
             min_x, min_y, max_x, max_y = update_min_and_max(xe, ye, min_x, min_y, max_x, max_y)
-            text = graphDisplay.canvas.itemcget(graphDisplay.edgeAnnotation[(v,w)],"text") 
+            text = graphDisplay.canvas.itemcget(graphDisplay.edgeAnnotation[(v,w)],"text")
             size = r * 0.9
             offset = 0.33 * size
             col = 'black'
@@ -435,7 +435,7 @@ def get_graph_as_svg_str_standalone(graphDisplay, x_add, y_add, file, idPrefix='
 
 
 def get_graph_as_svg_str_for_animation(graphDisplay, x_add, y_add, file, idPrefix=''):
-    ''' Returns an svg string.  The SVG string returned 
+    ''' Returns an svg string.  The SVG string returned
         is designed for use with javascript with WebGato
     '''
     ret_strs = []
@@ -446,12 +446,12 @@ def get_graph_as_svg_str_for_animation(graphDisplay, x_add, y_add, file, idPrefi
         wx,wy,r = graphDisplay.VertexPositionAndRadius(w)
         col = graphDisplay.GetEdgeColor(v,w)
         width = graphDisplay.GetEdgeWidth(v,w)
-        
+
         vy -= y_add
         wy -= y_add
         vx -= x_add
         wx -= x_add
-        
+
         edge_id = get_edge_id(v, w, idPrefix)
         ret_strs.append('<g id="%s" class="edge_group" style="cursor: pointer">' % (edge_id + '_group'))
         if graphDisplay.G.directed == 0:
@@ -460,7 +460,7 @@ def get_graph_as_svg_str_for_animation(graphDisplay, x_add, y_add, file, idPrefi
         else:
             x1,y1,x2,y2 = graphDisplay.directedDrawEdgePoints(graphDisplay.VertexPosition(v),
                 graphDisplay.VertexPosition(w), 0)
-            
+
             x1e,y1e = graphDisplay.CanvasToEmbedding(x1,y1)
             x2e,y2e = graphDisplay.CanvasToEmbedding(x2,y2)
             y1e -= y_add
@@ -480,7 +480,7 @@ def get_graph_as_svg_str_for_animation(graphDisplay, x_add, y_add, file, idPrefi
                 c = (l-2*graphDisplay.zVertexRadius)/l + .01
                 tmpX = float(vx) + c*(float(wx) - float(vx))
                 tmpY = float(vy) + c*(float(wy) - float(vy))
-                
+
                 #dx = 0 #offset of wx to make room for arrow
                 #dy = 0 #offset of wy
                 cr = 0
@@ -501,7 +501,7 @@ def get_graph_as_svg_str_for_animation(graphDisplay, x_add, y_add, file, idPrefi
                 a_width = (1 + 1.5/(1*pow(log10(float(width)), 6)))
                 if(a_width > 5.0):
                     a_width = 5.0
-                a_width *= float(width) 
+                a_width *= float(width)
                 p1 = (0,0)
                 p2 = (0, a_width)
                 p3 = (cr, a_width/2)
@@ -525,7 +525,7 @@ def get_graph_as_svg_str_for_animation(graphDisplay, x_add, y_add, file, idPrefi
             x -= x_add
             xe -= x_add
 
-            text = graphDisplay.canvas.itemcget(graphDisplay.edgeAnnotation[(v,w)],"text") 
+            text = graphDisplay.canvas.itemcget(graphDisplay.edgeAnnotation[(v,w)],"text")
             size = r * 0.9
             offset = 0.33 * size
             col = 'black'
@@ -571,7 +571,7 @@ def get_graph_as_svg_str_for_animation(graphDisplay, x_add, y_add, file, idPrefi
                        'font-size="%s" font-style="normal" text_content="%s">%s</text>\n' % (idPrefix+str(v),x+r+1,y+r*1.5+2.5,col,size,text,text))
 
     return '\n'.join(ret_strs)
-    
+
 
 def compute_coord_changes(gdisp):
     has_elements = False
@@ -620,7 +620,7 @@ def format_init_vertex_infos(info_dict, idPrefix):
         str_bits.append(assignment)
     str_bits.append('}')
     return '\n'.join(str_bits)
-        
+
 def ExportAlgoInfo(fileName, algorithm):
     if not os.path.exists('./svgs/infos'):
         os.makedirs('./svgs/infos')
@@ -656,7 +656,7 @@ def ExportAlgoInfo(fileName, algorithm):
         clear_div = soup.new_tag('div')
         clear_div['class'] = 'clear_div'
         dd.insert_after(clear_div)
-    
+
     body = soup.find('body')
     if not body.contents:
         # If there isn't any content add "No algorithm info"
@@ -687,8 +687,8 @@ def construct_animation_name(fileName):
     graph = sp[1].split('.')[0]
     return '%s algorithm on %s graph' % (algorithm, graph)
 
-def ExportSVG(fileName, algowin, algorithm, graphDisplay, secondaryGraphDisplay=None, 
-    secondaryGraphDisplayAnimationHistory=None, showAnimation=False, 
+def ExportSVG(fileName, algowin, algorithm, graphDisplay, secondaryGraphDisplay=None,
+    secondaryGraphDisplayAnimationHistory=None, showAnimation=False,
     init_edge_infos=None, init_vertex_infos=None, init_graph_infos=None,
     write_to_png=False, chapter_number=None, algo_div=None):
     """ Export either the current graphs or the complete animation
@@ -777,9 +777,9 @@ def ExportSVG(fileName, algowin, algorithm, graphDisplay, secondaryGraphDisplay=
             'animation_name': construct_animation_name(fileName),
             'chapter_number': chapter_number or 0,
             'algo_div': algo_div or '',
-            'info_file': 'infos/' + fileName[fileName.rindex('/') + 1:], 
+            'info_file': 'infos/' + fileName[fileName.rindex('/') + 1:],
             'animation': format_animation(animation),
-            'graph_str': '\n'.join(graph_strs), 
+            'graph_str': '\n'.join(graph_strs),
             'algo_str': '<g id="codelines" style="visibility: hidden">' + ''.join(algo_lines) + "</g>",
             'g1_x_add': g1_x_add,
             'g1_y_add': g1_y_add,
@@ -795,25 +795,25 @@ def ExportSVG(fileName, algowin, algorithm, graphDisplay, secondaryGraphDisplay=
         file.write(animationhead % str_vars)
         file.close()
 
-        # Export the algorithm info to its own HTML file        
+        # Export the algorithm info to its own HTML file
         ExportAlgoInfo(fileName, algorithm)
 
 
     elif not showAnimation and not write_to_png:
         edge_padding = 5
-        g1_svg_body_str, g1_width, g1_height = get_graph_as_svg_str_standalone(graphDisplay, g1_x_add, 
+        g1_svg_body_str, g1_width, g1_height = get_graph_as_svg_str_standalone(graphDisplay, g1_x_add,
             g1_y_add, file, idPrefix=id_prefixes[0], translate=(edge_padding, edge_padding))
         g2_svg_body_str, g2_width, g2_height = '', 0, 0
         g2_y_padding = 0
         if secondaryGraphDisplay:
             g2_y_padding = 10
-            g2_svg_body_str, g2_width, g2_height = get_graph_as_svg_str_standalone(secondaryGraphDisplay, g2_x_add, 
+            g2_svg_body_str, g2_width, g2_height = get_graph_as_svg_str_standalone(secondaryGraphDisplay, g2_x_add,
                 g2_y_add, file, idPrefix=id_prefixes[1], translate=(edge_padding,g1_height+g2_y_padding+edge_padding))
 
         width = int(max(g1_width, g2_width))+edge_padding*2
-        height = int(g1_height+g2_height+g2_y_padding)+edge_padding*2 
+        height = int(g1_height+g2_height+g2_y_padding)+edge_padding*2
         scale = min(200.0/width, 1.0)
-        
+
         # Put a border between the graphs
         if secondaryGraphDisplay:
             y = g1_height + g2_y_padding/2 + edge_padding
@@ -833,19 +833,19 @@ def ExportSVG(fileName, algowin, algorithm, graphDisplay, secondaryGraphDisplay=
         file.close()
 
         edge_padding = 15
-        g1_svg_body_str, g1_width, g1_height = get_graph_as_svg_str_standalone(graphDisplay, g1_x_add, 
+        g1_svg_body_str, g1_width, g1_height = get_graph_as_svg_str_standalone(graphDisplay, g1_x_add,
             g1_y_add, file, idPrefix=id_prefixes[0], translate=(edge_padding, edge_padding))
         g2_svg_body_str, g2_width, g2_height = '', 0, 0
         g2_y_padding = 0
         if secondaryGraphDisplay:
             g2_y_padding = 10
-            g2_svg_body_str, g2_width, g2_height = get_graph_as_svg_str_standalone(secondaryGraphDisplay, g2_x_add, 
+            g2_svg_body_str, g2_width, g2_height = get_graph_as_svg_str_standalone(secondaryGraphDisplay, g2_x_add,
                 g2_y_add, file, idPrefix=id_prefixes[1], translate=(edge_padding,g1_height+g2_y_padding+edge_padding))
 
         width = int(max(g1_width, g2_width))+edge_padding*2
-        height = int(g1_height+g2_height+g2_y_padding)+edge_padding*2 
+        height = int(g1_height+g2_height+g2_y_padding)+edge_padding*2
         scale = min(min(200.0/width, 1.0), min(200.0/height, 1.0))
-        
+
         # Put a border between the graphs
         if secondaryGraphDisplay:
             y = g1_height + g2_y_padding/2 + edge_padding

@@ -5,10 +5,10 @@
 #	file:   GatoGlobals.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -28,7 +28,7 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
@@ -41,7 +41,7 @@ gatoVersion = '1.2.2'
 gatoBuildDate = '1/13/2015'
 
 class AnimationParameters:
-    """ Convenience class to collect all globals. 
+    """ Convenience class to collect all globals.
 
         The values below are the initial default values, which can be
         overriden from the user with the GUI.
@@ -113,14 +113,14 @@ class GatoError(Exception):
     def __init__(self, *args):
         """Set the 'args' attribute."""
         self.args = args
-        
+
     def __str__(self):
         """Return the str of args[0] or args, depending on length."""
         if len(self.args) <= 1:
             return str(self.args[0])
         else:
             return self.args
-            
+
 
     def __repr__(self):
         func_args = repr(self.args) if self.args else "()"

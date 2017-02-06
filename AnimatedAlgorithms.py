@@ -1,15 +1,15 @@
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #       You can find more information at http://gato.sf.net
 #
 #	file:   AnimatedAlgorithms.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -29,7 +29,7 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
@@ -45,25 +45,25 @@ g = GatoGlobals.AnimationParameters
 def shortestPath(G, A, s, t):
     """ Find a shortest path and return it as a set of edges. If no
         path exists, it returns None """
-    pred = AnimatedVertexLabeling(A)    
-    Q = AnimatedVertexQueue(A)    
+    pred = AnimatedVertexLabeling(A)
+    Q = AnimatedVertexQueue(A)
     A.SetAllEdgesColor(g.cEdgeDefault)
     A.SetAllVerticesColor(g.cVertexDefault)
-        
+
     for v in G.vertices:
         pred[v] = None	
     Q.Append(s)
-    
+
     while Q.IsNotEmpty() and pred[t] == None:
         v = Q.Top()
         for w in AnimatedNeighborhood(A,G,v):
             if pred[w] == None and w != s:
                 pred[w] = v
                 Q.Append(w)
-                
+
     if pred[t] == None: # No augmenting path found
         return None
-        
+
     path = []
     v = t
     while pred[v] != None:
@@ -73,4 +73,4 @@ def shortestPath(G, A, s, t):
         v = pred[v]
     A.SetVertexColor(v,"red")
     return path
-    
+

@@ -813,7 +813,7 @@ class gauss_tail_function_left(gauss_tail_function_right):
     def get_value(self,x):
         #return self.a * pygsl.rng.gaussian_tail_pdf(self.mu-x, self.mu-self.tail, self.sigma)
         return self.a * ghmmwrapper.ighmm_rand_normal_density_trunc(-x, -self.mu, self.sigma**2, -self.tail)
-    
+
     def __repr__(self):
         return "gauss_tail_function_left: x->%f/(%f*sqrt(2*pi))*exp(-(x-%f)**2/2*%f**2)"%(self.a,self.sigma,self.mu,self.sigma)
 
@@ -1844,13 +1844,13 @@ class gauss_editor(tkinter.Frame):
         self.edit_area.bind('<Configure>',self.configure_handles)
         self.root=master
 
-        self.box = tkinter.Frame() 
+        self.box = tkinter.Frame()
         button_ok = tkinter.Button(self.box, text="Save", width=10, command=self.save)
         button_ok.pack(side=LEFT, padx=5, pady=5)
         button_cancel = tkinter.Button(self.box, text="Cancel", width=10, command=self.cancel)
         button_cancel.pack(side=LEFT, padx=5, pady=5)
         self.box.pack(side=BOTTOM, fill=X)
-        
+
         self.plot_list = plotlist
         self.handle_list=[]
         self.color_idx = len(self.plot_list)
@@ -1979,7 +1979,7 @@ class gauss_editor(tkinter.Frame):
         addMenu.add_radiobutton(label="Gaussian",   command=self.gaussadd)
         addMenu.add_radiobutton(label="GaussianL",  command=self.gaussladd)
         addMenu.add_radiobutton(label="GaussianR",  command=self.gaussradd)
-        
+
         for i in range(len(self.plot_list)):
             delMenu.add_radiobutton(label=str(i+1), background = self.plot_list[i].color, command = self.make_del_function(i))
         if self.sumindi:
@@ -2263,7 +2263,7 @@ class gauss_editor(tkinter.Frame):
         for i,k in enumerate(self.dict.keys()):
             d[str(i+1)] = self.dict[k]
         self.dict = ProbEditorBasics.ProbDict(d)
-        
+
         # normalize mixture component weights to 1.0
         if self.normalize.get() == 1:
             self.dict.renorm_to(1.0)
@@ -2271,7 +2271,7 @@ class gauss_editor(tkinter.Frame):
                 o.a = self.dict[str(i+1)]
 
         self.makePie()
-        
+
         self.edit_area.destroy()
         del self.edit_area
         self.handle_list=[]
@@ -2353,7 +2353,7 @@ class gauss_editor(tkinter.Frame):
         self.create_handle(o)
 
         self.makePie()
-        
+
         self.plot_area.configure(width=550)
         #self.pie.grid(row=0,rowspan=2,column=1,sticky=Tkinter.NSEW)
         self.suche_randwerte()
@@ -2484,7 +2484,7 @@ class gauss_editor(tkinter.Frame):
 
 if __name__=='__main__':
     root=tkinter.Tk()
-    
+
     plot_list=[box_function(start=-0.2,stop=1.0,a=0.1,color='green'),
                     gauss_function(mu=2,sigma=0.6,a=0.2,color='blue')#,
     ##                gauss_tail_function_right(mu=6,sigma=1,tail=5,a=0.2,color='grey'),

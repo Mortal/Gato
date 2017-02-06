@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #
 #	file:   setup-mac-gato.py
 #	author: Alexander Schliep
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
+#
 #       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
@@ -31,7 +31,7 @@
 #
 #
 #
-#       This file is version $Revision: 291 $ 
+#       This file is version $Revision: 291 $
 #                       from $Date: 2006-10-18 16:04:35 +0200 (Wed, 18 Oct 2006) $
 #             last change by $Author: schliep $.
 #

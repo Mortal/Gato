@@ -1,14 +1,14 @@
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #
 #	file:   MapEditor.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -28,7 +28,7 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
@@ -59,79 +59,79 @@ class MultiListbox(Frame):
         sb.pack(expand=YES, fill=Y)
         self.lists[0]['yscrollcommand']=sb.set
         self.doubleclickCallback = doubleclickCallback
-        
+
     def _double_select(self, y):
         row = self.lists[0].nearest(y)
         self.selection_clear(0, END)
         self.selection_set(row)
         self.doubleclickCallback(self.curselection())
         return 'break'
-        
+
     def _select(self, y):
         row = self.lists[0].nearest(y)
         self.selection_clear(0, END)
         self.selection_set(row)
         return 'break'
-        
+
     def _button2(self, x, y):
         for l in self.lists: l.scan_mark(x, y)
         return 'break'
-        
+
     def _b2motion(self, x, y):
         for l in self.lists: l.scan_dragto(x, y)
         return 'break'
-        
+
     def _scroll(self, *args):
         for l in self.lists:
             l.yview(*args)
-            
+
     def curselection(self):
         return self.lists[0].curselection()
-        
+
     def delete(self, first, last=None):
         for l in self.lists:
             l.delete(first, last)
-            
+
     def get(self, first, last=None):
         result = []
         for l in self.lists:
             result.append(l.get(first,last))
         if last: return list(map(*[None] + result))
         return result
-        
+
     def index(self, index):
         self.lists[0].index(index)
-        
+
     def insert(self, index, *elements):
         for e in elements:
             i = 0
             for l in self.lists:
                 l.insert(index, e[i])
                 i = i + 1
-                
+
     def size(self):
         return self.lists[0].size()
-        
+
     def see(self, index):
         for l in self.lists:
             l.see(index)
-            
+
     def selection_anchor(self, index):
         for l in self.lists:
             l.selection_anchor(index)
-            
+
     def selection_clear(self, first, last=None):
         for l in self.lists:
             l.selection_clear(first, last)
-            
+
     def selection_includes(self, index):
         return self.lists[0].selection_includes(index)
-        
+
     def selection_set(self, first, last=None):
         for l in self.lists:
             l.selection_set(first, last)
-            
-            
+
+
 class MapEditor(tkinter.simpledialog.Dialog):
 
     def __init__(self, master, maps, map_titles, field_widths):
@@ -141,16 +141,16 @@ class MapEditor(tkinter.simpledialog.Dialog):
         self.entryWidget = []
         self.lastSelection = None
         tkinter.simpledialog.Dialog.__init__(self, master, "MapEditor")
-        
+
     def body(self, master):
         outer_frame = Frame(master, relief=SUNKEN, bd=2)
-        
+
         args = ()
         for i in range(len(self.map_titles)):
             args += ((self.map_titles[i], self.field_widths[i]),)
         self.mlb = MultiListbox(outer_frame, args, self.editSelection)
         self.mlb.pack(expand=YES,fill=BOTH)
-        
+
         frame = Frame(outer_frame, relief=RAISED, bd=2)
         yanf = Frame(frame)
         for i in range(len(self.map_titles)):
@@ -167,48 +167,48 @@ class MapEditor(tkinter.simpledialog.Dialog):
         yanf.pack(expand=YES,fill=Y)
         frame.pack(expand=YES,fill=Y)
         outer_frame.pack(expand=YES,fill=BOTH)
-        
+
         for k in list(self.maps[0].keys()):
             mapItem = (k,)
             for i in range(len(self.maps)):
                 mapItem += (self.maps[i][k],)
             self.mlb.insert(END, mapItem)
-            
+
     def addMapItem(self):
         mapItem = ()
         for i in range(len(self.map_titles)):
             mapItem += (self.entryWidget[i].get(),)
             self.entryWidget[i].delete(0,END)
-            
+
         self.mlb.insert(END, mapItem)
-        
+
     def updateMapItem(self):
         mapItem = ()
         for i in range(len(self.map_titles)):
             mapItem += (self.entryWidget[i].get(),)
             self.entryWidget[i].delete(0,END)
-            
+
         if self.mlb.curselection() == self.lastSelection:
-            self.mlb.delete(self.lastSelection)           
+            self.mlb.delete(self.lastSelection)
             self.mlb.insert(self.lastSelection, mapItem)
-            
+
     def deleteSelection(self):
         self.mlb.delete(self.mlb.curselection())
-        
+
     def editSelection(self, selection):
         self.lastSelection = selection
         values = self.mlb.get(selection)
         for i in range(len(values)):
             self.entryWidget[i].delete(0,END)
             self.entryWidget[i].insert(0,"%s" % values[i])
-            
+
     def ok(self, event=None):
         self.result = []
         for i in range(self.mlb.size()):
             self.result.append(self.mlb.get(i))
         tkinter.simpledialog.Dialog.ok(self, event)
-        
-        
+
+
 class NamedCollectionEditor(tkinter.simpledialog.Dialog):
     """ Provide a simple editor to
         - add items
@@ -220,26 +220,26 @@ class NamedCollectionEditor(tkinter.simpledialog.Dialog):
         - delete(name)
         - edit(name)
         - names() the name initially listed
-        methods, which should being up UI for add/edit if necessary. """ 
-    
+        methods, which should being up UI for add/edit if necessary. """
+
     def __init__(self, master, collection):
         self.collection = collection
         tkinter.simpledialog.Dialog.__init__(self, master, "CollectionEditor")
-        
+
     def body(self, master):
         outer_frame = Frame(master, relief=SUNKEN, bd=2)
-        
+
         scrollbar = Scrollbar(outer_frame, orient=VERTICAL)
         self.lb = Listbox(outer_frame, yscrollcommand=scrollbar.set)
         scrollbar.config(command=self.lb.yview)
         scrollbar.pack(side=RIGHT, fill=Y)
         self.lb.pack(expand=YES, fill=BOTH)
-        
+
         for name in self.collection.names():
             self.lb.insert(END, name)
-            
+
         yanf = outer_frame
-        
+
         addButton = Button(yanf, text='Delete', foreground='red', command=self.deleteItem)
         addButton.pack(padx=4, pady=3, side=RIGHT)
         addButton = Button(yanf, text='Edit', foreground='red', command=self.editItem)
@@ -250,30 +250,30 @@ class NamedCollectionEditor(tkinter.simpledialog.Dialog):
         self.nameEntry.pack(padx=6, pady=3, side=RIGHT)
         yanf.pack(expand=YES,fill=Y)
         outer_frame.pack(expand=YES,fill=BOTH)
-        
+
     def newItem(self):
         name = self.nameEntry.get()
         self.collection.add(name)
         self.lb.insert(END, name)
-        
+
     def editItem(self):
         name = self.lb.get(self.lb.curselection())
         if name is not "":
             self.collection.edit(self, name)
-            
+
     def deleteItem(self):
         name = self.lb.get(self.lb.curselection())
         self.collection.delete(name)
         self.lb.delete(self.lb.curselection())
-        
+
     def ok(self, event=None):
         tkinter.simpledialog.Dialog.ok(self, event)
-        
-        
-        
+
+
+
 if __name__ == '__main__':
     tk = Tk()
-    
+
     map = {"josef":1, "maria":2}
     sexMap = {"josef":'m', "maria":'w'}
     mapedit = MapEditor(tk,[map, sexMap],['Name','Age','Sex'],[32,5,5])

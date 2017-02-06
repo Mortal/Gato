@@ -1,14 +1,14 @@
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
+#       This file is part of Gato (Graph Animation Toolbox)
 #
 #	file:   AnimationHistory.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -28,7 +28,7 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
@@ -62,12 +62,12 @@ class AnimationCommand:
 
     def CanUndo(self):
         return self.canUndo
-        
+
     def Do(self):
         #return apply(self.method, self.target + self.args)
         args = self.target + self.args
         return self.method(*args,**self.kwargs)
-        
+
     def Undo(self):
         if self.canUndo:
             if self.undo_method == None:
@@ -102,7 +102,7 @@ class AnimationCommand:
             kwstr = ",".join(kwstr)
         else:
             kwstr = ''
-           
+
         if len(self.args) == 0:
             return "%s(%s) %s" % (self.method.__name__, t, kwstr)
         elif len(self.args) == 1:
@@ -117,7 +117,7 @@ class AnimationHistory:
     """AnimationHistory provides a history of animation commands, and a undo and
        redo facility. It is to be used as a wrapper around a GraphDisplay and it
        will happily dispatch all calls to GraphDisplay.
-    
+
        Animation commands for which undo/redo is provided, have to be methods of
        AnimationHistory.
 
@@ -128,7 +128,7 @@ class AnimationHistory:
 
        The AnimationHistory is also used for providing SVG output of animations.
 
-       
+
        XXX Maybe decorators for graph display would be a better way to implement
        it. Here we incurr overhead for every method call
     """
@@ -148,7 +148,7 @@ class AnimationHistory:
         else:
             print "We're in display 1"""
         AnimationHistory.merged = MergedHistories.MergedHistories()
-        
+
     def UpdateEdgeInfo(self, tail, head, info):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
@@ -163,13 +163,13 @@ class AnimationHistory:
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.UpdateVertexInfo(v, info, self.animator, self.displayNum)
-        
+
     #========== Provide Undo/Redo for animation commands from GraphDisplay ======
     def SetVertexColor(self, v, color):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.SetVertexColor(v, color, self.animator, self.displayNum)
-       
+
     def Wait(self):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
@@ -179,28 +179,28 @@ class AnimationHistory:
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.SetAllVerticesColor(color, self.animator, self.displayNum, graph, vertices)
-        
+
     def SetAllEdgesColor(self, color, graph=None, leaveColor=None, edges=None):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.SetAllEdgesColor( color, self.animator, self.displayNum, leaveColor, graph, edges)
-       
+
     #Need to handle directed/undirected differently?
     def SetEdgesColor(self, edges, color):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.SetEdgesColor(edges, color, self.animator, self.displayNum)
-        
+
     def SetEdgeColor(self, tail, head, color):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.SetEdgeColor(tail, head, color, self.animator, self.displayNum)
-        
+
     def BlinkVertex(self, v, color=None):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.BlinkVertex(v, self.animator, self.displayNum, color)
-       
+
     def BlinkEdge(self, tail, head, color=None):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
@@ -210,7 +210,7 @@ class AnimationHistory:
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.CreateBubble(vertex_nums, offset_value, color, self.animator, self.displayNum)
-       
+
 
     def ResizeBubble(self, vertex_nums, new_radius):
         if self.auto_print == 1:
@@ -227,7 +227,7 @@ class AnimationHistory:
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.CreateMoat(moat_id, radius, color, self.animator, self.displayNum)
-       
+
     def GrowMoat(self, moat_id, radius):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
@@ -237,45 +237,45 @@ class AnimationHistory:
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.SetVertexFrameWidth(v, val, self.animator, self.displayNum)
-        
+
     def SetVertexAnnotation(self, v, annotation,color="black"):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.SetVertexAnnotation(v, annotation, self.animator, self.displayNum, color)
-        
+
     def AddVertex(self, x, y, v=None):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
-        return AnimationHistory.merged.AddVertex(x, y, self.animator, self.displayNum, v)  
-        
+        return AnimationHistory.merged.AddVertex(x, y, self.animator, self.displayNum, v)
+
     def AddEdge(self, tail, head):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.AddEdge(tail, head, self.animator, self.displayNum)
-       
+
     def DeleteEdge(self, tail, head, repaint=1):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.DeleteEdge(tail, head, self.animator, self.displayNum, repaint)
-        
-        
+
+
     def DeleteVertex(self, v):
         #Delete all edges containing v
         #Call deletevertex command
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
         AnimationHistory.merged.DeleteVertex(v, self.animator, self.displayNum)
-        
+
 
     def HighlightPath(self, path, color, closed=0):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
-        return AnimationHistory.merged.HighlightPath(path, color, self.animator, self.displayNum, closed)  
+        return AnimationHistory.merged.HighlightPath(path, color, self.animator, self.displayNum, closed)
 
     def HidePath(self, pathID):
         if self.auto_print == 1:
             AnimationHistory.merged.auto_print = 1
-        AnimationHistory.merged.HidePath(pathID, self.animator, self.displayNum)  
+        AnimationHistory.merged.HidePath(pathID, self.animator, self.displayNum)
 
     #========== Handle all other methods from GraphDisplay =====================
     def __getattr__(self,arg):
@@ -287,35 +287,35 @@ class AnimationHistory:
             return tmp
         else:
             return self.animator.__dict__[arg]
-            
+
     #========== AnimationHistory methods =======================================
     def Undo(self):
         """ Undo last command if there is one and if it can be undone """
         AnimationHistory.merged.Undo()
-                
+
     def Do(self):
         AnimationHistory.merged.Do()
-        
+
     def DoAll(self):
         AnimationHistory.merged.DoAll()
-        
+
     def Replay(self):
         AnimationHistory.merged.Replay()
-       
+
     #Deprecated Function
     def append(self, animation):
         if self.auto_print:
-            print(self.logPrefix + animation.log_str()) 
+            print(self.logPrefix + animation.log_str())
         self.history.append(animation)
-        
+
 
     def Clear(self):
         self.history = []
         self.history_index = None
-        
+
     def getHistoryOne(self):
         return AnimationHistory.merged.getHistoryOne()
-    
+
     def getHistoryTwo(self):
         return AnimationHistory.merged.getHistoryTwo()
-        
+

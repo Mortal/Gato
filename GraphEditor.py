@@ -5,10 +5,10 @@
 #	file:   GraphEditor.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -28,7 +28,7 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
@@ -41,7 +41,7 @@ from math import sqrt
 from . import GatoGlobals
 from .GraphDisplay import GraphDisplay
 from tkinter.simpledialog import askinteger, askfloat
-import tkinter.simpledialog 
+import tkinter.simpledialog
 import string
 import tkinter.messagebox
 
@@ -49,12 +49,12 @@ g = GatoGlobals.AnimationParameters
 
 class EditWeightsDialog(tkinter.simpledialog.Dialog):
     """ Provide a dialog for editing vertex and edge weigths
-    
+
          - title        the title in the dialog box
          - nrOfWeights  how many weights are there
-         - weights      an array of initial values 
+         - weights      an array of initial values
          - intFlag      an array denoting whether the corresponding
-                        entry is an integer (=1) or a float (=0) 
+                        entry is an integer (=1) or a float (=0)
                         Hack: A negative value will disable editing
          - label        an optional array of strings to use for weight names """
     def __init__(self, master, title, nrOfWeights, weights, intFlag, label=None):
@@ -63,17 +63,17 @@ class EditWeightsDialog(tkinter.simpledialog.Dialog):
         self.intFlag = intFlag
         self.label = label
         tkinter.simpledialog.Dialog.__init__(self, master, title)
-        
-        
+
+
     def body(self, master):
         self.resizable(0,0)
         #label = Label(master, text="Weight", anchor=W)
         #label.grid(row=0, column=0, padx=4, pady=3)
         label = Label(master, text="Value", anchor=W)
         label.grid(row=0, column=1, padx=4, pady=3)
-        
+
         self.entry = [None] * self.nrOfWeights
-        
+
         for i in range(self.nrOfWeights):
             if self.label == None:
                 label = Label(master, text="Weight %d" %(i+1), anchor=W)
@@ -86,10 +86,10 @@ class EditWeightsDialog(tkinter.simpledialog.Dialog):
             else:
                 self.entry[i].insert(0,"%f" % self.weights[i])
             self.entry[i].grid(row=i+1, column=1, padx=4, pady=3, sticky="w")
-            
+
     def validate(self):
         self.result = [None] * self.nrOfWeights
-        for i in range(self.nrOfWeights):	    
+        for i in range(self.nrOfWeights):	
             try:
                 if self.intFlag[i]:
                     self.result[i] = string.atoi(self.entry[i].get())
@@ -97,39 +97,39 @@ class EditWeightsDialog(tkinter.simpledialog.Dialog):
                     self.result[i] = string.atof(self.entry[i].get())
             except ValueError:
                 if self.intFlag[i]:
-                    m = "Please enter an integer value for weight %d." % (i+1) 
+                    m = "Please enter an integer value for weight %d." % (i+1)
                 else:
-                    m = "Please enter an floating point number for weight %d." % (i+1) 
+                    m = "Please enter an floating point number for weight %d." % (i+1)
                 tkinter.messagebox.showwarning("Invalid Value", m, parent=self)
                 self.entry[i].selection_range(0,"end")
                 self.entry[i].focus_set()
                 self.result = None
                 return 0
         return 1
-        
+
 class GraphEditor(GraphDisplay):
     """ GraphEditor is a subclass of GraphDisplay providing an user interface
         for editing options. Core edit operations are defined in  GraphDisplay.
-        GraphEditor is not designed for direct consumption, use 
-    
+        GraphEditor is not designed for direct consumption, use
+
         - GraphEditorFrame
         - GraphEditorToplevel
-    
-        instead. 
-    
+
+        instead.
+
         Bindings:
         - Mouse, button 1 down/up: Add a vertex if nothing underneath mouse
           else select for move vertex
-        - Mouse, move: move vertex 
-        - Mouse, button 2 down: select tail for adding an edge 
-        - Mouse, button 2 up: select head for adding an edge 
+        - Mouse, move: move vertex
+        - Mouse, button 2 down: select tail for adding an edge
+        - Mouse, button 2 up: select head for adding an edge
         - Mouse, button 3 up: delete vertex/edge  underneath mouse
         """
-    
-    
+
+
     def __init__(self):
         GraphDisplay.__init__(self)
-        
+
         self.rubberbandLine = None
         self.movedVertex = None
         self.startx = None # position where MouseDown first occurred
@@ -138,19 +138,19 @@ class GraphEditor(GraphDisplay):
         self.gridding = 0
         self.mode = 'AddOrMoveVertex'
         # 'AddEdge' 'DeleteEdgeOrVertex' 'SwapOrientation' 'EditWeight'
-        
+
     def ToggleGridding(self):
         """ Toggle gridding """
         if self.gridding:
             self.gridding = 0
         else:
             self.gridding = 1
-            
+
     def SetEditMode(self,mode):
         self.mode = mode
-        
+
     def WindowToCanvasCoords(self,event):
-        """ Given an event return the (x,y) in canvas coordinates while 
+        """ Given an event return the (x,y) in canvas coordinates while
             using gridding if a gridsize is specified in gGridSize """
         if not self.gridding:
             x = self.canvas.canvasx(event.x)
@@ -159,33 +159,33 @@ class GraphEditor(GraphDisplay):
             x = self.canvas.canvasx(event.x,self.gridSize)
             y = self.canvas.canvasy(event.y,self.gridSize)
         return (x,y)
-        
+
     def Zoom(self,percent):
         try:
             GraphDisplay.Zoom(self,percent)
             self.gridSize = (g.GridSize * self.zoomFactor) / 100.0
         except:
             return None
-            
+
     def CreateWidgets(self):
         """ Add additional bindings with proper callbacks to canvas  """
         GraphDisplay.CreateWidgets(self)
-        
+
         Widget.bind(self.canvas, "<Motion>", self.MouseMotion)
-        Widget.bind(self.canvas, "<1>", self.MouseDown) 
+        Widget.bind(self.canvas, "<1>", self.MouseDown)
         Widget.bind(self.canvas, "<B1-Motion>", self.MouseMove)
-        Widget.bind(self.canvas, "<B1-ButtonRelease>", self.MouseUp) 
-        Widget.bind(self.canvas, "<2>", self.Mouse2Down) 
+        Widget.bind(self.canvas, "<B1-ButtonRelease>", self.MouseUp)
+        Widget.bind(self.canvas, "<2>", self.Mouse2Down)
         Widget.bind(self.canvas, "<B2-Motion>", self.Mouse2Move)
-        Widget.bind(self.canvas, "<B2-ButtonRelease>", self.Mouse2Up) 
+        Widget.bind(self.canvas, "<B2-ButtonRelease>", self.Mouse2Up)
         Widget.bind(self.canvas, "<B3-ButtonRelease>", self.Mouse3Up)
         Widget.bind(self.canvas, "<Enter>", self.CanvasEnter)
         Widget.bind(self.canvas, "<Leave>", self.CanvasLeave)
-        
-        
-        
+
+
+
         #===== ACTIONS ==============================================================
-        
+
     def ShowCoords(self,event):
         x,y = self.WindowToCanvasCoords(event)
         v=self.FindVertex(event)
@@ -193,7 +193,7 @@ class GraphEditor(GraphDisplay):
             v = self.FindGridVertex(event)
         e = self.FindEdge(event)
         if e!=None:
-            infoString = "Edge (%d,%d)" % (e[0], e[1]) 
+            infoString = "Edge (%d,%d)" % (e[0], e[1])
         elif v!=None:
             t = self.G.GetEmbedding(v)
             infoString = "Vertex %d at position (%d,%d)" % (v, int(t.x), int(t.y))
@@ -203,8 +203,8 @@ class GraphEditor(GraphDisplay):
         else:
             infoString = ""
         self.UpdateInfo(infoString)
-        
-        
+
+
     def AddOrMoveVertexDown(self,event):
         v = self.FindVertex(event)
         if v == None:
@@ -230,7 +230,7 @@ class GraphEditor(GraphDisplay):
             self.oldy = (c[3] - c[1])/2 + c[1]
             self.movedVertex = v
             self.didMoveVertex = 0
-            
+
     def AddOrMoveVertexMove(self,event):
         if not self.canvasleft:
             self.newx,self.newy = self.WindowToCanvasCoords(event)
@@ -239,23 +239,23 @@ class GraphEditor(GraphDisplay):
             self.update_idletasks()
             try:
                 self.canvas.lift("mySel")
-                self.canvas.move("mySel", 
-                                 self.newx - self.oldx, 
+                self.canvas.move("mySel",
+                                 self.newx - self.oldx,
                                  self.newy - self.oldy)
-                
+
                 #self.MoveVertex(self.movedVertex,self.newx,self.newy)
-                
+
                 self.oldx = self.newx
                 self.oldy = self.newy
-                
+
                 x,y = self.CanvasToEmbedding(self.newx,self.newy)
                 infoString = "Vertex %d at position (%d,%d)" % (self.movedVertex,x,y)
                 self.UpdateInfo(infoString)
-                
+
                 self.didMoveVertex = 1
             except:
                 i = 1 # Need instruction after except
-                
+
     def AddOrMoveVertexUp(self,event):
         if self.movedVertex != None:
             # Moving within vertex oval does not move vertex
@@ -264,43 +264,43 @@ class GraphEditor(GraphDisplay):
                 self.MoveVertex(self.movedVertex,self.newx,self.newy)
             self.movedVertex = None
             self.canvas.dtag("mySel")
-            
-            
+
+
     def AddEdgeDown(self,event):
         self.tail = self.FindVertex(event)
         if self.tail != None:
             c = self.canvas.coords(self.drawVertex[self.tail])
             self.startx = (c[2] - c[0])/2 + c[0]
-            self.starty = (c[3] - c[1])/2 + c[1] 
-            
-            
+            self.starty = (c[3] - c[1])/2 + c[1]
+
+
     def AddEdgeMove(self,event):
         if self.tail != None:	
             # canvas x and y take the screen coords from the event and translate
             # them into the coordinate system of the canvas object
             x = self.canvas.canvasx(event.x)
             y = self.canvas.canvasy(event.y)
-            
-            if (self.startx != event.x)  and (self.starty != event.y) : 
+
+            if (self.startx != event.x)  and (self.starty != event.y) :
                 self.canvas.delete(self.rubberbandLine)
                 self.rubberbandLine = self.canvas.create_line(
                     self.startx, self.starty, x, y)
                 self.canvas.lower(self.rubberbandLine,"vertices")
-                # this flushes the output, making sure that 
-                # the rectangle makes it to the screen 
+                # this flushes the output, making sure that
+                # the rectangle makes it to the screen
                 # before the next event is handled
                 self.update_idletasks()
-                
-                
-                
+
+
+
     def AddEdgeUp(self,event):
         if self.rubberbandLine != None:
             self.canvas.delete(self.rubberbandLine)
-            
+
         if self.tail != None:	
             x = self.canvas.canvasx(event.x)
             y = self.canvas.canvasy(event.y)
-            
+
             widget = event.widget.find_closest(x,y,None,self.rubberbandLine)
             if widget:
                 widget = widget[0]
@@ -310,11 +310,11 @@ class GraphEditor(GraphDisplay):
                     head = self.vertex[widget]
                 elif "labels" in tags:
                     head = self.label[widget]
-                    
+
                 if head != None:
                     self.AddEdge(self.tail,head)
-                    
-                    
+
+
     def DeleteEdgeOrVertexUp(self,event):
         if event.widget.find_withtag(CURRENT):
             widget = event.widget.find_withtag(CURRENT)[0]
@@ -331,8 +331,8 @@ class GraphEditor(GraphDisplay):
                 self.tail = None
                 if self.rubberbandLine != None:
                     self.canvas.delete(self.rubberbandLine)
-                    
-                    
+
+
     def SwapOrientationUp(self,event):
         if event.widget.find_withtag(CURRENT):
             widget = event.widget.find_withtag(CURRENT)[0]
@@ -340,30 +340,30 @@ class GraphEditor(GraphDisplay):
             if "edges" in tags:
                 (tail,head) = self.edge[widget]
                 self.SwapEdgeOrientation(tail,head)
-                
+
 
     def SetEdgeWeight(self, i, tail, head, val):
         self.G.SetEdgeWeight(i, tail, head, val)
 
     def SetVertexWeight(self, i, v, val):
         self.G.SetVertexWeight(i, v, val)
-                
+
     def EditWeightUp(self,event):
         if event.widget.find_withtag(CURRENT):
             widget = event.widget.find_withtag(CURRENT)[0]
             tags = self.canvas.gettags(widget)
             if "edges" in tags:
                 (tail,head) = self.edge[widget]
-                
+
                 weights = ()
                 intFlag = ()
                 count = len(list(self.G.edgeWeights.keys()))
                 for i in range(count):
                     weights = weights + (self.G.GetEdgeWeight(i,tail,head),)
                     intFlag = intFlag + (self.G.edgeWeights[i].QInteger(),)
-                    
-                d = EditWeightsDialog(self, "Weight of edge (%d,%d)" % (tail,head), 
-                                      count, weights, intFlag) 
+
+                d = EditWeightsDialog(self, "Weight of edge (%d,%d)" % (tail,head),
+                                      count, weights, intFlag)
                 if d.result is not None:
                     for i in range(count):
                         self.SetEdgeWeight(i, tail, head, d.result[i])
@@ -376,32 +376,32 @@ class GraphEditor(GraphDisplay):
                     for i in range(count):
                         weights = weights + (self.G.GetVertexWeight(i, v),)
                         intFlag = intFlag + (self.G.vertexWeights[i].QInteger(),)
-                        
-                    d = EditWeightsDialog(self, "Edit vertex weights %d" % v, 
-                                              count, weights, intFlag) 
+
+                    d = EditWeightsDialog(self, "Edit vertex weights %d" % v,
+                                              count, weights, intFlag)
                     if d.result is not None:
                         for i in range(count):
                             self.G.SetVertexWeight(i, v, d.result[i])
-                            
-                            
+
+
                             #===== GUI-Bindings FOR ACTIONS ================================================
-                            
+
     def MouseMotion(self,event):
         if self.mode == 'AddOrMoveVertex':	
             self.ShowCoords(event)
-            
+
     def MouseDown(self,event):
         if self.mode == 'AddOrMoveVertex':
             self.AddOrMoveVertexDown(event)
         elif self.mode == 'AddEdge':
             self.AddEdgeDown(event)
-            
+
     def MouseMove(self,event):
         if self.mode == 'AddOrMoveVertex':
             self.AddOrMoveVertexMove(event)
         elif self.mode == 'AddEdge':
             self.AddEdgeMove(event)
-            
+
     def MouseUp(self,event):
         if self.mode == 'AddOrMoveVertex':
             self.AddOrMoveVertexUp(event)
@@ -413,43 +413,43 @@ class GraphEditor(GraphDisplay):
             self.SwapOrientationUp(event)
         elif self.mode == 'EditWeight':
             self.EditWeightUp(event)
-            
+
     def Mouse2Down(self,event):
         self.AddEdgeDown(event)
-        
+
     def Mouse2Move(self,event):
         self.AddEdgeMove(event)
-        
+
     def Mouse2Up(self,event):
         self.AddEdgeUp(event)
-        
+
     def Mouse3Up(self,event):
         self.DeleteEdgeOrVertexUp(event)
-        
+
     def CanvasEnter(self,event):
         self.canvasleft = 0
-        
+
     def CanvasLeave(self, event):
         self.canvasleft = 1
-        
-        
+
+
 class GraphEditorFrame(GraphEditor, Frame):
     """ A GraphEditor in a frame """
     def __init__(self, master=None):
         Frame.__init__(self, master)
-        self.pack() 
+        self.pack()
         self.pack(expand=1,fill=BOTH) # Makes whole window resizeable
         GraphEditor.__init__(self)
-        
+
     def SetTitle(self,title):
         sys.info("change window title to %s" % title)
-        
+
 class GraphEditorToplevel(GraphEditor, Toplevel):
     """ A GraphEditor in a top-level window """
-    
+
     def __init__(self, master=None):
         Toplevel.__init__(self, master)
         GraphEditor.__init__(self)
-        
+
     def SetTitle(self,title):
         self.title(title)

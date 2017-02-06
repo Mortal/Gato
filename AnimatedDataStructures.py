@@ -1,16 +1,16 @@
 ################################################################################
 #
-#       This file is part of Gato (Graph Animation Toolbox) 
-#       You can find more information at 
+#       This file is part of Gato (Graph Animation Toolbox)
+#       You can find more information at
 #       http://gato.sf.net
 #
 #	file:   AnimatedDataStructures.py
 #	author: Alexander Schliep (alexander@schliep.org)
 #
-#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and 
+#       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
-#                                   
-#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de             
+#
+#       Contact: alexander@schliep.org, winfried.hochstaettler@fernuni-hagen.de
 #
 #       Information: http://gato.sf.net
 #
@@ -30,12 +30,12 @@
 #
 #
 #
-#       This file is version $Revision: 670 $ 
+#       This file is version $Revision: 670 $
 #                       from $Date: 2015-01-13 16:04:11 -0500 (Tue, 13 Jan 2015) $
 #             last change by $Author: schliep $.
 #
 ################################################################################
-from .GatoGlobals import AnimationParameters, gInfinity, NoSuchVertexError, NoSuchEdgeError  
+from .GatoGlobals import AnimationParameters, gInfinity, NoSuchVertexError, NoSuchEdgeError
 from .DataStructures import VertexLabeling, Queue, Stack, PriorityQueue
 from .Graph import SubGraph
 import copy
@@ -46,30 +46,30 @@ g = AnimationParameters
 class Animator:
     """ *Debugging* Text only Animator providing animation functions which
         only print to console """
-    
+
     def SetVertexColor(self,v, color):
         print("set color of",v," to ",color)
-        
+
     def SetEdgeColor(self, tail, head, color):
         print("set color of edge (",tail,",", head ,") to ",color)
-        
-        
+
+
 class AnimatedNeighborhood:
     """ Visualizes visiting of neighbors by calling the Neighborhood
-        method of graph for v and allowing to iterate over it, while 
+        method of graph for v and allowing to iterate over it, while
         coloring (v,w) cTraversedEdge unless (v,w) is colored with
         one of the colors in ignoreColors.
-    
+
         #Neighborhood = lambda v,a=A,g=G: AnimatedNeighborhood(a,g,v,['red'])
         #
         #for w in Neighborhood(v):
         #    doSomething
         will color all edges cTraversedEdge unless the edge has been colored
         'red' at some point
-    
+
         if a blinkColor is specified the edge will blink
         """
-    
+
     def __init__(self, theAnimator, G, v, ignoreColors = [],
                  blinkColor = None, activeColor = 'yellow',
                  traversedColor = g.cTraversedEdge):	
@@ -80,12 +80,12 @@ class AnimatedNeighborhood:
         self.ignoreColors = ignoreColors
         self.blinkColor = blinkColor
         self.activeColor = activeColor
-        self.traversedColor = traversedColor        
+        self.traversedColor = traversedColor
         self.lastEdge = None
         self.lastColor = None
         self.Animator.SetVertexFrameWidth(self.v, g.ActiveVertexFrameWidth)
 
-        
+
     def __getitem__(self, i):
         if self.lastEdge:
             try:
@@ -94,7 +94,7 @@ class AnimatedNeighborhood:
                     if self.lastColor not in self.ignoreColors:
                         col = self.traversedColor
                     else:
-                        col = self.lastColor                    
+                        col = self.lastColor
                     self.Animator.SetEdgeColor(self.lastEdge[0],self.lastEdge[1],col)
             except NoSuchEdgeError: # lastEdge was deleted
                 pass
@@ -108,84 +108,84 @@ class AnimatedNeighborhood:
         else:
             self.Animator.SetVertexFrameWidth(self.v, g.VertexFrameWidth)
             raise IndexError
-            
+
     def __len__(self):
         return len(self.nbh)
-        
-        
+
+
 class BlinkingNeighborhood:
     """ Visualizes visiting blinking (v,w) for all w when iterating over
         the Neighborhood
-    
+
         #Neighborhood = lambda v,a=A,g=G: BlinkingNeighborhood(a,g,v,c)
         #
         #for w in Neighborhood(v):
         #    doSomething
         will blink all edges"""
-    
+
     def __init__(self,theAnimator,G,v,c):	
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         self.Animator = theAnimator
         self.nbh = G.Neighborhood(v)
         self.v = v
         self.color = c
-        
+
     def __getitem__(self, i):
         if i < len(self.nbh):
             self.Animator.BlinkEdge(self.v, self.nbh[i], self.color)
             return self.nbh[i]
         else:
             raise IndexError
-            
+
     def __len__(self):
         return len(self.nbh)
-        
+
 class BlinkingTrackLastNeighborhood(BlinkingNeighborhood):
     """ Visualizes visiting blinking (v,w) for all w when iterating over
         the Neighborhood. It also temporarily keeps the the last blinked
         edge grey
-    
+
         #Neighborhood = lambda v,a=A,g=G: BlinkingTrackLastNeighborhood(a,g,v,c,track)
         #
         #for w in Neighborhood(v):
         #    doSomething
-        will blink all edges with color c, the last blinked is tracked with color 
+        will blink all edges with color c, the last blinked is tracked with color
         track """
     old = None
-    
-    
+
+
     def __init__(self,theAnimator,G,v,c,track="grey"):
         BlinkingNeighborhood.__init__(self,theAnimator,G,v,c)
         self.trackColor = track
-        
+
     def __getitem__(self, i):
-        if BlinkingTrackLastNeighborhood.old != None and i < len(self.nbh): 
+        if BlinkingTrackLastNeighborhood.old != None and i < len(self.nbh):
             old = BlinkingTrackLastNeighborhood.old
             self.Animator.SetEdgeColor(old[0],old[1],old[2])
-            
+
         BlinkingTrackLastNeighborhood.old = (self.v,self.nbh[i],
                                              self.Animator.GetEdgeColor(self.v,self.nbh[i]))
         retVal = BlinkingNeighborhood.__getitem__(self,i)
         self.Animator.SetEdgeColor(self.v,self.nbh[i],self.trackColor)
-        
+
         return retVal
-        
-        
+
+
 class BlinkingContainerWrapper:
     """ Visualizes iterating over a list of vertices and/or edges by
         blinking.
-    
+
         #List = lambda l, a=A: BlinkingContainerWrapper(a,l,color)
         #
         #for w in List:
         #    doSomething
         """
-    
+
     def __init__(self, theAnimator, l, color=g.cOnQueue):	
         self.Animator = theAnimator
         self.list = copy.copy(l)
         self.color = color
-        
+
     def __getitem__(self, i):
         if i < len(self.list):
             item = self.list[i]
@@ -196,27 +196,27 @@ class BlinkingContainerWrapper:
             return item
         else:
             raise IndexError
-            
+
     def __len__(self):
         return len(self.list)
-        
-        
+
+
 class ContainerWrapper(BlinkingContainerWrapper):
     """ Visualizes iterating over a list of vertices and/or edges by
         coloring. If color has changed in the meantime the original
         color will not be set again.
-    
+
         #List = lambda l, a=A: ContainerWrapper(a,l,color)
         #
         #for w in List:
         #    doSomething
         """
-    
+
     def __init__(self, theAnimator, l, color=g.cOnQueue):
         BlinkingContainerWrapper.__init__(self,theAnimator,l,color)	
         self.lastitem  = None
         self.lastcolor = None
-        
+
     def __getitem__(self, i):
         if i < len(self.list):
             item = self.list[i]
@@ -244,14 +244,14 @@ class ContainerWrapper(BlinkingContainerWrapper):
             else:
                 if (self.lastitem != None) and \
                        (self.Animator.GetEdgeColor(self.lastitem[0],self.lastitem[1]) == self.color):
-                    self.Animator.SetEdgeColor(self.lastitem[0],self.lastitem[1],self.lastcolor)                
+                    self.Animator.SetEdgeColor(self.lastitem[0],self.lastitem[1],self.lastcolor)
             raise IndexError
-            
+
 class VisibleVertexLabeling(VertexLabeling):
     def __init__(self, theAnimator):
         VertexLabeling.__init__(self)
         self.A = theAnimator
-        
+
     def __setitem__(self, v, val):
         VertexLabeling.__setitem__(self, v, val)
         if val == gInfinity:
@@ -259,47 +259,47 @@ class VisibleVertexLabeling(VertexLabeling):
         elif val == -gInfinity:
             val = "-Infinity"
         self.A.SetVertexAnnotation(v,val)
-        
-        
+
+
 class AnimatedVertexLabeling(VertexLabeling):
     """ Visualizes changes of values of the VertexLabeling
         by changing vertex colors appropriately.
-    
+
         E.g.,
-        #d = AnimatedVertexLabeling(A) 
+        #d = AnimatedVertexLabeling(A)
         #d[v] = 0
         will color v cInitial.
-    
-        The coloring used for d[v] = val 
+
+        The coloring used for d[v] = val
         - cInitial if val = 0,None,gInfinity
         - "blue" else """
-    
+
     def __init__(self, theAnimator, initial=0, color="blue"):
-        """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) 
+        """ theAnimator will usually be the GraphDisplay(Frame/Toplevel)
             initial is the value to cause coloring in cInitial """
         VertexLabeling.__init__(self)
         self.Animator = theAnimator
         self.initial=initial
         self.color = color
-        
+
     def __setitem__(self, v, val):
         VertexLabeling.__setitem__(self, v, val)
         if val == self.initial or val == None or val == gInfinity:
             self.Animator.SetVertexColor(v,g.cInitial)
         else:
             self.Animator.SetVertexColor(v,self.color)
-            
-            
+
+
 class AnimatedSignIndicator:
     """ Visualizes sign of vertex or edge:
         weight > 0 : green
                = 0 : grey
                < 0 : red """
-    
+
     def __init__(self,theAnimator):
         self.Animator = theAnimator
         self.weight   = {}
-        
+
     def __setitem__(self, i, val):
         self.weight[i] = val
         if type(i) == type(2): # vertex
@@ -316,12 +316,12 @@ class AnimatedSignIndicator:
                 self.Animator.SetEdgeColor(i,"red")
             else:
                 self.Animator.SetEdgeColor(i,"grey")
-                
+
     def __getitem__(self, i):
         return self.weight[i]
-        
-        
-        
+
+
+
 class AnimatedPotential:
     """ Visualizes the potential from 0 (green) to
          max (brown) of a vertex. """
@@ -335,8 +335,8 @@ class AnimatedPotential:
         if theAnimator2 == None:
             self.Animator2 = theAnimator1
         else:
-            self.Animator2 = theAnimator2 
-            
+            self.Animator2 = theAnimator2
+
     def __setitem__(self,v,val):
         self.pot[v] = val
         if val == gInfinity:
@@ -348,37 +348,37 @@ class AnimatedPotential:
         if val > self.max:
             val = self.max
         self.Animator1.SetVertexColor(v,self.colors[(val*(len(self.colors)-1))/self.max])
-        
+
     def __getitem__(self,v):
         return self.pot[v]
-        
-        
-        
+
+
+
 class BlinkingVertexLabeling(VertexLabeling):
     """ Visualizes changes of values of the VertexLabeling
         by blinking vertices """
-    
+
     def __init__(self, theAnimator):
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         VertexLabeling.__init__(self)
         self.Animator = theAnimator
-        
+
     def __setitem__(self, v, val):
         VertexLabeling.__setitem__(self, v, val)
         if val == 0:
             self.Animator.BlinkVertex(v)
         else:
             self.Animator.BlinkVertex(v)
-            
-            
+
+
 class AnimatedVertexQueue(Queue):
     """ Visualizes status of vertices in relation to the Queue by
         coloring them
-    
+
         - cOnQueue if they are in the queue
         - cRemovedFromQueue if they have been on the queue and were
           removed """
-    
+
     def __init__(self, theAnimator, colorOn=g.cOnQueue, colorOff=g.cRemovedFromQueue):
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         Queue.__init__(self)
@@ -386,36 +386,36 @@ class AnimatedVertexQueue(Queue):
         self.ColorOn = colorOn
         self.ColorOff = colorOff
         self.lastRemoved = None
-        
+
     def Append(self,v):
         Queue.Append(self,v)
         self.Animator.SetVertexColor(v, self.ColorOn)
-        
+
     def Top(self):
         v = Queue.Top(self)
         self.Animator.SetVertexColor(v, self.ColorOff)
         if self.lastRemoved is not None:
             self.Animator.SetVertexFrameWidth(self.lastRemoved, g.VertexFrameWidth)
         self.Animator.SetVertexFrameWidth(v, g.ActiveVertexFrameWidth)
-        self.lastRemoved = v 
+        self.lastRemoved = v
         return v
-        
+
     def Clear(self):
         for v in self.contents:
             self.Animator.SetVertexColor(v, self.ColorOff)
-        Queue.Clear(self) 
+        Queue.Clear(self)
         if self.lastRemoved is not None:
             self.Animator.SetVertexFrameWidth(self.lastRemoved,g.VertexFrameWidth)
             self.lastRemoved = None
-            
-class AnimatedVertexPriorityQueue(PriorityQueue):    
+
+class AnimatedVertexPriorityQueue(PriorityQueue):
     """ Visualizes status of vertices in relation to the PriorityQueue by
         coloring them
-    
+
         - cOnQueue if they are in the queue
         - cRemovedFromQueue if they have been on the queue and were
           removed """
-    
+
     def __init__(self, theAnimator, colorOn=g.cOnQueue, colorOff=g.cRemovedFromQueue):
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         PriorityQueue.__init__(self)
@@ -423,33 +423,33 @@ class AnimatedVertexPriorityQueue(PriorityQueue):
         self.ColorOn = colorOn
         self.ColorOff = colorOff
         self.lastRemoved = None
-        
+
     def Insert(self,value,sortKey):
         PriorityQueue.Insert(self,value,sortKey)
         self.Animator.SetVertexColor(value, self.ColorOn)
-        
+
     def DecreaseKey(self,value,newSortKey):
         PriorityQueue.DecreaseKey(self,value,newSortKey)
         self.Animator.BlinkVertex(value)
-        
+
     def DeleteMin(self):
         v = PriorityQueue.DeleteMin(self)
         self.Animator.SetVertexColor(v, self.ColorOff)
         if self.lastRemoved is not None:
             self.Animator.SetVertexFrameWidth(self.lastRemoved, g.VertexFrameWidth)
         self.Animator.SetVertexFrameWidth(v, g.ActiveVertexFrameWidth)
-        self.lastRemoved = v 
+        self.lastRemoved = v
         return v
-        
-        
+
+
 class AnimatedVertexStack(Stack):
     """ Visualizes status of vertices in relation to the Stack by
         coloring them
-    
+
         - cOnQueue if they are in the queue
         - cRemovedFromQueue if they have been on the queue and were
           removed """
-    
+
     def __init__(self, theAnimator, colorOn=g.cOnQueue, colorOff=g.cRemovedFromQueue):
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         Stack.__init__(self)
@@ -457,20 +457,20 @@ class AnimatedVertexStack(Stack):
         self.ColorOn = colorOn
         self.ColorOff = colorOff
         self.lastRemoved = None
-        
+
     def Push(self,v):
         Stack.Push(self,v)
         self.Animator.SetVertexColor(v, self.ColorOn)
-        
+
     def Pop(self):
         v = Stack.Pop(self)
         self.Animator.SetVertexColor(v, self.ColorOff)
         if self.lastRemoved is not None:
             self.Animator.SetVertexFrameWidth(self.lastRemoved, g.VertexFrameWidth)
         self.Animator.SetVertexFrameWidth(v, g.ActiveVertexFrameWidth)
-        self.lastRemoved = v 
+        self.lastRemoved = v
         return v
-        
+
     def Clear(self):
         for v in self.contents:
             self.Animator.SetVertexColor(v, self.ColorOff)
@@ -478,28 +478,28 @@ class AnimatedVertexStack(Stack):
         if self.lastRemoved is not None:
             self.Animator.SetVertexFrameWidth(self.lastRemoved, g.VertexFrameWidth)
             self.lastRemoved = None
-            
-            
+
+
             ##class AnimatedPriorityQueue(PriorityQueue):
             ##    def __init__(self, theAnimator, color=cVisited):
             ##	""" theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
             ##	self.Animator = theAnimator
-            ##        self.color = color        
+            ##        self.color = color
             ##        PriorityQueue.__init__(self)
-            
+
             ##    def Insert(self,value,sortKey):
             ##        # XXX For compat. to AnimatedVertexSet (yuk)
             ##        PriorityQueue.Insert(self,value,sortKey)
-            
+
             ##    def DeleteMin(self):
             ##        """ Return and delete minimal value with minimal sortKey from queue. """
             ##	v = PriorityQueue.DeleteMin(self)
             ## 	self.Animator.SetVertexColor(v,self.color)
             ##        return v
-            
-            
-            
-            
+
+
+
+
 class AnimatedVertexSet:
     """ Visualizes status of vertices in relation to the Set by
         coloring them
@@ -508,9 +508,9 @@ class AnimatedVertexSet:
         - color if they have been in the set and were
           removed
 
-        
+
     """
-    
+
     def __init__(self, theAnimator, vertexSet=None, color=g.cVisited, addcolor='red',
                  trackLast=None):
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
@@ -523,11 +523,11 @@ class AnimatedVertexSet:
         self.addcolor = addcolor
         self.trackLast = trackLast
         self.last = None
-        
+
     def Set(self, vertexSet):
         """ Sets the set equal to a copy of vertexSet """
         self.vertices = vertexSet[:]
-        
+
     def Remove(self, v):
         self.Animator.SetVertexColor(v,self.color)
         self.vertices.remove(v)
@@ -538,77 +538,77 @@ class AnimatedVertexSet:
             self.Animator.SetVertexFrameWidth(v,
                                               g.ActiveVertexFrameWidth)
             self.last = v
-            
+
     def Add(self,v):
         """ Add a single vertex v """
         self.Animator.SetVertexColor(v,self.addcolor)
         self.vertices.append(v)
-        
+
     def IsNotEmpty(self):
         return len(self.vertices) > 0
-        
+
     def IsEmpty(self):
         return len(self.vertices) == 0
-        
+
     def Contains(self,v):
         return v in self.vertices
-        
-        
+
+
 class AnimatedEdgeSet:
     """ Visualizes status of edges in relation to the Set by
         coloring them
-    
+
         - 'blue' if they are added to the set
         - cVisited  if they have been in the set and were
           removed """
-    
+
     def __init__(self, theAnimator, edgeSet=None, color='blue'):
         """ theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         if edgeSet == None:
             self.edges = []
         else:
-            self.edges = edgeSet	    
+            self.edges = edgeSet	
         self.Animator = theAnimator
         self.color = color
-        
+
     def __len__(self):
         return len(self.edges)
-        
+
     def __getitem__(self,key):
         return self.edges[key]
-        
+
     def Set(self, edgeSet):
         """ Sets the set equal to a copy of edgeSet """
         self.edges = edgeSet[:]
-        
+
     def AddEdge(self, e):
         self.Animator.SetEdgeColor(e[0],e[1], self.color)
         self.edges.append(e)
-        
+
     def Remove(self, e):
         self.Animator.BlinkEdge(e[0], e[1], g.cVisited)
         self.Animator.SetEdgeColor(e[0], e[1], g.cVisited)
-        self.edges.remove(e) 
-        
+        self.edges.remove(e)
+
     def IsNotEmpty(self):
         return len(self.edges) > 0
-        
+
     def Contains(self,e):
         return e in self.edges
-        
-        
+
+
 class AnimatedSubGraph(SubGraph):
     """ Visualizes status of vertices and edges in relation to the SubGraph by
         coloring them
         - color (default is 'blue') if they are added to the SubGraph """
-    
+
     def __init__(self, G, theAnimator, color="blue"):
         """ color is used to color vertices and edges in the subgraph.
             theAnimator will usually be the GraphDisplay(Frame/Toplevel) """
         SubGraph.__init__(self, G)
         self.Animator = theAnimator
         self.Color = color
-        
+
     def AddVertex(self,v):
         try:
             SubGraph.AddVertex(self,v)
@@ -616,7 +616,7 @@ class AnimatedSubGraph(SubGraph):
             self.Animator.DefaultInfo()
         except NoSuchVertexError:
             return
-            
+
     def AddEdge(self,edge,head=None):
         # Poor mans function overload
         if head == None and len(edge) == 2:
@@ -636,19 +636,19 @@ class AnimatedSubGraph(SubGraph):
             return
 
     def AddSubGraph(self, G):
-        """ Add subgraph G to self. Will do nothing if self and G 
+        """ Add subgraph G to self. Will do nothing if self and G
             have distinct supergraphs """
         if self.superGraph != G.superGraph:
             log.error("AddSubGraph: distinct superGraphs")
             return
-        
+
         for v in G.Vertices():
             if G.QIsolated(v):
                 SubGraph.AddVertex(self,v)
-                
+
         for t,h in G.Edges():
             SubGraph.AddEdge(self, t, h)
-        self.Animator.SetEdgesColor(G.Edges(),self.Color) 
+        self.Animator.SetEdgesColor(G.Edges(),self.Color)
         #print "Just called setEdgesColor animator is ", self.Animator.__class__.__name__
         self.Animator.SetAllVerticesColor(self.Color, graph=G)
         self.RaiseEdges()
@@ -659,8 +659,8 @@ class AnimatedSubGraph(SubGraph):
         for (t,h) in self.Edges():
             tt, hh = self.superGraph.Edge(t,h)
             self.Animator.RaiseEdge(tt,hh)
-            
-            
+
+
     def DeleteEdge(self,edge,head=None):
         if head == None and len(edge) == 2:
             t = edge[0]
@@ -673,22 +673,22 @@ class AnimatedSubGraph(SubGraph):
             self.Animator.SetEdgeColor(t,h,"black")
         except NoSuchVertexError as NoSuchEdgeError:
             return
-            
+
     def Clear(self, color="grey"):
-        """ Delete all vertices and edges from the animated subgraph. 
+        """ Delete all vertices and edges from the animated subgraph.
             and color them with 'color' (grey is default) """
-        
+
         # GraphDisplay functions save several update()'s
         self.Animator.SetAllVerticesColor(color, self)
         self.Animator.SetAllEdgesColor(color, self)
-        
-        self.vertices         = [] 
+
+        self.vertices         = []
         self.adjLists         = {}
         self.invAdjLists      = {}   # Inverse Adjazenzlisten
         self.size = 0
         self.totalWeight   = 0
-        
-        
+
+
     def AddEdgeByVertices(self,tail,head):
         try:
             SubGraph.AddEdge(self,tail,head)
@@ -696,22 +696,22 @@ class AnimatedSubGraph(SubGraph):
             self.Animator.DefaultInfo()
         except NoSuchVertexError as NoSuchEdgeError:
             return
-            
-            
-            
+
+
+
 class AnimatedPredecessor(VertexLabeling):
-    """ Animates a predecessor array by 
-    
-        - coloring edges (pred[v],v) 'red' 
+    """ Animates a predecessor array by
+
+        - coloring edges (pred[v],v) 'red'
         - coloring edges (pred[v],v) 'grey' if the value of
           pred[v] is changed """
-    
+
     def __init__(self, theAnimator, ignoreColors = [], predColor='red'):
         VertexLabeling.__init__(self)
         self.Animator = theAnimator
         self.ignoreColors = ignoreColors
         self.predColor = predColor
-        
+
     def __setitem__(self, v, val):
         try:
             oldVal = VertexLabeling.__getitem__(self, v)
@@ -719,7 +719,7 @@ class AnimatedPredecessor(VertexLabeling):
                 if not self.Animator.GetEdgeColor(oldVal, v) in self.ignoreColors:
                     self.Animator.SetEdgeColor(oldVal, v, 'grey')
         except:
-            pass 
+            pass
         if val != None:
             try:
                 if not self.Animator.GetEdgeColor(val, v) in self.ignoreColors:
@@ -727,18 +727,18 @@ class AnimatedPredecessor(VertexLabeling):
             except:
                 pass
         VertexLabeling.__setitem__(self, v, val)
-        
-        
+
+
     def SetPredColor(self, color):
         """ NOTE: This does not recolor assigned (pred[v],v) edges """
         self.predColor = color
-        
+
     def AppendLeaveColor(self,color):
         if self.ignoreColors == None:
             self.ignoreColors = [color]
         else:
             self.ignoreColors.append(color)
-            
+
 class ComponentMaker:
     """ Subsequent calls of method NewComponent() will return differently
         colored subgraphs of G """
@@ -758,7 +758,7 @@ class ComponentMaker:
             for color in forbidden_colors:
                 if color in self.colors:
                     self.colors.remove(color)
-        
+
     def NewComponent(self):
         self.firstCall = False
         comp = AnimatedSubGraph(self.G, self.A, self.colors[self.lastColor])
@@ -766,7 +766,7 @@ class ComponentMaker:
         if self.lastColor == len(self.colors):
             self.lastColor = 0
         return comp
-        
+
     def LastComponentColor(self):
         if self.firstCall:
             return None
@@ -774,24 +774,24 @@ class ComponentMaker:
             return self.colors[self.lastColor -1]
         else:
             return self.colors[-1]
-  
-        
+
+
 ################################################################################
 #
 # Functions
 #
 ################################################################################
-        
+
 def showPathByPredecessorArray(source,sink,pred,A,color="red"):
     """ Visualizes a path from source to sink in a graph G
         displayed in A. The path is specified in terms of the
         predecessor array pred and will be colored with color
         (default is 'red') """
-    
+
     v = sink
-    
+
     seen = [v] # avoid getting stuck in cycles
-    
+
     while (pred[v] != None) and (pred[v] != v):
         A.SetVertexColor(v,color)
         A.SetEdgeColor(pred[v],v,color)
@@ -800,24 +800,24 @@ def showPathByPredecessorArray(source,sink,pred,A,color="red"):
             return
         else:
             seen.append(v)
-            
+
     A.SetVertexColor(v,color)
-    
+
     ################################################################################
     #
     # Wrapper
     #
     ################################################################################
-    
+
 class FlowWrapper:
     """ This class visualizes the flow in a directed graph G
         with animator GA and it's residual network R with
         animator RA.
-    
+
         flow = FlowWrapper(G,A,R,RA,G.edgeWeights[0],R.edgeWeights[0])
-    
+
         or
-    
+
         flow = FlowWrapper(G,A,R,RA,G.edgeWeights[0],R.edgeWeights[0],G.vertexWeights[0])
     """
     def __init__(self,  G, GA, R, RA, flow, res, excess=None):
@@ -835,13 +835,13 @@ class FlowWrapper:
             for v in self.G.vertices:
                 self.excess[v] = 0
         for e in self.G.Edges():
-            self.flow[e] = 0 
-            
+            self.flow[e] = 0
+
     def __setitem__(self, e, val):
         if (self.excess[e[0]] != gInfinity) and (self.excess[e[0]] != -gInfinity):
             self.excess[e[0]] = self.excess[e[0]] + self.flow[e] - val
         if (self.excess[e[1]] != gInfinity) and (self.excess[e[1]] != -gInfinity):
-            self.excess[e[1]] = self.excess[e[1]] - self.flow[e] + val  
+            self.excess[e[1]] = self.excess[e[1]] - self.flow[e] + val
         if self.excess[e[0]] > 0:
             self.RA.SetVertexColor(e[0],"green")
         elif self.excess[e[0]] < 0:
@@ -855,7 +855,7 @@ class FlowWrapper:
         else:
             self.RA.SetVertexColor(e[1],"gray")
         self.flow[e] = val
-        if val == self.cap[e]:     
+        if val == self.cap[e]:
             self.GA.SetEdgeColor(e[0],e[1],"blue")
             self.GA.SetEdgeAnnotation(e[0],e[1],"%d/%d" % (val,self.cap[e]),"black")
             try:
@@ -864,7 +864,7 @@ class FlowWrapper:
                 None
             if not self.R.QEdge(e[1],e[0]):
                 self.RA.AddEdge(e[1],e[0])
-        elif val == 0: 
+        elif val == 0:
             self.GA.SetEdgeColor(e[0],e[1],self.zeroEdgeColor)
             #self.GA.SetEdgeAnnotation(e[0],e[1],"%d/%d" % (val, self.cap[e]),"gray")
             self.GA.SetEdgeAnnotation(e[0],e[1],"","gray")
@@ -874,7 +874,7 @@ class FlowWrapper:
                 None
             if not self.R.QEdge(e[0],e[1]):
                 self.RA.AddEdge(e[0],e[1])
-        else:                      
+        else:
             self.GA.SetEdgeColor(e[0],e[1],"#9999FF")
             self.GA.SetEdgeAnnotation(e[0],e[1],"%d/%d" % (val,self.cap[e]),"black")
             if not self.R.QEdge(e[1],e[0]):
@@ -887,22 +887,22 @@ class FlowWrapper:
         else:
             self.res[(e[0],e[1])]  = val
             self.res[(e[1],e[0])]  = self.cap[(e[1],e[0])] - val
-        
+
     def __getitem__(self, e):
         return self.flow[e]
-        
-        
+
+
 class ReducedCostsWrapper:
     """ Visualizes the reduced costs of the edge
         >0 green
         =0 grey
-        <0 red 
+        <0 red
     """
     def __init__(self, A, cost, pot):
         self.cost = cost
         self.pot = pot
         self.A = A
-        
+
     def __setitem__(self, e, val):
         self.cost[e] = val
         rc = self.cost[e] + self.pot[e[0]] - self.pot[e[1]]
@@ -915,6 +915,6 @@ class ReducedCostsWrapper:
                 self.A.SetEdgeColor(e[0],e[1],"green")
         except:
             None
-            
+
     def __getitem__(self, e):
         return self.cost[e]
