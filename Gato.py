@@ -618,7 +618,8 @@ class AlgoWin(Frame):
             self.tagLines(self.algorithm.GetBreakpointLines(), 'Break')
 
             # Syntax highlighting
-            tokenize.tokenize(io.StringIO(self.algorithm.GetSource()).readline, self.tokenEater)
+            for x in tokenize.tokenize(io.StringIO(self.algorithm.GetSource()).readline):
+                self.tokenEater(*x)
 
             if self.algorithm.ReadyToStart():
                 self.buttonStart['state'] = NORMAL
