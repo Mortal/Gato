@@ -42,6 +42,7 @@ import tkinter.simpledialog
 import sys
 import os
 import formatter
+import inspect
 
 
 # Should be in GatoGlobals
@@ -92,7 +93,7 @@ class AutoScrolledText(Text):
             cnf = _cnfmerge((cnf, kw))
         fcnf = {}
         for k in list(cnf.keys()):
-            if type(k) == ClassType or k == 'name':
+            if inspect.isclass(type(k)) or k == 'name':
                 fcnf[k] = cnf[k]
                 del cnf[k]
         self.frame = Frame(master, **fcnf)

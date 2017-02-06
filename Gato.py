@@ -113,12 +113,12 @@ def WMExtrasGeometry(window):
               """
     try:
         window.geometry() # XXX Sometimes first produced wrong results ...
-        g = string.split(window.geometry(),"+")
+        g = str.split(window.geometry(),"+")
     except TclError:
         # bad geometry specifier: e.g. ... "-1949x260+1871+1"
         return (32,32)
-    trueRootx = string.atoi(g[1])
-    trueRooty = string.atoi(g[2])
+    trueRootx = int(g[1])
+    trueRooty = int(g[2])
 
     rootx = window.winfo_rootx() # top left of our window
     rooty = window.winfo_rooty() # *WITHOUT* WM extras
@@ -421,7 +421,8 @@ class AlgoWin(Frame):
 
         self.algoText = AutoScrolledText(borderFrame, relief=FLAT,
                                          padx=3, pady=3,
-                                         background="white", wrap='none',
+                                         background="white",
+                                         # wrap='none',
                                          width=w, height=h
                                          )
         self.SetAlgorithmFont(self.algoFont, self.algoFontSize)
@@ -1167,8 +1168,8 @@ class AlgoWin(Frame):
     # handleMouse
     def handleMouse(self, event):
         """ Callback for canvas to allow toggeling of breakpoints """
-        currLine  = string.splitfields(self.algoText.index(CURRENT),'.')[0]
-        self.algorithm.ToggleBreakpoint(string.atoi(currLine))
+        currLine  = str.split(self.algoText.index(CURRENT),'.')[0]
+        self.algorithm.ToggleBreakpoint(int(currLine))
 
 
     ############################################################
