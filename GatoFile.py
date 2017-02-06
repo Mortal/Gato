@@ -420,7 +420,8 @@ class xmlGraphElement:
         #remove all other text nodes
         textNodes=[e for e in self.domElement.childNodes if e.nodeType==xml.dom.minidom.Node.TEXT_NODE or
                          e.nodeType==xml.dom.minidom.Node.CDATA_SECTION_NODE]
-        list(map(self.domElement.removeChild,textNodes))
+        for o in textNodes:
+            self.domElement.removeChild(o)
         # create necessary dom elements
         # maybe xml.dom.minidom.Text is ok, too
         newCDATASection=None
@@ -633,14 +634,16 @@ class xmlGatoElement:
         removes the named graph
         """
         graphs=[x for x in self.getGraphElements() if x.getAttribute("name")==name]
-        list(map(self.domElement.removeChild,graphs))
+        for o in graphs:
+            self.domElement.removeChild(o)
         
     def removeAlgorithmByName(self,name):
         """
         removes the named algorithm
         """
         algorithms=[x for x in self.getAlgorithmElements() if x.getAttribute("name")==name]
-        list(map(self.domElement.removeChild,algorithms))
+        for o in algorithms:
+            self.domElement.removeChild(o)
         
 class ElementDisplay(tkinter.Frame):
     """

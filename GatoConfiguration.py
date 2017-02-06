@@ -113,14 +113,14 @@ class GatoConfiguration:
         if name in self.keys:
             return self.config.get(self.section[name], name)
         else:
-            raise 'NoOptionError'
+            raise Exception('NoOptionError')
             
     def set(self, name, value):
         if name in self.keys:
             self.config.set(self.section[name], name, "%s" % value)
             self.modified = 1
         else:
-            raise 'NoOptionError'
+            raise Exception('NoOptionError')
             
             
     def edit(self):
