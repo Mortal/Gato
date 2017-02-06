@@ -41,7 +41,7 @@ from . import GatoIcons
 import tkinter.simpledialog
 import sys
 import os
-import htmllib, formatter
+import formatter
 
 
 # Should be in GatoGlobals
@@ -234,97 +234,6 @@ class HTMLWriter(formatter.DumbWriter):
 
 
 
-
-class MyHTMLParser(htmllib.HTMLParser):
-    """ Basic parser with image support added. output is supposed to be
-        the textwidget for output """
-
-    def __init__(self, formatter, output):
-        htmllib.HTMLParser.__init__(self, formatter)
-        self.output = output
-        self.tag_start = {}
-
-    def handle_image(self, source, alt, ismap, align, width, height):
-        imageCache = GatoUtil.ImageCache() # ImageCache is a singleton
-        self.output.image_create('insert', image=imageCache[source], align='baseline')
-
-    def do_colordef(self,attrs):
-        colordef = Frame(self.output,width=40,height=18,background=attrs[0][1])
-        self.output.window_create(INSERT, window=colordef)
-        self.output.insert(INSERT, ' ')
-
-    def start_h1(self,attrs):
-        self.output.insert(INSERT,'\n\n')
-        self.tag_start['h1'] = self.output.index(INSERT)
-
-    def end_h1(self):
-        self.output.tag_add('h1',self.tag_start['h1'],self.output.index(INSERT))
-        self.output.insert(INSERT,'\n\n')
-
-    def start_h2(self,attrs):
-        self.output.insert(INSERT,'\n\n')
-        self.tag_start['h2'] = self.output.index(INSERT)
-
-    def end_h2(self):
-        self.output.tag_add('h2',self.tag_start['h2'],self.output.index(INSERT))
-        self.output.insert(INSERT,'\n\n')
-
-    def start_h3(self,attrs):
-        self.output.insert(INSERT,'\n\n')
-        self.tag_start['h3'] = self.output.index(INSERT)
-
-    def end_h3(self):
-        self.output.tag_add('h3',self.tag_start['h3'],self.output.index(INSERT))
-        self.output.insert(INSERT,'\n')
-
-    def start_h4(self,attrs):
-        self.output.insert(INSERT,'\n\n')
-        self.tag_start['h4'] = self.output.index(INSERT)
-
-    def end_h4(self):
-        self.output.tag_add('h4',self.tag_start['h4'],self.output.index(INSERT))
-        self.output.insert(INSERT,'\n')
-
-    def start_h5(self,attrs):
-        self.tag_start['h5'] = self.output.index(INSERT)
-
-    def end_h5(self):
-        self.output.tag_add('h5',self.tag_start['h5'],self.output.index(INSERT))
-        self.output.insert(INSERT,'\n')
-
-    def start_b(self,attr):
-        self.tag_start['b'] = self.output.index(INSERT)
-
-    def end_b(self):
-        self.output.tag_add('b',self.tag_start['b'],self.output.index(INSERT))
-
-    def start_em(self,attr):
-        self.tag_start['em'] = self.output.index(INSERT)
-
-    def end_em(self):
-        self.output.tag_add('em',self.tag_start['em'],self.output.index(INSERT))
-
-    def start_p(self,attr):
-        self.output.insert(INSERT,'\n')
-
-    def end_p(self):
-        self.output.insert(INSERT,'\n\n')
-
-    def start_pre(self,attr):
-        self.tag_start['pre'] = self.output.index(INSERT)
-
-    def end_pre(self):
-        self.output.tag_add('pre',self.tag_start['pre'],self.output.index(INSERT))
-        self.output.insert(INSERT,'\n\n')
-
-    def start_tt(self,attr):
-        self.tag_start['tt'] = self.output.index(INSERT)
-
-    def end_tt(self):
-        self.output.tag_add('tt',self.tag_start['tt'],self.output.index(INSERT))
-
-
-
 class HTMLViewer(Toplevel):
     """ Basic class which provides a scrollable area for viewing HTML
         text and a Dismiss button """
@@ -388,6 +297,7 @@ class HTMLViewer(Toplevel):
         writer = HTMLWriter(self.text, self)
         format = formatter.AbstractFormatter(writer)
         #parser = htmllib.HTMLParser(format)
+        raise Exception("No HTML parser")
         parser = MyHTMLParser(format, self.text)
         parser.nofill=False
         parser.feed(htmlcode)
