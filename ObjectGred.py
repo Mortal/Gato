@@ -349,7 +349,7 @@ class SAGraphEditor(GraphEditor, Frame):
 
     def EnterButtonCallback(self,e):
         w = e.widget
-        text = str.join(w.config("text")[4])
+        text = ''.join(w.config("text")[4])
         self.UpdateInfo(text)
         value = w.config("value")[4]
         w.configure(image=self.icons[value][1])

@@ -503,7 +503,7 @@ class Graph:
 
         <p>The properties %s are unknown or undetermined.</p>
         </BODY></HTML>
-        """ % (graphName, self.Order(), self.Size(), knownProps, str.join(unknownProps,', '))
+        """ % (graphName, self.Order(), self.Size(), knownProps, ''.join(unknownProps,', '))
         return result
 
 
