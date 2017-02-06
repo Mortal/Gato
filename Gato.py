@@ -1850,16 +1850,17 @@ class Algorithm:
         if prologOnly:
             return
         # Read in algo and execute it in the debugger
-        file = self.algoFileName
+        with open(self.algoFileName) as fp:
+            source = fp.read()
         # Filename must be handed over in a very safe way
         # because of \ and ~1 under windows
-        self.algoGlobals['_tmp_file']=self.algoFileName
+        self.algoGlobals['_tmp_file_contents'] = source
 
         # Switch on all shown breakpoints
         for line in self.breakpoints:
             self.DB.set_break(self.algoFileName,line)
         try:
-            command = "execfile(_tmp_file)"
+            command = "exec(_tmp_file_contents)"
             self.DB.run(command, self.algoGlobals, self.algoGlobals)
         except:
             short_msg = "Error in %s.alg" % os.path.splitext(self.algoFileName)[0]
