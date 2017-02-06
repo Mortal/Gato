@@ -2,8 +2,8 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   GraphCreator.py
-#	author: Ramazan Buzdemir (buzdemir@zpr.uni-koeln.de)
+#       file:   GraphCreator.py
+#       author: Ramazan Buzdemir (buzdemir@zpr.uni-koeln.de)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -255,7 +255,7 @@ class completeGraphCreator(Creator):
 
         dial = Dialog(theGraphEditor, 0, 0, "Create Complete Graph")
         if dial.result is None:
-            theGraphEditor.config(cursor="")	
+            theGraphEditor.config(cursor="")    
             return
 
         n=dial.result[0]

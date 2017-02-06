@@ -4,8 +4,8 @@
 #       You can find more information at
 #       http://gato.sf.net
 #
-#	file:   AnimatedDataStructures.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   AnimatedDataStructures.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln

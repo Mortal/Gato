@@ -2,8 +2,8 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   ObjectGraph.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   ObjectGraph.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 2007-2015 Alexander Schliep, Winfried Hochstaettler
 #
@@ -206,7 +206,7 @@ class ObjectGraph(object):
     def QEdge(self,tail,head):
         """ Returns 1 if (tail,head) is an edge in G. If G is undirected
             order of vertices does not matter """
-        if self.directed == 1:	
+        if self.directed == 1:  
             return (tail,head) in self.edges
         else:
             return (tail,head) in self.edges or (head,tail) in self.edges
@@ -243,32 +243,32 @@ class ObjectGraph(object):
 
 
     def InOutNeighbors(self,v):
-        """ Returns vertices w for which (v,w) or (w,v) is an edge """	
+        """ Returns vertices w for which (v,w) or (w,v) is an edge """  
         return self.InNeighbors(v) + self.OutNeighbors(v)
 
 
     def InEdges(self,v):
-        """ Returns edges (*,v) """	
+        """ Returns edges (*,v) """     
         return [e.key() for e in self.vertices[v].inEdges]
 
 
     def OutEdges(self,v):
-        """ Returns edges (v,*) """	
+        """ Returns edges (v,*) """     
         return [e.key() for e in self.vertices[v].outEdges]
 
 
     def IncidentEdges(self,v):
-        """ Returns edges (v,*) and (*,v) """	
+        """ Returns edges (v,*) and (*,v) """   
         return self.InEdges(v) + self.OutEdges(v)
 
 
     def Edges(self):
-        """ Returns all edges """		
+        """ Returns all edges """               
         return list(self.edges.keys())
 
 
     def Vertices(self):
-        """ Returns all edges """		
+        """ Returns all edges """               
         return list(self.vertices.keys())
 
     def printMy(self):
@@ -564,7 +564,7 @@ class ObjectGraph(object):
 ##        """ Returns 1 if (tail,head) is an edge in G """
 ##        if not tail in self.vertices or not head in self.vertices:
 ##            return 0
-##        if self.directed == 1:	
+##        if self.directed == 1:        
 ##            return head in self.adjLists[tail]
 ##        else:
 ##            return head in self.adjLists[tail] or tail in self.adjLists[head]

@@ -3,8 +3,8 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   Gato.py
-#	author: Janne Grunau
+#       file:   Gato.py
+#       author: Janne Grunau
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln

@@ -3,8 +3,8 @@
 #       This file is part of Gato (Graph Animation Toolbox)
 #       You can find more information at http://gato.sf.net
 #
-#	file:   AnimatedAlgorithms.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   AnimatedAlgorithms.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -51,7 +51,7 @@ def shortestPath(G, A, s, t):
     A.SetAllVerticesColor(g.cVertexDefault)
 
     for v in G.vertices:
-        pred[v] = None	
+        pred[v] = None  
     Q.Append(s)
 
     while Q.IsNotEmpty() and pred[t] == None:

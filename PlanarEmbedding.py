@@ -2,8 +2,8 @@
 #
 #       This file is part of Gato (Graph Algorithm Toolbox)
 #
-#	file:   PlanarEmbedding.py
-#	author: Ramazan Buzdemir (buzdemir@zpr.uni-koeln.de)
+#       file:   PlanarEmbedding.py
+#       author: Ramazan Buzdemir (buzdemir@zpr.uni-koeln.de)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -524,8 +524,8 @@ class pe_Graph:
             # case 2: vk+1 is "to the left" of vk
             # case 3: vk+1 "covers" vk
             # all make the first element in Vk+1's oppositeNodes label 1,
-            #   	   last                                        2,
-            #  		   rest        	   			       3.
+            #              last                                        2,
+            #              rest                                        3.
             # oppositeNodes is done in FPP
 
             first=vkplus1.oppositeNodes[0]

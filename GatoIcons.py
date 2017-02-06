@@ -2,7 +2,7 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   GatoIcons.py
+#       file:   GatoIcons.py
 #
 #       NOTE:   Automatically created by mkGatoIcons.pl
 #               Do *not* edit this file manually

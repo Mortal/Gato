@@ -3,8 +3,8 @@
 #       This file is part of Gato (Graph Animation Toolbox)
 #       You can find more information at http://gato.sf.net
 #
-#	file:   GatoDialogs.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   GatoDialogs.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
 #
@@ -154,7 +154,7 @@ class AboutBox(tkinter.simpledialog.Dialog):
                                      font="Times 10")
         self.infoText.pack(expand=0, fill=X, side=BOTTOM)
         self.infoText.delete('0.0', END)
-        self.infoText.insert('0.0', GatoGlobals.gLGPLText)	
+        self.infoText.insert('0.0', GatoGlobals.gLGPLText)      
         self.infoText.configure(state=DISABLED)
         self.title("Gato - About")
 

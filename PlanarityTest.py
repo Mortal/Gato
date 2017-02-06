@@ -2,8 +2,8 @@
 #
 #       This file is part of Gato (Graph Algorithm Toolbox)
 #
-#	file:   PlanarityTest.py
-#	author: Ramazan Buzdemir (buzdemir@zpr.uni-koeln.de)
+#       file:   PlanarityTest.py
+#       author: Ramazan Buzdemir (buzdemir@zpr.uni-koeln.de)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -940,7 +940,7 @@ def embedding(e0,t,T,A):
                     else:
                         tprime=right
                     embedding(e,tprime,Tprime,Aprime)
-                else: 	
+                else:   
                     # back edge
                     Tprime.append(e)
                     Aprime.append(reversal(e))
@@ -950,7 +950,7 @@ def embedding(e0,t,T,A):
                     Tprime.conc(T)
                     T.conc(Tprime) # T = Tprime conc T
                     Al.conc(Aprime) # Al = Al conc Aprime
-                else:	
+                else:   
                     T.conc(Tprime) # T = T conc Tprime
                     Aprime.conc(Ar)
                     Ar.conc(Aprime) # Ar = Aprime conc Ar

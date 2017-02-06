@@ -2,8 +2,8 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   GraphEditor.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   GraphEditor.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -89,7 +89,7 @@ class EditWeightsDialog(tkinter.simpledialog.Dialog):
 
     def validate(self):
         self.result = [None] * self.nrOfWeights
-        for i in range(self.nrOfWeights):	
+        for i in range(self.nrOfWeights):       
             try:
                 if self.intFlag[i]:
                     self.result[i] = string.atoi(self.entry[i].get())
@@ -275,7 +275,7 @@ class GraphEditor(GraphDisplay):
 
 
     def AddEdgeMove(self,event):
-        if self.tail != None:	
+        if self.tail != None:   
             # canvas x and y take the screen coords from the event and translate
             # them into the coordinate system of the canvas object
             x = self.canvas.canvasx(event.x)
@@ -297,7 +297,7 @@ class GraphEditor(GraphDisplay):
         if self.rubberbandLine != None:
             self.canvas.delete(self.rubberbandLine)
 
-        if self.tail != None:	
+        if self.tail != None:   
             x = self.canvas.canvasx(event.x)
             y = self.canvas.canvasy(event.y)
 
@@ -387,7 +387,7 @@ class GraphEditor(GraphDisplay):
                             #===== GUI-Bindings FOR ACTIONS ================================================
 
     def MouseMotion(self,event):
-        if self.mode == 'AddOrMoveVertex':	
+        if self.mode == 'AddOrMoveVertex':      
             self.ShowCoords(event)
 
     def MouseDown(self,event):

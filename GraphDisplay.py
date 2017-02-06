@@ -2,8 +2,8 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   GraphDisplay.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   GraphDisplay.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -163,7 +163,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         else:
             self.zoomIn = 0
 
-        factor = zoomFactor[percent] / self.zoomFactor	
+        factor = zoomFactor[percent] / self.zoomFactor  
         self.zoomFactor = zoomFactor[percent]
 
         self.zVertexRadius = (g.VertexRadius*self.zoomFactor) / 100.0
@@ -189,7 +189,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
             self.canvas.itemconfig(de, width=newEdgeWidth,
                                    arrowshape=self.zArrowShape)
 
-        self.canvas.scale("all", 0, 0, factor, factor)	
+        self.canvas.scale("all", 0, 0, factor, factor)  
 
         newWidth = (self.zoomFactor / 100.0) * float(g.PaperWidth)
         newHeight = (self.zoomFactor/ 100.0) * float(g.PaperHeight)
@@ -258,7 +258,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
         # Scrolling Canvas
         # To make things more windows like, we put the canvas
-        # in a separate frame	
+        # in a separate frame   
         if self.windowingsystem == 'aqua':
             borderFrame = Frame(self, relief=FLAT, bd=1, background='#666666')
         else:
@@ -291,7 +291,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
             except AttributeError:
                 pass
 
-    def ShowGraph(self, G, graphName):	
+    def ShowGraph(self, G, graphName):  
         """ Display graph G name graphName. Currently we assume that for
             the embedding (x,y) of every vertex  0 < x < 1000 and 0 < y < 1000
             holds.
@@ -450,7 +450,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         """ *Internal* Create an undirected loop draw edge. v is a Point2D """
         loopRadius = 2 * self.zVertexRadius
         xMiddle = v.x
-        yMiddle = v.y-((25*self.zoomFactor)/100.0)	
+        yMiddle = v.y-((25*self.zoomFactor)/100.0)      
         Coords = []
         for degree in range(0,400,40):
             Coords.append(loopRadius*cos(degree*(pi/180))+xMiddle)
@@ -480,7 +480,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
                                        width=w,
                                        smooth=TRUE,
                                        splinesteps=24,
-                                       tag="edges")	
+                                       tag="edges")     
 
     def CreateUndirectedDrawEdge(self,t,h,w):
         """ *Internal* Create an undirected draw edge. t, h are Point2Ds """
@@ -552,7 +552,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
         if self.G.QDirected() == 1:
             if tail == head:
-                de = self.CreateDirectedLoopDrawEdge(t,w)		
+                de = self.CreateDirectedLoopDrawEdge(t,w)               
             else:
                 if tail in self.G.OutNeighbors(head):
                     # Remove old straight de for other direction ...
@@ -579,7 +579,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
                         oldColor = g.cEdgeDefault # When opening a graph we can get here
 
                         # Finally create the one we wanted to ...
-                    de = self.CreateDirectedDrawEdge(t,h,1,w)		
+                    de = self.CreateDirectedDrawEdge(t,h,1,w)           
                 else:
                     de = self.CreateDirectedDrawEdge(t,h,0,w)
 
@@ -657,7 +657,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
 
     ############################################################################
-    #				
+    #                           
     # Animator commands
     #
     def SetVertexColor(self, v, color):
@@ -712,7 +712,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         """ Change the color of all edges to 'color' at once
             You can also pass an induced subgraph  """
         if graph == None:
-            if leaveColors == None:	
+            if leaveColors == None:     
                 self.canvas.itemconfig("edges", fill=color)
             else:
                 for e in self.G.Edges():
@@ -734,7 +734,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
             try:
                 de = self.drawEdges[(tail,head)]
             except KeyError:
-                de = self.drawEdges[(head,tail)]	
+                de = self.drawEdges[(head,tail)]        
         self.canvas.itemconfig( de, fill=color)
         self.update()
 
@@ -763,7 +763,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
                 try:
                     de = self.drawEdges[(tail,head)]
                 except KeyError:
-                    de = self.drawEdges[(head,tail)]	
+                    de = self.drawEdges[(head,tail)]    
             self.canvas.itemconfig( de, fill=color)
         self.update()
 
@@ -771,7 +771,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
     def GetEdgeColor(self, tail, head):
         """ Return color of (tail,head). No error checking!
-            Handles undirected graphs. """	
+            Handles undirected graphs. """      
         (u,v) = self.G.Edge(tail,head)
         de = self.drawEdges[(u,v)]
         return self.canvas.itemconfig(de, "fill")[4]
@@ -795,8 +795,8 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
     def BlinkEdge(self, tail, head, color=None):
         """ Blink edge (tail,head) with color. Number of times, speed, default
-            color is specified in GatoGlobals.py. No error checking!	Handles
-            undirected graphs. """	
+            color is specified in GatoGlobals.py. No error checking!    Handles
+            undirected graphs. """      
         if color is None: # No self in default arg
             color=g.cVertexBlink
         if self.G.QDirected() == 1:
@@ -805,7 +805,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
             try:
                 de = self.drawEdges[(tail,head)]
             except KeyError:
-                de = self.drawEdges[(head,tail)]	
+                de = self.drawEdges[(head,tail)]        
         oldColor = self.canvas.itemconfig(de, "fill")[4]
         for i in range(1,g.BlinkRepeat):
             self.canvas.after(g.BlinkRate)
@@ -821,7 +821,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
             Edges are specified as (tail,head).
 
             Number of times, speed, default color is specified in GatoGlobals.py.
-            No error checking!	Handles undirected graphs. """	
+            No error checking!  Handles undirected graphs. """  
         if color is None: # No self in default arg
             color=g.cVertexBlink
         oldColor = [None] * len(list)
@@ -830,7 +830,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         for i in range(len(list)):
             try:
                 e = list[i]
-                l = len(e) # will raise an exception	
+                l = len(e) # will raise an exception    
                 drawItems[i] = self.drawEdges[e]
                 oldColor[i] = self.canvas.itemconfig(drawItems[i], "fill")[4]
             except: # It is a vertex
@@ -840,11 +840,11 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
         for i in range(1,g.BlinkRepeat):
             self.canvas.after(g.BlinkRate)
-            for j in range(len(drawItems)):	
+            for j in range(len(drawItems)):     
                 self.canvas.itemconfig(drawItems[j], fill=color)
             self.update()
             self.canvas.after(g.BlinkRate)
-            for j in range(len(drawItems)):	
+            for j in range(len(drawItems)):     
                 self.canvas.itemconfig(drawItems[j], fill=oldColor[j])
             self.update()
 
@@ -887,7 +887,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         """ Add an annotation to v. Annotations are displayed to the left and
             the bottom of v and allow to display more info about a vertex.
             No error checking!  Does not handle vertex deletions/moves !"""
-        if v == None: return	
+        if v == None: return    
         if not self.vertexAnnotation.QDefined(v):
             self.vertexAnnotation[v] = self.CreateVertexAnnotation(v,annotation,color)
         else:
@@ -907,7 +907,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
     def SetEdgeAnnotation(self,tail,head,annotation,color="black"):
         """ Add an annotation to (tail,head). Annotations are displayed to the left and
-            the bottom of v and allow to display more info about a vertex. """	
+            the bottom of v and allow to display more info about a vertex. """  
         if not self.edgeAnnotation.QDefined((tail,head)):
             self.edgeAnnotation[(tail,head)] = self.CreateEdgeAnnotation(tail,head,
                                                                          annotation,
@@ -954,13 +954,13 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
 
     def UpdateInfo(self, neuText):
-        """ *Internal* Update text in info box """	
+        """ *Internal* Update text in info box """      
         self.info.config(text=neuText)
         self.update()
 
 
     def DefaultInfo(self,event=None):
-        """ *Internal* Put default info into info box """	
+        """ *Internal* Put default info into info box """       
         if self.graphInformer == None:
             self.UpdateInfo("")
         else:
@@ -991,7 +991,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
     def EdgeInfo(self,event):
         """ *Internal* Call back routine bound to MouseEnter of edges.
             Produces default info for edges unless a user supplied
-            informer has been registered with RegisterGraphInformer() """	
+            informer has been registered with RegisterGraphInformer() """       
         widget = event.widget.find_withtag(CURRENT)[0]
         (tail,head) = self.edge[widget]
         if self.graphInformer == None:
@@ -1131,7 +1131,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         self.canvas.delete(self.highlightedPath[pathID])
 
     ############################################################################
-    #				
+    #                           
     # edit commands
     #
     def AddVertex(self, x, y, v=None):
@@ -1174,7 +1174,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         """ *Internal* Move vertex v to position (x,y)
             NOTE: Assumes x,y to be in canvas coordinates if
                   doUpdate=None and in embedding coordinates else
-        """ 	
+        """     
         if doUpdate == None: # User has moved drawvertex
             newX, newY = self.CanvasToEmbedding(x,y)
             self.G.SetEmbedding(v,newX, newY)
@@ -1341,7 +1341,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
 
     ############################################################################
-    #				
+    #                           
     # various stuff
     #
     def PrintToPSFile(self,fileName):
@@ -1358,17 +1358,17 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
         printablePageHeight=280 #m
         printablePageWidth =190 #m
-		
+                
         printableRatio=printablePageHeight/printablePageWidth
 
         bbRatio = height/width
 
         if bbRatio > printableRatio: # Height gives limiting dimension
             self.canvas.postscript(file=fileName, pageheight="%dm" % printablePageHeight,
-                                   x=x,y=y,height=height,width=width)	
+                                   x=x,y=y,height=height,width=width)   
         else:
             self.canvas.postscript(file=fileName, pagewidth="%dm" % printablePageWidth,
-                                   x=x,y=y,height=height,width=width)	
+                                   x=x,y=y,height=height,width=width)   
 
 
 # MOVED to GatoExport
@@ -1415,8 +1415,8 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 ##var blinkcolor;
 ##var blinkcount;
 ##function StartAnimation(evt) {
-##	the_evt = evt;	
-##	ShowAnimation();
+##      the_evt = evt;  
+##      ShowAnimation();
 ##}
 ##function SetVertexColor(v, color) {
 ##    element = the_evt.target.ownerDocument.getElementById(v);
@@ -1468,27 +1468,27 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 ##{
 ##    element = the_evt.target.ownerDocument.getElementById(v);
 ##    if(element != null){
-##	if(the_evt.target.ownerDocument.getElementById(v_ano_id + v) !=null){
-##		ano = the_evt.target.ownerDocument.getElementById(v_ano_id + v);
-##		ano.parentNode.removeChild(ano);
-	
-##	}
-	
-##	var newano = the_evt.target.ownerDocument.createElementNS(svgNS,"text");
-##	x_pos = parseFloat(element.getAttribute("cx")) + parseFloat(element.getAttribute("r")) + 1;
-##	y_pos = parseFloat(element.getAttribute("cy")) + parseFloat(element.getAttribute("r")) + 1;
-##	newano.setAttribute("x", x_pos);
-##	newano.setAttribute("y", y_pos);
-##	newano.setAttribute("fill",color);
-##	newano.setAttribute("id", v_ano_id+v);
-##	newano.setAttribute("text-anchor","center");
-##	newano.setAttribute("font-size","14.0");
-##	newano.setAttribute("font-family","Helvetica");
-##	newano.setAttribute("font-style","normal");
-##	newano.setAttribute("font-weight","bold");
-##	newano.appendChild(the_evt.target.ownerDocument.createTextNode(annotation));
-##	the_evt.target.ownerDocument.documentElement.appendChild(newano);
-	
+##      if(the_evt.target.ownerDocument.getElementById(v_ano_id + v) !=null){
+##              ano = the_evt.target.ownerDocument.getElementById(v_ano_id + v);
+##              ano.parentNode.removeChild(ano);
+        
+##      }
+        
+##      var newano = the_evt.target.ownerDocument.createElementNS(svgNS,"text");
+##      x_pos = parseFloat(element.getAttribute("cx")) + parseFloat(element.getAttribute("r")) + 1;
+##      y_pos = parseFloat(element.getAttribute("cy")) + parseFloat(element.getAttribute("r")) + 1;
+##      newano.setAttribute("x", x_pos);
+##      newano.setAttribute("y", y_pos);
+##      newano.setAttribute("fill",color);
+##      newano.setAttribute("id", v_ano_id+v);
+##      newano.setAttribute("text-anchor","center");
+##      newano.setAttribute("font-size","14.0");
+##      newano.setAttribute("font-family","Helvetica");
+##      newano.setAttribute("font-style","normal");
+##      newano.setAttribute("font-weight","bold");
+##      newano.appendChild(the_evt.target.ownerDocument.createTextNode(annotation));
+##      the_evt.target.ownerDocument.documentElement.appendChild(newano);
+        
 ##    }
 ##}
 
@@ -1497,11 +1497,11 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 ##var animation = Array(%(animation)s
 ##);
 ##function ShowAnimation() {
-##	var duration = animation[step][0] * 4;
-##	animation[step][1](animation[step][2],animation[step][3],animation[step][4]);
-##	step = step + 1;
-##	if(step < animation.length)
-##		setTimeout(ShowAnimation, duration);
+##      var duration = animation[step][0] * 4;
+##      animation[step][1](animation[step][2],animation[step][3],animation[step][4]);
+##      step = step + 1;
+##      if(step < animation.length)
+##              setTimeout(ShowAnimation, duration);
 ##}
 ##]]></script>
 ##        """
@@ -1691,7 +1691,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
 
 
     ############################################################################
-    #				
+    #                           
     # Clickhandler commands
     #
     def RegisterClickhandler(self, handler):
@@ -1711,7 +1711,7 @@ class GraphDisplay(): #object): XXX New Style classes fuck up Tkinter
         self.canvas.unbind("<B1-ButtonRelease>")
 
 
-    def MouseUp(self, event):	
+    def MouseUp(self, event):   
         """ Callback method for <B1-ButtonRelease>. Finds the vertex/edge
             clicked and calls the registered clickhandler """
         if self.clickhandler != None:

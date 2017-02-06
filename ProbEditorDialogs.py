@@ -3,8 +3,8 @@
 #
 #       This file is part of Gato (Graph Algorithm Toolbox)
 #
-#	file:   ProbEditorDialogs.py
-#	author: Achim Gaedke (achim.gaedke@zpr.uni-koeln.de)
+#       file:   ProbEditorDialogs.py
+#       author: Achim Gaedke (achim.gaedke@zpr.uni-koeln.de)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln

@@ -3,8 +3,8 @@
 #
 #       This file is part of Gato (Graph Algorithm Toolbox)
 #
-#	file:   HMMEd.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   HMMEd.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2002, Alexander Schliep
 #
@@ -594,7 +594,7 @@ class HMM:
 class HMMEditor(SAGraphEditor):
 
     def __init__(self, master=None):
-        SAGraphEditor.__init__(self, master)	
+        SAGraphEditor.__init__(self, master)    
         self.HMM = None
 
     def CreateWidgets(self):
@@ -704,12 +704,12 @@ class HMMEditor(SAGraphEditor):
         self.fileMenu = Menu(self.menubar, tearoff=0)
         self.fileMenu.add_command(label='New',            command=self.NewGraph)
         self.fileMenu.add_command(label='Open ...',       command=self.OpenGraph)
-        self.fileMenu.add_command(label='Save',	     command=self.SaveGraph)
+        self.fileMenu.add_command(label='Save',      command=self.SaveGraph)
         self.fileMenu.add_command(label='Save as ...',    command=self.SaveAsGraph)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label='Export EPSF...', command=self.ExportEPSF)
         self.fileMenu.add_separator()
-        self.fileMenu.add_command(label='Quit',	     command=self.Quit)
+        self.fileMenu.add_command(label='Quit',      command=self.Quit)
         self.menubar.add_cascade(label="File", menu=self.fileMenu,
                                  underline=0)
 
@@ -723,7 +723,7 @@ class HMMEditor(SAGraphEditor):
         self.graphMenu.add_command(label='Edit Background Distributions', command=self.EditBackgroundDistributions)
         self.graphMenu.add_separator()
         self.graphMenu.add_checkbutton(label='Grid',
-                                                  command=self.ToggleGridding)	
+                                                  command=self.ToggleGridding)  
         self.menubar.add_cascade(label="HMM", menu=self.graphMenu,
                                  underline=0)
 
@@ -731,7 +731,7 @@ class HMMEditor(SAGraphEditor):
 
     def SetGraphMenuOptions(self):
         if not self.gridding:
-            self.graphMenu.invoke(self.graphMenu.index('Grid'))	
+            self.graphMenu.invoke(self.graphMenu.index('Grid')) 
 
 
             ############################################################
@@ -759,7 +759,7 @@ class HMMEditor(SAGraphEditor):
         for i in range(nrOfSymbols):
             self.HMM.G.vertexWeights[i] = VertexWeight(0.0)
 
-    def OpenGraph(self):	
+    def OpenGraph(self):        
         file = askopenfilename(title="Open HMM",
                                defaultextension=".xml",
                                filetypes = (("XML", ".xml"),
@@ -783,7 +783,7 @@ class HMMEditor(SAGraphEditor):
             self.SetTitle("HMMEd _VERSION_ - " + self.graphName)
 
             if not self.gridding:
-                self.graphMenu.invoke(self.graphMenu.index('Grid'))	
+                self.graphMenu.invoke(self.graphMenu.index('Grid'))     
 
 
     def SaveGraph(self):
@@ -875,7 +875,7 @@ class HMMEditor(SAGraphEditor):
                         # write back normalized probabilities
                         for key in list(emission_probabilities.keys()):
                             code = self.HMM.hmmAlphabet.name2code[key]
-                            state.emissions[code] = emission_probabilities[key] / emission_probabilities.sum	
+                            state.emissions[code] = emission_probabilities[key] / emission_probabilities.sum    
 
     def EditPropertiesUp(self,event):
         if event.widget.find_withtag(CURRENT):

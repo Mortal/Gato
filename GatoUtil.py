@@ -2,8 +2,8 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   GatoUtil.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   GatoUtil.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -81,7 +81,7 @@ class ImageCache:
 
         ...image_create('insert', image=ic['some/path/image.gif']
     """
-    images = None	
+    images = None       
 
     def __init__(self):
         if ImageCache.images == None:

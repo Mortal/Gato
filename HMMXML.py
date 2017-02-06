@@ -3,8 +3,8 @@
 #
 #       This file is part of Gato (Graph Algorithm Toolbox)
 #
-#	file:   HMMXML.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   HMMXML.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln

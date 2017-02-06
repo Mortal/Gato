@@ -4,8 +4,8 @@
 #       You can find more information at
 #       http://gato.sf.net
 #
-#	file:   Embedder.py
-#	author: Ramazan Buzdemir
+#       file:   Embedder.py
+#       author: Ramazan Buzdemir
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -209,7 +209,7 @@ def center(G):
 
     for u in G.vertices:
         for v in G.vertices:
-            for w in G.vertices:		
+            for w in G.vertices:                
                 if dist[v,u]+dist[u,w]<dist[v,w]:
                     dist[v,w]=dist[v,u]+dist[u,w]
 
@@ -285,7 +285,7 @@ def TreeCoords(G, root, orientation):
     father = {}
 
     for v in G.vertices:
-        visited[v] = 0	
+        visited[v] = 0  
     visited[root] = 1
     S.Push(root)
     d[root] = 0
@@ -401,7 +401,7 @@ class TreeEmbedder(Embedder):
         dial = TreeLayoutDialog(theGraphEditor)
         if dial.result is None:
             theGraphEditor.config(cursor="")
-            return	
+            return      
 
         if TreeCoords(theGraphEditor.G, dial.result[0], dial.result[1]):
             RedrawGraph(theGraphEditor)
@@ -508,7 +508,7 @@ class BFSTreeEmbedder(Embedder):
         dial = BFSLayoutDialog(theGraphEditor)
         if dial.result is None:
             theGraphEditor.config(cursor="")
-            return	
+            return      
 
         if BFSTreeCoords(theGraphEditor.G, dial.result[0], dial.result[1]):
             RedrawGraph(theGraphEditor)
@@ -617,7 +617,7 @@ class BFSRadialTreeEmbedder(Embedder):
         dial = BFSLayoutDialog(theGraphEditor)
         if dial.result is None:
             theGraphEditor.config(cursor="")
-            return	
+            return      
 
         if BFSRadialTreeCoords(theGraphEditor.G, dial.result[0], dial.result[1]):
             RedrawGraph(theGraphEditor)

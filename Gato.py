@@ -3,8 +3,8 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   Gato.py
-#	author: Alexander Schliep (alexander@schliep.org)
+#       file:   Gato.py
+#       author: Alexander Schliep (alexander@schliep.org)
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
@@ -247,7 +247,7 @@ class AlgoWin(Frame):
     ############################################################
     #
     # Create GUI
-    #   	
+    #           
     def makeMenuBar(self):
         """ *Internal* """
         self.menubar = Menu(self, tearoff=0)
@@ -260,30 +260,30 @@ class AlgoWin(Frame):
 
         # --- FILE menu ----------------------------------------
         self.fileMenu = Menu(self.menubar, tearoff=0)
-        self.fileMenu.add_command(label='Open Algorithm...',	
+        self.fileMenu.add_command(label='Open Algorithm...',    
                                   command=self.OpenAlgorithm)
-        self.fileMenu.add_command(label='Open Graph...',	
+        self.fileMenu.add_command(label='Open Graph...',        
                                   command=self.OpenGraph)
         # On the Mac starting gred from Gato will not create a seperate process
         # It is just one app where the menu bar switches based on which window has focus
         if self.windowingsystem != 'aqua':
-            self.fileMenu.add_command(label='New Graph...',	
+            self.fileMenu.add_command(label='New Graph...',     
                                   command=self.NewGraph)
         # Only used for TRIAL-SOLUTION Gato version. Might be reused for easy
         # web-deployment
         #self.fileMenu.add_command(label='Open GatoFile...',
-        #			  command=self.OpenGatoFile)
+        #                         command=self.OpenGatoFile)
         #self.fileMenu.add_command(label='Save GatoFile...',
-        #			  command=self.SaveGatoFile)
-        self.fileMenu.add_command(label='Reload Algorithm & Graph',	
+        #                         command=self.SaveGatoFile)
+        self.fileMenu.add_command(label='Reload Algorithm & Graph',     
                                   command=self.ReloadAlgorithmGraph)
-        self.fileMenu.add_command(label='Export Graph as EPS...',	
+        self.fileMenu.add_command(label='Export Graph as EPS...',       
                                   command=self.ExportEPSF)
 
         if self.experimental:
-            self.fileMenu.add_command(label='Export Graph as SVG...',	
+            self.fileMenu.add_command(label='Export Graph as SVG...',   
                                       command=self.ExportSVG)
-            self.fileMenu.add_command(label='Export Animation as SVG...',	
+            self.fileMenu.add_command(label='Export Animation as SVG...',       
                                       command=self.ExportSVGAnimation)
         if self.windowingsystem != 'aqua':
             self.fileMenu.add_separator()
@@ -292,17 +292,17 @@ class AlgoWin(Frame):
                                       accelerator='%s-,' % accMod)
             #self.gatoInstaller.addMenuEntry(self.fileMenu)
             self.fileMenu.add_separator()
-            self.fileMenu.add_command(label='Quit',		
+            self.fileMenu.add_command(label='Quit',             
                                       command=self.Quit,
                                       accelerator='%s-Q' % accMod)
         self.menubar.add_cascade(label="File", menu=self.fileMenu,
-                                 underline=0)	
+                                 underline=0)   
         # --- WINDOW menu ----------------------------------------
         self.windowMenu=Menu(self.menubar, tearoff=0)
-        self.windowMenu.add_command(label='One graph window',	
+        self.windowMenu.add_command(label='One graph window',   
                                     accelerator='%s-1' % accMod,
                                     command=self.OneGraphWindow)
-        self.windowMenu.add_command(label='Two graph windows',	
+        self.windowMenu.add_command(label='Two graph windows',  
                                     accelerator='%s-2' % accMod,
                                     command=self.TwoGraphWindow)
         self.menubar.add_cascade(label="Window Layout", menu=self.windowMenu,
@@ -325,9 +325,9 @@ class AlgoWin(Frame):
         self.helpMenu.add_command(label='Go to CATBox website',
                                   command=self.GoToCATBoxWebsite)
         self.helpMenu.add_separator()
-        self.helpMenu.add_command(label='About Algorithm',	
+        self.helpMenu.add_command(label='About Algorithm',      
                                   command=self.AboutAlgorithm)
-        self.helpMenu.add_command(label='About Graph',	
+        self.helpMenu.add_command(label='About Graph',  
                                   command=self.AboutGraph)
         self.menubar.add_cascade(label="Help", menu=self.helpMenu,
                                  underline=0)
@@ -337,7 +337,7 @@ class AlgoWin(Frame):
         # On a Mac we put our about box under the Apple menu ...
         if self.windowingsystem == 'aqua':
             self.apple=Menu(self.menubar, tearoff=0, name='apple')
-            self.apple.add_command(label='About Gato',	
+            self.apple.add_command(label='About Gato',  
                                    command=self.AboutBox)
             self.apple.add_separator()
             self.apple.add_command(label='Preferences...',
@@ -397,7 +397,7 @@ class AlgoWin(Frame):
         self.buttonStep['state']     = DISABLED
         self.buttonTrace['state']    = DISABLED
         self.buttonContinue['state'] = DISABLED
-        self.buttonStop['state']     = DISABLED	
+        self.buttonStop['state']     = DISABLED 
 
         if self.windowingsystem == 'aqua':
             dummy = Frame(toolbar, relief=FLAT, bd=2)
@@ -509,7 +509,7 @@ class AlgoWin(Frame):
     ############################################################
     #
     # GUI Helpers
-    #   	
+    #           
 
     # Lock
     def touchLock(self):
@@ -941,7 +941,7 @@ class AlgoWin(Frame):
         self.graphDisplay.geometry("%dx%d+%d+%d" % (
             screenwidth - trueWidth - 2 * WMExtra - pad - 1,# see 1 below
             screenheight - WMExtra - topWMExtra - pad,
-            trueWidth + 1 + pad, 	
+            trueWidth + 1 + pad,        
             screenTop + pad))
         self.graphDisplay.update()
         self.graphDisplay.tkraise()
@@ -981,13 +981,13 @@ class AlgoWin(Frame):
         self.graphDisplay.geometry("%dx%d+%d+%d" % (
             reqGDWidth,
             reqGDHeight,
-            trueWidth + 1 + pad, 	
+            trueWidth + 1 + pad,        
             screenTop + pad))
 
         self.secondaryGraphDisplay.geometry("%dx%d+%d+%d" % (
             reqGDWidth,
             reqGDHeight,
-            trueWidth + 1 + pad, 	
+            trueWidth + 1 + pad,        
             screenTop + reqGDHeight + WMExtra + topWMExtra + 2 * pad))
 
         self.graphDisplay.tkraise()
@@ -1161,7 +1161,7 @@ class AlgoWin(Frame):
     ############################################################
     #
     # Mouse Commands
-    #		
+    #           
 
     #
     # handleMouse
@@ -1180,19 +1180,19 @@ class AlgoWin(Frame):
         if self.lastActiveLine != 0:
             self.unTagLine(self.lastActiveLine,'Active')
         self.lastActiveLine = lineNo
-        self.tagLine(lineNo,'Active')	
+        self.tagLine(lineNo,'Active')   
         self.algoText.yview_pickplace('%d.0' % lineNo)
         self.update() # Forcing redraw
         self.codeLineHistory.append(AnimationCommand(self.ShowActive, (lineNo,), []))
 
     def ShowBreakpoint(self, lineNo):
         """ Show  lineNo as breakpoint """
-        self.tagLine(lineNo,'Break')	
+        self.tagLine(lineNo,'Break')    
 
 
     def HideBreakpoint(self, lineNo):
         """ Show lineNo w/o breakpoint """
-        self.unTagLine(lineNo,'Break')	
+        self.unTagLine(lineNo,'Break')  
 
 
     def WaitNextEvent(self):
@@ -1316,7 +1316,7 @@ class AlgorithmDebugger(bdb.Bdb):
             return None
         line = self.currentLine(frame)
         if line == self.lastLine:
-            return self.trace_dispatch	
+            return self.trace_dispatch  
         self.lastLine = line
         self.user_line(frame)
         if self.quitting:
@@ -1353,7 +1353,7 @@ class AlgorithmDebugger(bdb.Bdb):
         if self.break_anywhere(frame):
             self.doTrace = 0 #1 # We will break if there is a breakpoint set in
             # function called (set to self.doTrace = 1 if you don't want that)
-            return self.trace_nofeedback_dispatch	
+            return self.trace_nofeedback_dispatch       
         #log.debug("%s" % inspect.getframeinfo(frame))
         return None
 
@@ -1405,7 +1405,7 @@ class AlgorithmDebugger(bdb.Bdb):
                 self.GUI.mode = 2
             self.GUI.GUI.ShowActive(line)
             # TO Avoid multiple steps in def line of called fun
-            #self.interaction(frame, None)	
+            #self.interaction(frame, None)      
             self.doTrace = 0
         else:
             pass
@@ -1688,7 +1688,7 @@ class Algorithm:
             match = compPattern.search(text)
 
             if match != None:
-                options[patternName] = eval(match.group(1))	
+                options[patternName] = eval(match.group(1))     
 
                 # Special case with about (XXX: assuming about = """ ... """)
 
@@ -2127,7 +2127,7 @@ def main(argv=None):
             app.master.geometry("%dx%d+%d+%d" % (
                 880,
                 600,
-                50, 	
+                50,     
                 50))
             app.tkraise()
             app.master.update()

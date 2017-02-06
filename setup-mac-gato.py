@@ -4,8 +4,8 @@
 #
 #       This file is part of Gato (Graph Animation Toolbox)
 #
-#	file:   setup-mac-gato.py
-#	author: Alexander Schliep
+#       file:   setup-mac-gato.py
+#       author: Alexander Schliep
 #
 #       Copyright (C) 1998-2015, Alexander Schliep, Winfried Hochstaettler and
 #       Copyright 1998-2001 ZAIK/ZPR, Universitaet zu Koeln
