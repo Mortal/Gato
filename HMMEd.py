@@ -71,11 +71,11 @@ def listFromCSV(s, type):
 
 def csvFromList(list, perRow = None):
     if perRow == None:
-        return string.join(list(map(str,list)), ', ')
+        return str.join(list(map(str,list)), ', ')
     else:
         result = ""
         for start in range(0, len(list), perRow):
-            result += string.join(list(map(str,list[start:start+perRow])), ', ') + ',\n'
+            result += str.join(list(map(str,list[start:start+perRow])), ', ') + ',\n'
         return result[0:len(result)-2]
 
 def writeContents(XMLDoc, XMLNode, data):
